@@ -147,20 +147,20 @@ export function ContactView() {
         </div>
       </div>
 
-      {/* <div className=" gap-6 lg:gap-0 lg:flex-row pt-[9rem]">
-        <div className="grid gap-2 lg:gap-4 ">
+      <div className=" gap-6 flex lg:gap-0 lg:flex-row pt-[9rem]">
+        <div className="grid w-full mr-auto max-w-md gap-2 lg:gap-4 ">
           <h2 className="text-[#7A7979]">Location</h2>
           <p className="lg:text-xl text-lg font-medium">
             Herbert Macaulay Street, Plot C36 Penthouse Estate, Lugbe East
             Extension, F.C.T, Nigeria
           </p>
         </div>
-        <div className="w-full grid">
+        <div className="w-full max-w-md mx-auto grid">
           <h2 className="text-[#7A7979]">Call / Email</h2>
           <p className="lg:text-xl text-lg font-medium">info@techmosaic.org</p>
           <p className="lg:text-xl text-lg font-medium">+2348095555658</p>
         </div>
-        <div className="grid">
+        <div className="grid max-w-md  ml-auto">
           <h2 className="text-[#7A7979]">Social media</h2>
           <Link
             target="_blank"
@@ -176,43 +176,16 @@ export function ContactView() {
           >
             Instagram
           </Link>
-        </div>
-      </div> */}
-      <div className="px-4 pt-[9rem]">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="space-y-2 md:col-span-1">
-            <h2 className="text-[#7A7979]">Location</h2>
-            <p className="lg:text-xl text-lg font-medium">
-              Herbert Macaulay Street, Plot C36 Penthouse Estate, Lugbe East
-              Extension, F.C.T, Nigeria
-            </p>
-          </div>
-          <div className="space-y-2 md:col-span-1">
-            <h2 className="text-[#7A7979]">Call / Email</h2>
-            <p className="lg:text-xl text-lg font-medium">
-              info@techmosaic.org
-            </p>
-            <p className="lg:text-xl text-lg font-medium">+2348095555658</p>
-          </div>
-          <div className="space-y-2 md:col-span-1">
-            <h2 className="text-[#7A7979]">Social media</h2>
-            <Link
-              target="_blank"
-              href="https://www.linkedin.com/company/techmosaic/"
-              className="lg:text-xl text-lg underline font-medium block"
-            >
-              Linkedin
-            </Link>
-            <Link
-              target="_blank"
-              href="https://www.instagram.com/_techmosaic?igsh=ZDFjMGt6aTJ0bDI5"
-              className="lg:text-xl text-lg underline font-medium block"
-            >
-              Instagram
-            </Link>
-          </div>
+          <Link
+            target="_blank"
+            className="lg:text-xl text-lg underline font-medium"
+            href="https://youtube.com/@techmosaicalliance?si=v-GzRtmFjdQJ7gRL"
+          >
+            Youtube
+          </Link>
         </div>
       </div>
+
       <div className="mt-[10rem] bg-[#EEEDEB] p-6 md:p-16">
         <Faq />
       </div>

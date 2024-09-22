@@ -90,9 +90,9 @@ export default function OurMission() {
           </p>
 
           <Link href="/career">
-            <Button className="border-white  mt-3 w-fit border">
+            <Button className="border-white group  mt-3 w-fit border">
               JOIN OUR TEAM
-              <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1"/>
+              <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>

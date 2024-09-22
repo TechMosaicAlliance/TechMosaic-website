@@ -128,7 +128,7 @@ export default function Hero() {
     //     </div>
     //   </section>
     // </div>
-    <div className="grid grid-rows-[auto_1fr]  h-[100svh] 2xl:h-[54rem] relative">
+    <div className="grid grid-rows-[auto_1fr] hero-section  h-[100svh] 2xl:h-[54rem] relative">
       <Navbar />
       <div className="grid grid-cols-1 grid-rows-1">
         <Image

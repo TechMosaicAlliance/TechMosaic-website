@@ -34,13 +34,13 @@ export default function OurPortfolio() {
                 href="/portfolio"
                 className={cn(
                   buttonVariants({
-                    className: "border-white border",
+                    className: "border-white group border",
                     variant: "default",
                   })
                 )}
               >
                 VIEW MORE
-                <ArrowRightSvg className="ml-2" />
+                <ArrowRightSvg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>

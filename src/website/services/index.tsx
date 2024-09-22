@@ -19,9 +19,9 @@ export default function ServicePage() {
         <YoutubeView videoSrc="/assets/video1.mp4" />
 
         <div className="flex pt-7 lg:hidden gap-3">
-          <Button className="border-white  text-xs  border">
+          <Button className="border-white group  text-xs  border">
             JOIN OUR TEAM
-            <ArrowRightSvg className="ml-2" />
+            <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
       </div>

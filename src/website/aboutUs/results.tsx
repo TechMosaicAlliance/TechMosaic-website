@@ -75,19 +75,16 @@ export default function OurResults() {
           Our results in numbers
         </h1>
 
-        <Marquee baseVelocity={0}>
-          <div className="flex gap-20">
-            {data.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex  gap-1 flex-col w-fit items-center"
-              >
-                {item.icon}
-                <p>{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </Marquee>
+        {/* <Marquee baseVelocity={0}> */}
+        <div className="flex gap-20 justify-center pt-3">
+          {data.map((item, idx) => (
+            <div key={idx} className="flex  gap-1 flex-col w-fit items-center">
+              {item.icon}
+              <p>{item.text}</p>
+            </div>
+          ))}
+        </div>
+        {/* </Marquee> */}
       </div>
     </section>
   );

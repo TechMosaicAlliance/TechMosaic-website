@@ -58,7 +58,7 @@ function NavDropdownMenu({
       <DropdownMenuTrigger asChild>
         <button
           className={cn(
-            "flex items-center text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
+            "flex items-center uppercase text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
             className
           )}
         >
@@ -107,7 +107,7 @@ function MobileMenu({
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full z-[9999] pt-[5rem] sm:w-[400px]"
+        className="w-full z-[99999] pt-[5rem] sm:w-[400px]"
       >
         <nav className="flex flex-col h-full  items-center gap-7">
           {navData.map((item, idx) => (
@@ -132,22 +132,65 @@ function MobileMenu({
 }
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const heroSection = document.querySelector(".hero-section");
+
+      console.log(heroSection);
+      if (heroSection) {
+        const heroBottom = heroSection.getBoundingClientRect().bottom;
+        setIsSticky(heroBottom <= 0);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
-    <nav className="relative border-primary-foreground/50 border-b-[0.05rem] z-[99999]">
+    <nav
+      className={cn(
+        "transition-all duration-300 z-[99999]  border-primary-foreground/50 border-b-[0.05rem]",
+        isSticky
+          ? "bg-background  border-foreground/10 border-b-[0.05rem]  self-start fixed top-0 left-0 right-0 w-full"
+          : "bg-transparent"
+      )}
+    >
       <div className="flex container max-w-7xl mx-auto items-center p-4 justify-between">
         <Link href="/" className="flex items-center space-x-2">
-          <LogoSvg className="md:w-[14rem] w-[12rem] " />
+          {isSticky ? (
+            <LogoSvg className="md:w-[14rem] w-[12rem] fill-foreground" />
+          ) : (
+            <LogoSvg className="md:w-[14rem] w-[12rem]" />
+          )}
         </Link>
         <div className="hidden md:flex uppercase md:items-center md:space-x-4 lg:space-x-6">
           {navData.map((item, idx) =>
             item.caseStudies ? (
-              <NavDropdownMenu className="" key={idx} item={item} />
+              <NavDropdownMenu
+                key={idx}
+                item={item}
+                className={cn(
+                  isSticky
+                    ? "text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+                    : ""
+                )}
+              />
             ) : (
               <Link
                 key={idx}
                 href={item.url}
-                className=" text-accent px-2  cursor-pointer rounded-md transition-all text-sm"
+                className={cn(
+                  "text-sm px-2 font-medium transition-colors ",
+                  isSticky
+                    ? pathname === item.url
+                      ? "text-foreground font-semibold hover:text-foreground/80 border-b-2 border-foreground"
+                      : "text-foreground/60"
+                    : " text-accent"
+                )}
               >
                 {item.name}
               </Link>
@@ -156,7 +199,7 @@ export default function Navbar() {
           <Link href="/contact">
             <Button className="group">
               CONTACT US
-              <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
+              <ArrowRightSvg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
         </div>
