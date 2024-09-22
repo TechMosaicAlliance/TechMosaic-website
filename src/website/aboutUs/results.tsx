@@ -71,14 +71,20 @@ export default function OurResults() {
   return (
     <section className="lg:pt-[3rem]">
       <div className=" text-center mx-auto">
-        <h1 data-animation="fade-in-y" className="text-xl opacity-0">
+        <h1
+          data-animation="fade-in-y"
+          className="text-xl font-medium md:font-normal opacity-0"
+        >
           Our results in numbers
         </h1>
 
         {/* <Marquee baseVelocity={0}> */}
-        <div className="flex gap-20 justify-center pt-3">
+        <div className="flex gap-5 justify-center pt-5 items-center lg:gap-20">
           {data.map((item, idx) => (
-            <div key={idx} className="flex  gap-1 flex-col w-fit items-center">
+            <div
+              key={idx}
+              className="flex flex-shrink-0  gap-1 flex-col w-fit items-center"
+            >
               {item.icon}
               <p>{item.text}</p>
             </div>

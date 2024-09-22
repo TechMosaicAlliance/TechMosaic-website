@@ -156,7 +156,7 @@ export default function Navbar() {
         "transition-all duration-300 z-[99999]  border-primary-foreground/50 border-b-[0.05rem]",
         isSticky
           ? "bg-background  border-foreground/10 border-b-[0.05rem]  self-start fixed top-0 left-0 right-0 w-full"
-          : "bg-transparent"
+          : "bg-transparent   border-primary-foreground/40"
       )}
     >
       <div className="flex container max-w-7xl mx-auto items-center p-4 justify-between">
