@@ -1,0 +1,64 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap");
+
+.text-custom-conic-gradient {
+  background: conic-gradient(
+    from 90deg at 0% 100%,
+    #f27121 -7.61deg,
+    #e94057 333.75deg,
+    /* #8a2387 339.75deg, */ /* #f27121 352.39deg, */ #e94057 693.75deg
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.bg-custom-conic-gradient {
+  background: hsla(23, 89%, 54%, 1);
+
+  background: linear-gradient(
+    90deg,
+    hsla(23, 89%, 54%, 1) 0%,
+    hsla(352, 79%, 58%, 1) 100%
+  );
+
+  background: -moz-linear-gradient(
+    90deg,
+    hsla(23, 89%, 54%, 1) 0%,
+    hsla(352, 79%, 58%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    90deg,
+    hsla(23, 89%, 54%, 1) 0%,
+    hsla(352, 79%, 58%, 1) 100%
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#F27121", endColorstr="#E94057", GradientType=1 );
+  /* background: hsla(302, 60%, 34%, 1);
+
+  background: -moz-linear-gradient(
+    110deg,
+    hsla(302, 60%, 34%, 1) 0%,
+    hsla(23, 89%, 54%, 1) 51%,
+    hsla(23, 89%, 54%, 1) 100%
+  );
+
+  background: -webkit-linear-gradient(
+    110deg,
+    hsla(302, 60%, 34%, 1) 0%,
+    hsla(23, 89%, 54%, 1) 51%,
+    hsla(23, 89%, 54%, 1) 100%
+  );
+  background: linear-gradient(
+    140deg,
+    hsla(302, 60%, 34%, 1) 0%,
+    hsla(23, 89%, 54%, 1) 51%,
+    hsla(23, 89%, 54%, 1) 100%
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#8A2387", endColorstr="#F27121", GradientType=1 ); */
+}
+
+.playfair-display {
+  font-family: "Playfair Display", serif;
+  font-optical-sizing: auto;
+}

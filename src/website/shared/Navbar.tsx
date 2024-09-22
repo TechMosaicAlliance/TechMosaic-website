@@ -1,0 +1,215 @@
+"use client";
+
+import NavIconSvg, { ArrowRightSvg, LogoSvg } from "@/components/svgs";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { cn } from "@/lib/utils";
+import { ChevronDown, Menu, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import React, { SetStateAction, useEffect, useState } from "react";
+
+const navData = [
+  {
+    name: "Home",
+    url: "/",
+  },
+  {
+    name: "About",
+    url: "/about-us",
+  },
+  {
+    name: "Portfolio",
+    url: "/portfolio",
+    caseStudies: [
+      { name: "Our Portfolio", url: "/portfolio" },
+      { name: "Case Studies", url: "/casestudy" },
+    ],
+  },
+  {
+    name: "Services",
+    url: "/services",
+  },
+  {
+    name: "Blog",
+    url: "/blogs",
+  },
+  {
+    name: "Careers",
+    url: "/career",
+  },
+];
+
+function NavDropdownMenu({
+  item,
+  className,
+}: {
+  item: any;
+  className: string;
+}) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          className={cn(
+            "flex items-center text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
+            className
+          )}
+        >
+          {item.name}
+          <ChevronDown className="ml-1 h-4 w-4" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className="w-40 mt-2 z-[99999] ">
+        {item.caseStudies.map((study: any, idx: number) => (
+          <DropdownMenuItem className="" key={idx} asChild>
+            <Link href={study.url} className="w-full ">
+              {study.name}
+            </Link>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function MobileMenu({
+  className,
+  open,
+  setOpen,
+}: {
+  className: string;
+  open: boolean;
+  setOpen: React.Dispatch<SetStateAction<any>>;
+}) {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname, setOpen]);
+  return (
+    <Sheet open={open} onOpenChange={setOpen} modal={false}>
+      <SheetTrigger asChild>
+        <Button
+          className="md:hidden hover:bg-transparent"
+          variant="ghost"
+          size="icon"
+        >
+          <NavIconSvg className={className} />
+          <span className="sr-only">Open menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="right"
+        className="w-full z-[9999] pt-[5rem] sm:w-[400px]"
+      >
+        <nav className="flex flex-col h-full  items-center gap-7">
+          {navData.map((item, idx) => (
+            <Link
+              key={idx}
+              href={item.url}
+              className="text-lg font-medium hover:underline"
+            >
+              {item.name}
+            </Link>
+          ))}
+          <Link href="/contact" className="mt-4">
+            <Button className="w-full">
+              CONTACT US
+              <ArrowRightSvg className="ml-2 h-4 w-4" />
+            </Button>
+          </Link>
+        </nav>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  return (
+    <nav className="relative border-primary-foreground/50 border-b-[0.05rem] z-[99999]">
+      <div className="flex container max-w-7xl mx-auto items-center p-4 justify-between">
+        <Link href="/" className="flex items-center space-x-2">
+          <LogoSvg className="md:w-[14rem] w-[12rem] " />
+        </Link>
+        <div className="hidden md:flex uppercase md:items-center md:space-x-4 lg:space-x-6">
+          {navData.map((item, idx) =>
+            item.caseStudies ? (
+              <NavDropdownMenu className="" key={idx} item={item} />
+            ) : (
+              <Link
+                key={idx}
+                href={item.url}
+                className=" text-accent px-2  cursor-pointer rounded-md transition-all text-sm"
+              >
+                {item.name}
+              </Link>
+            )
+          )}
+          <Link href="/contact">
+            <Button className="group">
+              CONTACT US
+              <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
+            </Button>
+          </Link>
+        </div>
+        <MobileMenu open={open} setOpen={setOpen} className="" />
+      </div>
+    </nav>
+  );
+}
+
+export function NavbarVariant() {
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <nav className="top-0  bg-background  sticky self-start  border-foreground/10 border-b-[0.05rem] z-[9999]">
+        <div className="flex container mx-auto items-center p-4 justify-between">
+          <Link href="/" className="flex items-center space-x-2">
+            <LogoSvg className="md:w-[14rem] w-[12rem] fill-foreground" />
+          </Link>
+          <div className="hidden md:flex uppercase md:items-center md:space-x-4 lg:space-x-6">
+            {navData.map((item, idx) =>
+              item.caseStudies ? (
+                <NavDropdownMenu
+                  className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+                  key={idx}
+                  item={item}
+                />
+              ) : (
+                <Link
+                  key={idx}
+                  href={item.url}
+                  className={cn(
+                    "text-sm px-2 font-medium transition-colors hover:text-foreground/80",
+                    pathname === item.url
+                      ? "text-foreground font-semibold border-b-2 border-foreground"
+                      : "text-foreground/60"
+                  )}
+                >
+                  {item.name}
+                </Link>
+              )
+            )}
+            <Link href="/contact">
+              <Button className="border-white border group ">
+                CONTACT US
+                <ArrowRightSvg className="ml-1 w-4 h-4  transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+          </div>
+          <MobileMenu open={open} setOpen={setOpen} className="stroke-black" />
+        </div>
+      </nav>
+    </>
+  );
+}
