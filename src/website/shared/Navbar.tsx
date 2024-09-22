@@ -139,8 +139,6 @@ export default function Navbar() {
   useEffect(() => {
     const handleScroll = () => {
       const heroSection = document.querySelector(".hero-section");
-
-      console.log(heroSection);
       if (heroSection) {
         const heroBottom = heroSection.getBoundingClientRect().bottom;
         setIsSticky(heroBottom <= 0);
