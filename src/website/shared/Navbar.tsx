@@ -174,7 +174,7 @@ export default function Navbar() {
                 className={cn(
                   isSticky
                     ? "text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-                    : ""
+                    : "text-sm font-medium transition-colors  hover:text-accent/90 text-accent"
                 )}
               />
             ) : (
@@ -186,8 +186,8 @@ export default function Navbar() {
                   isSticky
                     ? pathname === item.url
                       ? "text-foreground font-semibold hover:text-foreground/80 border-b-2 border-foreground"
-                      : "text-foreground/60"
-                    : " text-accent"
+                      : "text-foreground/60 hover:text-foreground/80"
+                    : " hover:text-accent/90 text-accent"
                 )}
               >
                 {item.name}
