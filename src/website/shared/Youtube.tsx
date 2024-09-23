@@ -124,7 +124,10 @@ export default function YoutubeView({
   };
 
   return (
-    <div className="bg-green-800/20 h-full flex items-center justify-center relative">
+    <div
+      onClick={togglePlayPause}
+      className="bg-green-800/20 h-full flex items-center justify-center relative"
+    >
       {showThumbnail && (
         <div className="absolute overflow-hidden top-0 w-full h-full">
           <BlurImage
@@ -136,16 +139,18 @@ export default function YoutubeView({
         </div>
       )}
 
-      <Button
-        onClick={togglePlayPause}
-        className={`absolute cursor-pointer z-10 h-[3rem] w-[3rem] lg:w-[5rem] lg:h-[5rem] rounded-full ${
-          isLoading ? "opacity-50 cursor-not-allowed" : ""
-        }`}
-        disabled={isLoading}
-        style={{ backgroundColor: btnColor || "black" }}
-      >
-        {isPlaying ? <Pause size={32} /> : <Play size={32} />}
-      </Button>
+      {!isPlaying && (
+        <Button
+          onClick={togglePlayPause}
+          className={`absolute cursor-pointer z-10 h-[3rem] w-[3rem] lg:w-[5rem] lg:h-[5rem] rounded-full ${
+            isLoading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={isLoading}
+          style={{ backgroundColor: btnColor || "black" }}
+        >
+          {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+        </Button>
+      )}
 
       <video
         ref={videoRef}
