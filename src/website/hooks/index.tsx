@@ -56,6 +56,14 @@ export const useGetFaq = () => {
   return data;
 };
 
+export const useGetContents = () => {
+  const data = useQuery({
+    queryFn: () => wordpressApi.content.contents(),
+    queryKey: ["getAllContents"],
+  });
+  return data;
+};
+
 export const useGetCareerCategory = () => {
   const data = useQuery({
     queryFn: () => wordpressApi.career.getAllCategory(),

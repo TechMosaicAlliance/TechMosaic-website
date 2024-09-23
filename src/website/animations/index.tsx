@@ -104,61 +104,132 @@ export const SlideIn = forwardRef<gsap.core.Timeline | null, FadeInProps>(
 
 SlideIn.displayName = "SlideIn";
 
-export const useHeroAnimation = () => {
-  //First animation on the hero section runs only once
-  useEffect(() => {
-    const timeline = gsap.timeline();
+// export const useHeroAnimation = () => {
+//   //First animation on the hero section runs only once
+//   useEffect(() => {
+//     const timeline = gsap.timeline();
 
-    // Animation for elements with data-animation="fade-in-y"
+//     // Animation for elements with data-animation="fade-in-y"
+//     timeline.fromTo(
+//       '[data-animation="fade-in-y"]',
+//       { yPercent: 70, opacity: 0 }, // Slower initial reveal
+//       {
+//         yPercent: 0,
+//         opacity: 1,
+//         ease: Power2.easeOut, // Smoother easing
+//         stagger: {
+//           amount: 1.2, // Increase stagger amount for slower sequence
+//         },
+//       },
+//       0.3 // Small delay before the animation starts
+//     );
+
+//     // Animation for elements with data-animation="fade-in"
+//     timeline.to('[data-animation="fade-in"]', {
+//       opacity: 1,
+//       duration: 2.5, // Slower fade-in animation
+//       ease: Power2.easeInOut, // Smoother transition
+//     });
+//   }, []);
+//   // useEffect(() => {
+//   //   const timeline = gsap.timeline();
+//   //   timeline.fromTo(
+//   //     '[data-animation="fade-in-y"]',
+//   //     { yPercent: 70, opacity: 0, duration: 3 },
+//   //     {
+//   //       yPercent: 0,
+//   //       opacity: 1,
+//   //       ease: Power2.easeOut,
+//   //       stagger: {
+//   //         amount: 0.6,
+//   //       },
+//   //     },
+//   //     0.3
+//   //   );
+//   //   timeline.to(
+//   //     '[data-animation="fade-in"]',
+//   //     {
+//   //       opacity: 1,
+//   //       ease: Power2.easeIn,
+//   //     }
+//   //     // "-=0.9"
+//   //   );
+//   // }, []);
+
+//   useEffect(() => {
+//     gsap.defaults({ ease: "power3" });
+//     gsap.set('[data-animation="trigger-fade-in-y"]', { y: 50 });
+//     ScrollTrigger.batch('[data-animation="trigger-fade-in-y"]', {
+//       onEnter: (batch) =>
+//         gsap.to(batch, {
+//           opacity: 1,
+//           y: 0,
+//           stagger: { each: 0.15, grid: [1, 3] },
+//           overwrite: true,
+//         }),
+//       onLeave: (batch) =>
+//         gsap.set(batch, { opacity: 0, y: -100, overwrite: true }),
+//       onEnterBack: (batch) =>
+//         gsap.to(batch, { opacity: 1, y: 0, stagger: 0.15, overwrite: true }),
+//       onLeaveBack: (batch) =>
+//         gsap.set(batch, { opacity: 0, y: 50, overwrite: true }),
+//       // you can also define things like start, end, etc.
+//     });
+//     ScrollTrigger.batch('[data-animation="scroll-fade-in-y"]', {
+//       onEnter: (batch) =>
+//         gsap.fromTo(
+//           batch,
+//           { yPercent: 120, opacity: 1, duration: 1 },
+//           {
+//             yPercent: 0,
+//             opacity: 1,
+//             ease: Power2.easeOut,
+//             stagger: {
+//               amount: 0.2,
+//             },
+//           }
+//         ),
+//     });
+//   }, []);
+// };
+
+type Iprops = {
+  dataLoaded?: boolean;
+};
+export const useHeroAnimation = (props?: Iprops) => {
+  const timelineRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (props?.dataLoaded !== undefined && props?.dataLoaded === false) return;
+
+    // Initial animations
+    const timeline = gsap.timeline();
+    timelineRef.current = timeline;
+
     timeline.fromTo(
       '[data-animation="fade-in-y"]',
-      { yPercent: 70, opacity: 0 }, // Slower initial reveal
+      { yPercent: 70, opacity: 0 },
       {
         yPercent: 0,
         opacity: 1,
-        ease: Power2.easeOut, // Smoother easing
+        ease: "power2.out",
         stagger: {
-          amount: 1.2, // Increase stagger amount for slower sequence
+          amount: 1.2,
         },
       },
-      0.3 // Small delay before the animation starts
+      0.3
     );
 
-    // Animation for elements with data-animation="fade-in"
     timeline.to('[data-animation="fade-in"]', {
       opacity: 1,
-      duration: 2.5, // Slower fade-in animation
-      ease: Power2.easeInOut, // Smoother transition
+      duration: 2.5,
+      ease: "power2.inOut",
     });
-  }, []);
-  // useEffect(() => {
-  //   const timeline = gsap.timeline();
-  //   timeline.fromTo(
-  //     '[data-animation="fade-in-y"]',
-  //     { yPercent: 70, opacity: 0, duration: 3 },
-  //     {
-  //       yPercent: 0,
-  //       opacity: 1,
-  //       ease: Power2.easeOut,
-  //       stagger: {
-  //         amount: 0.6,
-  //       },
-  //     },
-  //     0.3
-  //   );
-  //   timeline.to(
-  //     '[data-animation="fade-in"]',
-  //     {
-  //       opacity: 1,
-  //       ease: Power2.easeIn,
-  //     }
-  //     // "-=0.9"
-  //   );
-  // }, []);
 
-  useEffect(() => {
+    // ScrollTrigger animations
     gsap.defaults({ ease: "power3" });
-    gsap.set('[data-animation="trigger-fade-in-y"]', { y: 50 });
+    gsap.set('[data-animation="trigger-fade-in-y"]', { y: 50, opacity: 0 });
+
     ScrollTrigger.batch('[data-animation="trigger-fade-in-y"]', {
       onEnter: (batch) =>
         gsap.to(batch, {
@@ -173,22 +244,31 @@ export const useHeroAnimation = () => {
         gsap.to(batch, { opacity: 1, y: 0, stagger: 0.15, overwrite: true }),
       onLeaveBack: (batch) =>
         gsap.set(batch, { opacity: 0, y: 50, overwrite: true }),
-      // you can also define things like start, end, etc.
     });
+
     ScrollTrigger.batch('[data-animation="scroll-fade-in-y"]', {
       onEnter: (batch) =>
         gsap.fromTo(
           batch,
-          { yPercent: 120, opacity: 1, duration: 1 },
+          { yPercent: 120, opacity: 0 },
           {
             yPercent: 0,
             opacity: 1,
-            ease: Power2.easeOut,
+            duration: 1,
+            ease: "power2.out",
             stagger: {
               amount: 0.2,
             },
           }
         ),
     });
-  }, []);
+
+    // Cleanup function
+    return () => {
+      if (timelineRef.current) {
+        timelineRef.current.kill();
+      }
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [props?.dataLoaded]); // Re-run effect when dataLoaded changes
 };

@@ -1,9 +1,11 @@
+import { transformContent } from "@/lib/utils";
 import { request } from "../apiConfig";
 import { wordPressBaseUrl } from "../constants";
 import {
   BlogAcf,
   CareerAcf,
   Category,
+  ContentAcf,
   FaqAcf,
   IAddContact,
   IApply,
@@ -117,6 +119,15 @@ export const wordpressApi = {
         method: "GET",
       });
       return data;
+    },
+    contents: async () => {
+      const data = await request<IWordPressReturnTypeObj<ContentAcf>[], void>({
+        customUrl: `${wordPressBaseUrl}/content${defaultQuery}`,
+        method: "GET",
+      });
+      if (data && data.length > 0) {
+        return transformContent(data[0]);
+      }
     },
     contact: async (payload: IAddContact) => {
       const data = await request<

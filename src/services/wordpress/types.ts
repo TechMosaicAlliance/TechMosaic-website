@@ -74,6 +74,18 @@ export interface TeamAcf {
   text?: string;
 }
 
+export interface ContentAcf {
+  "about-image1": string;
+  "about-image2": string;
+  "about-image3": string;
+  "about-image4": string;
+  "service-video": string;
+  "inside-mosaic-video": string;
+  role: string;
+  name: string;
+  text?: string;
+}
+
 export interface CareerAcf {
   content: string;
   short_description: string;

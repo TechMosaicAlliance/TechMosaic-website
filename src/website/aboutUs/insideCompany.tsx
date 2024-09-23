@@ -1,7 +1,10 @@
+"use client";
 import React from "react";
 import YoutubeView from "../shared/Youtube";
+import { useGetContents } from "../hooks";
 
 export default function InsideMosaicCompany() {
+  const { data: contentData, isPending } = useGetContents();
   return (
     <section className="container max-w-7xl p-4 pt-[2rem] lg:pt-[4rem] mx-auto">
       <div className="grid ">
@@ -24,7 +27,10 @@ export default function InsideMosaicCompany() {
         className="lg:pt-12 opacity-0 pt-8"
       >
         <YoutubeView
-          videoSrc="/assets/video1.mp4"
+          videoSrc={
+            contentData?.otherContent.acf["inside-mosaic-video"] ||
+            "/assets/video1.mp4"
+          }
           thumbnail="/assets/office.jpg"
         />
       </div>

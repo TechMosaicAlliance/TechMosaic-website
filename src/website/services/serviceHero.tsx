@@ -2,6 +2,7 @@
 import { BlurImage } from "@/components/ui/blurImage";
 import React from "react";
 import { useHeroAnimation } from "../animations";
+import { useGetContents } from "../hooks";
 
 export default function ServiceHero() {
   useHeroAnimation();

@@ -1,3 +1,7 @@
+import {
+  IWordPressReturnTypeObj,
+  ContentAcf,
+} from "@/services/wordpress/types";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -20,3 +24,41 @@ export function transformUrl(url: string, id: any) {
 
   return newUrl.toString();
 }
+
+export interface TransformedContent {
+  images: string[];
+  otherContent: Omit<IWordPressReturnTypeObj<ContentAcf>, "acf"> & {
+    acf: Omit<
+      ContentAcf,
+      "about-image1" | "about-image2" | "about-image3" | "about-image4"
+    >;
+  };
+}
+
+export const transformContent = (
+  item: IWordPressReturnTypeObj<ContentAcf>
+): TransformedContent => {
+  const { acf, ...otherContent } = item;
+  const images = [
+    acf["about-image1"],
+    acf["about-image2"],
+    acf["about-image3"],
+    acf["about-image4"],
+  ].filter(Boolean); // This removes any falsy values (undefined, null, empty string)
+
+  const {
+    "about-image1": _img1,
+    "about-image2": _img2,
+    "about-image3": _img3,
+    "about-image4": _img4,
+    ...restAcf
+  } = acf;
+
+  return {
+    images,
+    otherContent: {
+      ...otherContent,
+      acf: restAcf,
+    },
+  };
+};

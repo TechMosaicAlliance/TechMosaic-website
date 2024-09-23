@@ -2,6 +2,7 @@
 import { BlurImage } from "@/components/ui/blurImage";
 import React from "react";
 import { useHeroAnimation } from "../animations";
+import { useGetContents } from "../hooks";
 
 const data = [
   {
@@ -23,7 +24,6 @@ const data = [
 ];
 
 export default function AboutUsHero() {
-  useHeroAnimation();
   return (
     <section className="pb-14">
       <div className="container max-w-7xl p-4 items-center gap-10 justify-between flex pt-[5rem] mx-auto">
@@ -49,10 +49,10 @@ export default function AboutUsHero() {
           </p>
         </div>
       </div>
-
-      <div className="lg:pt-[8rem] pt-[6rem] p-4 container mx-auto">
+      <HeroImage />
+      {/* <div className="lg:pt-[8rem] pt-[6rem] p-4 container mx-auto">
         <div className="grid grid-cols-4 gap-5">
-          {data.map((item, idx) => (
+          {contentData?.images.map((item, idx) => (
             <article
               key={idx}
               className="grid odd:-mt-[3rem] lg:odd:-mt-[5rem] gap-2"
@@ -62,13 +62,39 @@ export default function AboutUsHero() {
                   className="object-cover"
                   fill
                   alt=""
-                  src="/assets/portfolio1.png"
+                  src={"/assets/portfolio1.png"}
                 />
               </div>
             </article>
           ))}
         </div>
-      </div>
+      </div> */}
     </section>
+  );
+}
+
+function HeroImage() {
+  const { data: contentData, isPending } = useGetContents();
+  useHeroAnimation({ dataLoaded: isPending ? false : true });
+  return (
+    <div className="lg:pt-[8rem] pt-[6rem] p-4 container mx-auto">
+      <div className="grid grid-cols-4 gap-5">
+        {contentData?.images.map((item, idx) => (
+          <article
+            key={idx}
+            className="grid odd:-mt-[3rem] lg:odd:-mt-[5rem] gap-2"
+          >
+            <div className="lg:h-[33rem] h-[15rem] group overflow-hidden relative w-full">
+              <BlurImage
+                className="object-cover"
+                fill
+                alt=""
+                src={"/assets/portfolio1.png"}
+              />
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
   );
 }

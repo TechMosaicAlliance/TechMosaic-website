@@ -55,9 +55,9 @@ function FooterLinks() {
             <li>
               <Link href="/about-us">About Us</Link>
             </li>
-            <li>
+            {/* <li>
               <Link href="/pricing">Pricing</Link>
-            </li>
+            </li> */}
             <li>
               <Link href="/career">Join Our Team</Link>
             </li>

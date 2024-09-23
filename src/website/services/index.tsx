@@ -7,6 +7,7 @@ import YoutubeView from "../shared/Youtube";
 import TestimonialView from "./testimonial";
 import { Button } from "@/components/ui/button";
 import { ArrowRightSvg } from "@/components/svgs";
+import ServiceYoutube from "./ServiceYoutube";
 
 export default function ServicePage() {
   return (
@@ -16,7 +17,7 @@ export default function ServicePage() {
       <CaseStudy />
       <ServicePortfolioView />
       <div className="container p-4 lg:pt-[4rem] mx-auto">
-        <YoutubeView videoSrc="/assets/video1.mp4" />
+        <ServiceYoutube />
 
         <div className="flex pt-7 lg:hidden gap-3">
           <Button className="border-white group  text-xs  border">
