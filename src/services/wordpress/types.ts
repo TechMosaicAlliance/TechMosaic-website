@@ -81,6 +81,8 @@ export interface ContentAcf {
   "about-image4": string;
   "service-video": string;
   "inside-mosaic-video": string;
+  "inside-mosaic-preview": string;
+  "service-preview": string;
   role: string;
   name: string;
   text?: string;

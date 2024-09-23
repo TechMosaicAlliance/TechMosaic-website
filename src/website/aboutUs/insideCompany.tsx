@@ -31,7 +31,10 @@ export default function InsideMosaicCompany() {
             contentData?.otherContent.acf["inside-mosaic-video"] ||
             "/assets/video1.mp4"
           }
-          thumbnail="/assets/office.jpg"
+          thumbnail={
+            contentData?.otherContent.acf?.["inside-mosaic-preview"] ||
+            "/assets/office.jpg"
+          }
         />
       </div>
     </section>
