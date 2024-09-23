@@ -1,79 +1,70 @@
 "use client";
-import {
-  FacebookSvg,
-  GoogleSvg,
-  PinterestSvg,
-  TwitchSvg,
-  WebFlowSvg,
-  YoutubeSvg,
-} from "@/components/svgs";
-import React from "react";
-import { useRef } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import {
   motion,
-  useScroll,
-  useSpring,
-  useTransform,
-  useMotionValue,
-  useVelocity,
   useAnimationFrame,
+  useMotionValue,
+  useTransform,
 } from "framer-motion";
-import { wrap } from "@motionone/utils";
 
-interface ParallaxProps {
+interface MarqueeProps {
   children: React.ReactNode;
-  baseVelocity?: number;
+  speed?: number;
+  direction?: "left" | "right";
 }
 
-export default function Marquee({ baseVelocity = 4, children }: ParallaxProps) {
+export default function Marquee({
+  children,
+  speed = 100,
+  direction = "left",
+}: MarqueeProps) {
+  const [contentWidth, setContentWidth] = useState(0);
+  const [containerWidth, setContainerWidth] = useState(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400,
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false,
-  });
+  const x = useTransform(baseX, (v) => `${v}px`);
 
-  /**
-   * This is a magic wrapping for the length of the text - you
-   * have to replace for wrapping that works for you or dynamically
-   * calculate
-   */
-  const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
-
-  const directionFactor = useRef<number>(1);
-  useAnimationFrame((t, delta) => {
-    let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
-
-    /**
-     * This is what changes the direction of the scroll once we
-     * switch scrolling directions.
-     */
-    if (velocityFactor.get() < 0) {
-      directionFactor.current = -1;
-    } else if (velocityFactor.get() > 0) {
-      directionFactor.current = 1;
+  useEffect(() => {
+    if (contentRef.current && containerRef.current) {
+      setContentWidth(contentRef.current.offsetWidth);
+      setContainerWidth(containerRef.current.offsetWidth);
     }
+  }, [children]);
 
-    // moveBy += directionFactor.current * moveBy * velocityFactor.get();
+  useAnimationFrame((t, delta) => {
+    if (!contentWidth || !containerWidth) return;
+
+    let moveBy = (direction === "left" ? -1 : 1) * speed * (delta / 1000);
+
+    if (direction === "left") {
+      if (baseX.get() <= -contentWidth) {
+        // Reset baseX to avoid delay when scrolling left
+        baseX.set(baseX.get() + contentWidth);
+      }
+    } else {
+      if (baseX.get() >= containerWidth) {
+        // Reset baseX sooner to avoid delay when scrolling right
+        baseX.set(baseX.get() - contentWidth);
+      }
+    }
 
     baseX.set(baseX.get() + moveBy);
   });
+
   return (
-    <section className="py-7">
-      <div className="overflow-hidden m-0 flex-nowrap whitespace-nowrap flex">
-        <motion.div style={{ x }}>
-          <div className="flex gap-10">
-            {children}
-            {children}
-            {children}
-            {children}
-          </div>
-        </motion.div>
-      </div>
-    </section>
+    <div
+      className="marquee-container py-4 md:py-7 max-w-[100rem] mx-auto relative overflow-hidden"
+      ref={containerRef}
+    >
+      <motion.div className="flex whitespace-nowrap" style={{ x }}>
+        <div ref={contentRef} className="flex gap-4">
+          {children}
+          {children}
+        </div>
+        <div className="flex gap-4">{children}</div>
+      </motion.div>
+    </div>
   );
 }
