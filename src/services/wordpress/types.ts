@@ -73,6 +73,9 @@ export interface TeamAcf {
   name: string;
   text?: string;
 }
+export interface LogoAcf {
+  logo: string;
+}
 
 export interface ContentAcf {
   "about-image1": string;

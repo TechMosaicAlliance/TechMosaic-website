@@ -10,6 +10,7 @@ import {
   IAddContact,
   IApply,
   IWordPressReturnTypeObj,
+  LogoAcf,
   PortfolioAcf,
   TeamAcf,
   TermAcf,
@@ -128,6 +129,14 @@ export const wordpressApi = {
       if (data && data.length > 0) {
         return transformContent(data[0]);
       }
+    },
+    logos: async () => {
+      const data = await request<IWordPressReturnTypeObj<LogoAcf>[], void>({
+        customUrl: `${wordPressBaseUrl}/companylogos${defaultQuery}`,
+        method: "GET",
+      });
+
+      return data;
     },
     contact: async (payload: IAddContact) => {
       const data = await request<

@@ -55,6 +55,13 @@ export const useGetFaq = () => {
   });
   return data;
 };
+export const useGetLogos = () => {
+  const data = useQuery({
+    queryFn: () => wordpressApi.content.logos(),
+    queryKey: ["getAllCompanyLogos"],
+  });
+  return data;
+};
 
 export const useGetContents = () => {
   const data = useQuery({

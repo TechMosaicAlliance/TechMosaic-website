@@ -6,18 +6,13 @@ import OurService from "./OurService";
 import OurPortfolio from "./OurPortfolio";
 import { companyMarqueeData, productMarqueeData } from "@/services/dummyData";
 import OurBlog from "./OurBlog";
+import HomeMarque from "./HomeMarque";
 
 export default function HomePage() {
   return (
     <WebLayout showNav={false}>
       <Hero />
-      <Marquee>
-        <div className="flex gap-10 items-center">
-          {companyMarqueeData.map((item, idx) => (
-            <div key={idx}>{item.icon}</div>
-          ))}
-        </div>
-      </Marquee>
+      <HomeMarque />
       <OurService />
       <OurPortfolio />
       <Marquee>
