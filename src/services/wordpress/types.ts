@@ -83,6 +83,10 @@ export interface ContentAcf {
   "inside-mosaic-video": string;
   "inside-mosaic-preview": string;
   "service-preview": string;
+  "happy-client": string;
+  projects: string;
+  "team-members": string;
+  satisfaction: string;
   role: string;
   name: string;
   text?: string;

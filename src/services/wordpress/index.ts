@@ -15,7 +15,7 @@ import {
   TermAcf,
 } from "./types";
 
-const defaultQuery = "?fields=acf&acf_format=standard";
+const defaultQuery = "?per_page=100&fields=acf&acf_format=standard";
 
 // Define the API object with reusable functions for different methods
 export const wordpressApi = {

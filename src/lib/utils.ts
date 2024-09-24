@@ -27,6 +27,7 @@ export function transformUrl(url: string, id: any) {
 
 export interface TransformedContent {
   images: string[];
+  results: string[];
   otherContent: Omit<IWordPressReturnTypeObj<ContentAcf>, "acf"> & {
     acf: Omit<
       ContentAcf,
@@ -46,6 +47,13 @@ export const transformContent = (
     acf["about-image4"],
   ].filter(Boolean); // This removes any falsy values (undefined, null, empty string)
 
+  const results = [
+    acf["happy-client"],
+    acf["projects"],
+    acf["team-members"],
+    acf["satisfaction"],
+  ].filter(Boolean); // This removes any falsy values (undefined, null, empty string)
+
   const {
     "about-image1": _img1,
     "about-image2": _img2,
@@ -55,6 +63,7 @@ export const transformContent = (
   } = acf;
 
   return {
+    results,
     images,
     otherContent: {
       ...otherContent,

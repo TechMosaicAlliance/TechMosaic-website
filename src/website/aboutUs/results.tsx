@@ -1,14 +1,14 @@
 "use client";
 import React, { useEffect } from "react";
-import Marquee from "../homepage/Marquee";
 import gsap, { Power4, Power2 } from "gsap";
+import { useGetContents } from "../hooks";
 
 const data = [
   {
-    icon: (
+    icon: (val: string) => (
       <div className="flex items-center">
-        <h1 data-count="250" className="text-3xl lg:text-5xl font-medium">
-          250
+        <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
+          {val}
         </h1>
         <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
       </div>
@@ -16,10 +16,10 @@ const data = [
     text: "Happy Clients",
   },
   {
-    icon: (
+    icon: (val: string) => (
       <div className="flex items-center">
-        <h1 data-count="400" className="text-3xl lg:text-5xl font-medium">
-          400
+        <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
+          {val}
         </h1>
         <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
       </div>
@@ -27,10 +27,10 @@ const data = [
     text: "Successful projects",
   },
   {
-    icon: (
+    icon: (val: string) => (
       <div className="flex items-center">
-        <h1 data-count="100" className="text-3xl lg:text-5xl font-medium">
-          100
+        <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
+          {val}
         </h1>
         <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
       </div>
@@ -38,10 +38,10 @@ const data = [
     text: "Team members",
   },
   {
-    icon: (
+    icon: (val: string) => (
       <div className="flex items-center">
-        <h1 data-count="99" className=" text-3xl lg:text-5xl font-medium">
-          99
+        <h1 data-count={val} className=" text-3xl lg:text-5xl font-medium">
+          {val}
         </h1>
         <p className=" text-2xl lg:text-4xl font-medium text-red-500">%</p>
       </div>
@@ -51,7 +51,10 @@ const data = [
 ];
 
 export default function OurResults() {
+  const { data: contentData, isPending } = useGetContents();
+
   useEffect(() => {
+    if (isPending) return;
     gsap.utils.toArray("h1[data-count]").forEach((el: any) => {
       gsap.fromTo(
         el,
@@ -67,7 +70,11 @@ export default function OurResults() {
         }
       );
     });
-  }, []);
+  }, [isPending]);
+
+  if (isPending) {
+    return <div></div>;
+  }
   return (
     <section className="lg:pt-[3rem]">
       <div className=" text-center mx-auto">
@@ -78,19 +85,17 @@ export default function OurResults() {
           Our results in numbers
         </h1>
 
-        {/* <Marquee baseVelocity={0}> */}
         <div className="flex gap-5 justify-center pt-5 items-center lg:gap-20">
           {data.map((item, idx) => (
             <div
               key={idx}
               className="flex flex-shrink-0  gap-1 flex-col w-fit items-center"
             >
-              {item.icon}
+              {item.icon(contentData?.results?.[idx] as any)}
               <p>{item.text}</p>
             </div>
           ))}
         </div>
-        {/* </Marquee> */}
       </div>
     </section>
   );
