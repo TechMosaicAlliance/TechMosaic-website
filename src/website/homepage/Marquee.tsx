@@ -55,11 +55,67 @@ export default function Marquee({
 
   return (
     <div
-      className="marquee-container py-4 md:py-7 max-w-[100rem] mx-auto relative overflow-hidden"
+      className=" z-0 py-10 max-w-[100rem] mx-auto relative overflow-hidden"
       ref={containerRef}
     >
+      <style jsx>{`
+        .marquee-container {
+          mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--fade-stop),
+            black calc(100% - var(--fade-stop)),
+            transparent
+          );
+          -webkit-mask-image: linear-gradient(
+            to right,
+            transparent,
+            black var(--fade-stop),
+            black calc(100% - var(--fade-stop)),
+            transparent
+          );
+        }
+
+        .marquee-container::before,
+        .marquee-container::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          width: calc(var(--fade-stop) * 1.5);
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .marquee-container::before {
+          left: 0;
+          background: linear-gradient(
+            to right,
+            var(--fade-color),
+            color-mix(in srgb, var(--fade-color) 10%, transparent)
+          );
+        }
+
+        .marquee-container::after {
+          right: 0;
+          background: linear-gradient(
+            to left,
+            var(--fade-color),
+            color-mix(in srgb, var(--fade-color) 10%, transparent)
+          );
+        }
+      `}</style>
       <motion.div className="flex whitespace-nowrap" style={{ x }}>
-        <div ref={contentRef} className="flex gap-4">
+        <div
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          }}
+          ref={contentRef}
+          className="flex gap-4"
+        >
           {children}
           {children}
         </div>

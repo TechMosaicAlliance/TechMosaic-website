@@ -79,55 +79,6 @@ export default function Hero() {
   }, []);
 
   return (
-    // <div className="  pb-[9rem] h-[100dvh] 2xl:h-[54rem] relative">
-    //   <Navbar />
-    //   <div className="absolute top-0 w-full h-full">
-    //     <Image
-    //       priority
-    //       alt=""
-    //       src="/assets/hero-image.webp"
-    //       fill
-    //       className=" object-cover aspect-auto"
-    //     />
-    //   </div>
-    //   <section className="relative max-w-7xl p-5 container  pt-[4rem] mx-auto lg:pt-[10rem] flex h-full z-[99]">
-    //     <div className="grid gap-5 lg:gap-[7rem] h-fit">
-    //       <h1
-    //         data-animation="hero-fade-in-y"
-    //         className="lg:text-6xl opacity-0 text-4xl font-semibold lg:font-medium tracking-tight text-accent"
-    //       >
-    //         Fueling Your Business <br />
-    //         Growth through <br />
-    //         <p
-    //           className="relative gap-2 flex flex-col md:flex-row overflow-hidden md:h-[4rem]" // Set overflow hidden and fix height
-    //         >
-    //           Personalized
-    //           <span
-    //             ref={wordRef}
-    //             className="relative italic playfair-display text-custom-conic-gradient"
-    //             style={{ display: "block", transform: "translateY(100%)" }} // Initial position
-    //           >
-    //             {/* Word will be animated here */}
-    //           </span>
-    //         </p>
-    //       </h1>
-    //       <div className="max-w-4xl  flex gap-10 items-center text-accent">
-    //         <p data-animation="hero-fade-in-y" className="lg:text-xl opacity-0">
-    //           We fuse creativity, effective management, and a shared industry
-    //           experience of over two decades to help you stand out in a
-    //           competitive market
-    //         </p>
-
-    //         <Link
-    //           href="/contact"
-    //           className="absolute   cursor-pointer transition-all bottom-0 md:bottom-20 right-[2rem]"
-    //         >
-    //           <GetStartedSvg className=" lg:w-[10rem] lg:h-[10rem] w-[6rem] h-[6rem]" />
-    //         </Link>
-    //       </div>
-    //     </div>
-    //   </section>
-    // </div>
     <div className="grid grid-rows-[auto_1fr] hero-section  h-[100svh] 2xl:h-[54rem] relative">
       <Navbar />
       <div className="grid grid-cols-1 grid-rows-1">
