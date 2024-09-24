@@ -191,7 +191,7 @@ function NewsLetterFooter() {
         fill
         className="object-cover absolute "
       />
-      <div className="relative flex flex-col max-w-7xl items-center lg:flex-row gap-10 justify-between container lg:pt-[5.5rem] mx-auto z-20 ">
+      <div className="relative flex flex-col md:max-w-7xl md:items-center lg:flex-row gap-10 justify-between container pt-[5.5rem] mx-auto z-20 ">
         <div className="grid  h-fit gap-4">
           <div className="grid gap-4 text-white">
             <h2 className="lg:text-5xl text-4xl lg:leading-[4rem] font-medium">
