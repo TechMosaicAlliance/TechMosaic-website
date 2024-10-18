@@ -101,6 +101,20 @@ export const useApplyJob = () => {
   return data;
 };
 
+export const useLinkedin = () => {
+  const data = useMutation({
+    mutationFn: wordpressApi.career.linkedin,
+    onSuccess(data) {
+      handleMutationSuccess(data);
+    },
+    onError(error) {
+      handleMutationError({ error });
+    },
+  });
+
+  return data;
+};
+
 export const useAddContact = () => {
   const data = useMutation({
     mutationFn: wordpressApi.content.contact,

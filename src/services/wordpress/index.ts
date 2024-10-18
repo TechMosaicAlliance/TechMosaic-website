@@ -9,6 +9,7 @@ import {
   FaqAcf,
   IAddContact,
   IApply,
+  ILinkedin,
   IWordPressReturnTypeObj,
   LogoAcf,
   PortfolioAcf,
@@ -102,6 +103,17 @@ export const wordpressApi = {
         method: "POST",
         body: payload,
       });
+      return data;
+    },
+
+    linkedin: async (payload: ILinkedin) => {
+      const data = await request<IWordPressReturnTypeObj<TeamAcf>[], ILinkedin>(
+        {
+          customUrl: `${wordPressBaseUrl}/linkedin${defaultQuery}`,
+          method: "POST",
+          body: payload,
+        }
+      );
       return data;
     },
   },

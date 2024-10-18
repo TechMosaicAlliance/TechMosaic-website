@@ -150,3 +150,9 @@ export interface IApply {
     job: any;
   };
 }
+
+export interface ILinkedin {
+  acf: {
+    url: string;
+  };
+}

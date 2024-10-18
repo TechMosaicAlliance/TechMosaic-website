@@ -8,6 +8,7 @@ import { useGetCareerCategory, useGetCareers } from "../hooks";
 import { ErrorCard } from "@/components/ui/cards";
 import { useRouter } from "next/navigation";
 import { BlogLoader, CardLoader } from "@/components/ui/loading";
+import LinkedInShare from "../shared/LinkedinShare";
 
 export default function Component() {
   const router = useRouter();
@@ -97,9 +98,10 @@ export default function Component() {
               your desired position here, please send us your LinkedIn profile
               and give us your contact information. We will be in touch.{" "}
             </p>
-            <Button className="rounded-full border-black" variant="outline">
+            {/* <Button className="rounded-full border-black" variant="outline">
               Share Your Linkedin Profile
-            </Button>
+            </Button> */}
+            <LinkedInShare />
           </div>
         </div>
 
