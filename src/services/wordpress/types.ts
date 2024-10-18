@@ -93,6 +93,8 @@ export interface ContentAcf {
   role: string;
   name: string;
   text?: string;
+  job_we_are: string;
+  jobwhatnext: string;
 }
 
 export interface CareerAcf {

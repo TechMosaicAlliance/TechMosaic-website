@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { ArrowRight, LucideLoader, LucideLoader2 } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { useGetCareerCategory, useGetCareers } from "../hooks";
+import { useGetCareerCategory, useGetCareers, useGetContents } from "../hooks";
 import { ErrorCard } from "@/components/ui/cards";
 import { useRouter } from "next/navigation";
 import { BlogLoader, CardLoader } from "@/components/ui/loading";

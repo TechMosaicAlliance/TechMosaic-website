@@ -16,7 +16,6 @@ export function SinglePortfolio({
 }: {
   data: IWordPressReturnTypeObj<PortfolioAcf>;
 }) {
-  console.log(data, "dd");
   return (
     <>
       <div>
