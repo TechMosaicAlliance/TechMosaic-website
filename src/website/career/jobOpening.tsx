@@ -24,11 +24,14 @@ export default function Component() {
 
   const [activeCategory, setActiveCategory] = useState("All");
   const topSectionRef = useRef<HTMLDivElement>(null);
+
   const filteredJobs =
     activeCategory === "All"
       ? careers
-      : careers?.filter(
-          (job) => job.acf.career_category.name.toLowerCase() === activeCategory
+      : careers?.filter((job) =>
+          job.acf.career_tags.some(
+            (tag) => tag.name.toLowerCase() === activeCategory.toLowerCase()
+          )
         );
 
   const handleCategoryClick = (category: string) => {
