@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useApplyJob } from "../hooks";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
-import { CareerAcf, IWordPressReturnTypeObj } from "@/services/wordpress/types";
+import { CareerAcf, IApply, IWordPressReturnTypeObj } from "@/services/wordpress/types";
 import { transformUrl } from "@/lib/utils";
 
 export function ApplyView({
@@ -58,7 +58,7 @@ export function ApplyView({
   console.log(formData)
 
   if (formData.termsAccepted) {
-    const payload= {
+    const payload : IApply = {
       acf: {
         fullname: formData.fullName,
         phone: formData.phone,
