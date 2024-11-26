@@ -66,7 +66,7 @@ export function ApplyView({
         title: "New Enquiry",
         why_do_you: formData.why_do_you,
         about_you: formData.about_you,
-        job: transformUrl(item.guid.rendered, item.id), // Replace this with the appropriate job value
+        job: transformUrl(item.guid.rendered, item.id) , // Replace this with the appropriate job value
         cvfile: formData.cvfile, // Ensure the API accepts the file directly
       },
     };
