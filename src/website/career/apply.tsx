@@ -20,7 +20,7 @@ export function ApplyView({
     termsAccepted: false,
     about_you: "",
     why_do_you: "",
-    cvFile: null as File | null, // Add file to formData
+    cvfile: null as File | null, // Add file to formData
   });
   const [cvFileName, setCvFileName] = useState<string | null>(null); // To display file name
 
@@ -34,73 +34,67 @@ export function ApplyView({
     }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      setFormData((prevData) => ({
-        ...prevData,
-        cvFile: file, // Update cvFile in formData
-      }));
-      setCvFileName(file.name); // Update displayed file name
-    }
-  };
-
   const triggerFileInput = () => {
     const fileInput = document.getElementById("cvFileInput") as HTMLInputElement;
     fileInput?.click();
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setFormData((prevData) => ({
+        ...prevData,
+        cvfile: file, // Update cvFile in formData
+      }));
+      setCvFileName(file.name); // Update displayed file name
+      console.log(file)
 
-    if (formData.termsAccepted) {
-      const payload: {
-        acf: {
-          title: string;
-          email: string;
-          fullname: string;
-          phone: string;
-          about_you: string;
-          why_do_you: string;
-          job: string;
-        };
-        cvFile?: File; // Add cvFile here
-      } = {
-        acf: {
-          title: "New Enquiry",
-          email: formData.email,
-          fullname: formData.fullName,
-          phone: formData.phone,
-          about_you: formData.about_you,
-          why_do_you: formData.why_do_you,
-          job: transformUrl(item.guid.rendered, item.id),
-        },
-      };
-      
-      // Add cvFile if it exists
-      if (formData.cvFile) {
-        payload.cvFile = formData.cvFile;
-      }
-
-      mutate(payload, {
-        onSuccess() {
-          setFormData({
-            fullName: "",
-            phone: "",
-            email: "",
-            projectDetails: "",
-            termsAccepted: false,
-            about_you: "",
-            why_do_you: "",
-            cvFile: null,
-          });
-          setCvFileName(null);
-        },
-      });
-    } else {
-      toast.error("Please accept the terms and conditions.");
     }
+    console.log(formData.cvfile)
   };
+
+ const handleSubmit = (e: any) => {
+  e.preventDefault();
+  console.log(formData)
+
+  if (formData.termsAccepted) {
+    const payload= {
+      acf: {
+        fullname: formData.fullName,
+        phone: formData.phone,
+        email: formData.email,
+        title: "New Enquiry",
+        why_do_you: formData.why_do_you,
+        about_you: formData.about_you,
+        job: transformUrl(item.guid.rendered, item.id) , // Replace this with the appropriate job value
+        cvfile: formData.cvfile, // Ensure the API accepts the file directly
+      },
+    };
+
+    console.log(payload);
+
+    mutate(payload, {
+      onSuccess() {
+        setFormData({
+          fullName: "",
+          phone: "",
+          email: "",
+          projectDetails: "",
+          termsAccepted: false,
+          about_you: "",
+          why_do_you: "",
+          cvfile: null,
+        });
+        setCvFileName(null);
+        toast.success("Application submitted successfully!");
+      },
+    });
+  } else {
+    toast.error("Please accept the terms and conditions.");
+  }
+
+
+};
 
   return (
     <div className="pt-[6rem]">
