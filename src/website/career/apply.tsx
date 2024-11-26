@@ -58,7 +58,7 @@ export function ApplyView({
   console.log(formData)
 
   if (formData.termsAccepted) {
-    const payload: IApply = {
+    const payload= {
       acf: {
         fullname: formData.fullName,
         phone: formData.phone,
