@@ -150,6 +150,7 @@ export interface IApply {
     why_do_you: string;
     about_you: string;
     job: any;
+    cvfile: any;
   };
 }
 
