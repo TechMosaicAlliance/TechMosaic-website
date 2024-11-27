@@ -53,49 +53,49 @@ export function ApplyView({
     console.log(formData.cvfile)
   };
 
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-  
-    if (formData.termsAccepted) {
-      // Create a new FormData object for file upload
-      const formDataPayload = new FormData();
-  
-      // Add the other fields as form fields in `acf`
-      formDataPayload.append("acf[fullname]", formData.fullName);
-      formDataPayload.append("acf[phone]", formData.phone);
-      formDataPayload.append("acf[email]", formData.email);
-      formDataPayload.append("acf[title]", "New Enquiry");
-      formDataPayload.append("acf[why_do_you]", formData.why_do_you);
-      formDataPayload.append("acf[about_you]", formData.about_you);
-      formDataPayload.append("acf[job]", transformUrl(item.guid.rendered, item.id));
-  
-      // Add the file field
-      if (formData.cvfile) {
-        formDataPayload.append("acf[cvfile]", formData.cvfile); // Append the file
-      }
-  
-      // Now send the FormData with the mutate function
-      mutate(formDataPayload, {
-        onSuccess() {
-          // Reset form data after successful submission
-          setFormData({
-            fullName: "",
-            phone: "",
-            email: "",
-            projectDetails: "",
-            termsAccepted: false,
-            about_you: "",
-            why_do_you: "",
-            cvfile: null,
-          });
-          setCvFileName(null);
-          toast.success("Application submitted successfully!");
-        },
-      });
-    } else {
-      toast.error("Please accept the terms and conditions.");
-    }
-  };
+ const handleSubmit = (e: any) => {
+  e.preventDefault();
+  console.log(formData)
+
+  if (formData.termsAccepted) {
+    const payload : IApply = {
+      acf: {
+        fullname: formData.fullName,
+        phone: formData.phone,
+        email: formData.email,
+        title: "New Enquiry",
+        why_do_you: formData.why_do_you,
+        about_you: formData.about_you,
+        job: transformUrl(item.guid.rendered, item.id) , // Replace this with the appropriate job value
+        cvfile: formData.cvfile, // Ensure the API accepts the file directly
+      },
+    };
+
+    console.log(payload);
+
+    mutate(payload, {
+      onSuccess() {
+        setFormData({
+          fullName: "",
+          phone: "",
+          email: "",
+          projectDetails: "",
+          termsAccepted: false,
+          about_you: "",
+          why_do_you: "",
+          cvfile: null,
+        });
+        setCvFileName(null);
+        toast.success("Application submitted successfully!");
+      },
+    });
+  } else {
+    toast.error("Please accept the terms and conditions.");
+  }
+
+
+};
+
   return (
     <div className="pt-[6rem]">
       <div className="">

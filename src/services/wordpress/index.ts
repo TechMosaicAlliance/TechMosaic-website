@@ -97,11 +97,11 @@ export const wordpressApi = {
       });
       return data;
     },
-    apply: async (payload: FormData) => {
-      const data = await request<IWordPressReturnTypeObj<TeamAcf>[], FormData>({
+    apply: async (payload: IApply) => {
+      const data = await request<IWordPressReturnTypeObj<TeamAcf>[], IApply>({
         customUrl: `${wordPressBaseUrl}/jobapplication${defaultQuery}`,
         method: "POST",
-        body: payload, // Send FormData as body
+        body: payload,
       });
       return data;
     },
