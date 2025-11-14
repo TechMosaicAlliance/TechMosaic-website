@@ -637,9 +637,17 @@ export function GetStartedSvg(props?: {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
+      <defs>
+        <linearGradient id="buttonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#f27121" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="#e94057" stopOpacity="0.15" />
+        </linearGradient>
+        <clipPath id="clip0_6193_2459">
+          <rect width="157" height="157" rx="78.5" />
+        </clipPath>
+      </defs>
       <g clipPath="url(#clip0_6193_2459)">
-        <rect width="157" height="157" rx="78.5" fill="#F6F5F4" />
-        <rect width="157" height="157" rx="78.5" fill="#F6F5F4" />
+        <rect width="157" height="157" rx="78.5" fill="url(#buttonGradient)" />
         <g>
           <animateTransform
             attributeName="transform"
@@ -747,9 +755,11 @@ export function GetStartedSvg(props?: {
           />
         </g>
         <path
-          d="M78.5 58.875V97.5117M78.5 97.5117L88.3125 87.6992M78.5 97.5117L68.6875 87.6992"
+          d="M97.5117 78.5H58.875M97.5117 78.5L87.6992 68.6875M97.5117 78.5L87.6992 88.3125"
           stroke="#F6F5F4"
-          strokeWidth="1.83984"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         />
       </g>
     </svg>

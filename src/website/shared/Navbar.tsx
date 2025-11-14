@@ -49,9 +49,11 @@ const navData = [
 function NavDropdownMenu({
   item,
   className,
+  isSticky = false,
 }: {
   item: any;
   className: string;
+  isSticky?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -66,7 +68,7 @@ function NavDropdownMenu({
   const handleMouseLeave = () => {
     timeoutRef.current = setTimeout(() => {
       setOpen(false);
-    }, 150); // Small delay to allow moving to dropdown content
+    }, 150);
   };
 
   useEffect(() => {
@@ -82,28 +84,39 @@ function NavDropdownMenu({
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="relative"
+        className="relative group"
       >
         <DropdownMenuTrigger asChild>
           <button
             className={cn(
-              "flex items-center uppercase text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
-              className
+              "relative flex items-center uppercase border-none focus:ring-0 focus:border-none focus-visible:outline-none focus:outline-none text-sm font-medium tracking-wide transition-all duration-300 px-4 py-2.5",
+              className,
+              "hover:bg-foreground/5",
+              "after:absolute after:bottom-1 after:left-1/2 after:-translate-x-1/2 after:h-[3px] after:bg-[#451842] after:w-0 after:transition-all after:duration-300",
+              "hover:after:w-[60%]"
             )}
           >
             {item.name}
-            <ChevronDown className="ml-1 h-4 w-4" />
+            <ChevronDown className={cn(
+              "ml-1.5 h-3.5 w-3.5 transition-transform duration-300",
+              open && "rotate-180"
+            )} />
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
-          className="w-40 mt-2 z-[99999]"
+          className="w-56 mt-2 z-[99999] border border-foreground/10 bg-background/95 backdrop-blur-xl rounded-lg p-1.5 shadow-lg shadow-foreground/5"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           {item.caseStudies.map((study: any, idx: number) => (
-            <DropdownMenuItem className="" key={idx} asChild>
-              <Link href={study.url} className="w-full ">
-                {study.name}
+            <DropdownMenuItem 
+              key={idx} 
+              className="px-4 py-2.5 cursor-pointer rounded-md focus:bg-[#451842]/10 hover:bg-[#451842]/10 transition-all duration-200 group/item focus-visible:outline-none" 
+              asChild
+            >
+              <Link href={study.url} className="w-full text-sm font-medium flex items-center justify-between text-foreground/80 hover:text-foreground">
+                <span className="group-hover/item:translate-x-1 transition-transform duration-200">{study.name}</span>
+                <span className="opacity-0 group-hover/item:opacity-100 transition-opacity duration-200 text-[#451842] font-semibold">→</span>
               </Link>
             </DropdownMenuItem>
           ))}
@@ -141,20 +154,20 @@ function MobileMenu({
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full z-[99999] pt-[5rem] sm:w-[400px]"
+        className="w-full z-[99999] pt-[5rem] sm:w-[400px] bg-background/98 backdrop-blur-xl"
       >
-        <nav className="flex flex-col h-full  items-center gap-7">
+        <nav className="flex flex-col h-full items-start gap-1 px-4">
           {navData.map((item, idx) => (
             <Link
               key={idx}
               href={item.url}
-              className="text-lg font-medium hover:underline"
+              className="w-full text-lg font-medium px-4 py-3 hover:bg-foreground/5 transition-all duration-200 hover:translate-x-2 hover:text-[#451842]"
             >
               {item.name}
             </Link>
           ))}
-          <Link href="/contact" className="mt-4">
-            <Button className="w-full">
+          <Link href="/contact" className="mt-6 w-full px-4">
+            <Button className="w-full bg-[#451842] text-white hover:bg-[#451842]/90">
               CONTACT US
               <ArrowRightSvg className="ml-2 h-4 w-4" />
             </Button>
@@ -179,36 +192,38 @@ export default function Navbar() {
       }
     };
 
+    // Check on mount
+    handleScroll();
+    
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
   return (
     <nav
       className={cn(
-        "transition-all duration-300 z-[99999]  border-primary-foreground/50 border-b-[0.05rem]",
+        "transition-all duration-500 z-[99999]",
         isSticky
-          ? "bg-background  border-foreground/10 border-b-[0.05rem]  self-start fixed top-0 left-0 right-0 w-full"
-          : "bg-transparent   border-primary-foreground/40"
+          ? "bg-background/80 backdrop-blur-lg border-b border-foreground/10 shadow-sm self-start fixed top-0 left-0 right-0 w-full"
+          : "bg-transparent border-b border-foreground/5"
       )}
     >
-      <div className="flex container max-w-7xl mx-auto items-center p-4 justify-between">
-        <Link href="/" className="flex items-center space-x-2">
-          {isSticky ? (
-            <LogoSvg className="md:w-[14rem] w-[12rem] fill-foreground" />
-          ) : (
-            <LogoSvg className="md:w-[14rem] w-[12rem]" />
-          )}
+      <div className="flex container max-w-7xl mx-auto items-center px-5 lg:px-8 py-4 lg:py-5 justify-between">
+        <Link 
+          href="/" 
+          className="flex items-center space-x-2 transition-all duration-300 hover:scale-105 active:scale-95"
+        >
+          <LogoSvg className="md:w-[14rem] w-[12rem] fill-foreground transition-opacity duration-300 hover:opacity-80" />
         </Link>
-        <div className="hidden md:flex uppercase md:items-center md:space-x-4 lg:space-x-6">
+        <div className="hidden md:flex uppercase md:items-center md:gap-0.5 lg:gap-1">
           {navData.map((item, idx) =>
             item.caseStudies ? (
               <NavDropdownMenu
                 key={idx}
                 item={item}
+                isSticky={isSticky}
                 className={cn(
-                  isSticky
-                    ? "text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
-                    : "text-sm font-medium transition-colors  hover:text-accent/90 text-accent"
+                  "text-sm font-medium tracking-wide",
+                  "text-foreground/70 hover:text-foreground transition-colors duration-300"
                 )}
               />
             ) : (
@@ -216,26 +231,41 @@ export default function Navbar() {
                 key={idx}
                 href={item.url}
                 className={cn(
-                  "text-sm px-2 font-medium transition-colors ",
-                  isSticky
-                    ? pathname === item.url
-                      ? "text-foreground font-semibold hover:text-foreground/80 border-b-2 border-foreground"
-                      : "text-foreground/60 hover:text-foreground/80"
-                    : " hover:text-accent/90 text-accent"
+                  "group relative text-sm px-4 py-2.5 font-medium tracking-wide transition-all duration-300",
+                  "text-foreground/70 hover:text-foreground hover:bg-foreground/5",
+                  pathname === item.url
+                    ? "text-foreground font-semibold bg-foreground/5"
+                    : ""
                 )}
               >
-                {item.name}
+                <span className="relative z-10">{item.name}</span>
+                {pathname === item.url && (
+                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[3px] w-[60%] bg-[#451842]" />
+                )}
+                <span className="absolute bottom-1 left-1/2 -translate-x-1/2 h-[3px] w-0 bg-[#451842] transition-all duration-300 group-hover:w-[60%]" />
               </Link>
             )
           )}
-          <Link href="/contact">
-            <Button className="group">
-              CONTACT US
-              <ArrowRightSvg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
-          </Link>
+          <div className="ml-3 lg:ml-5 pl-3 lg:pl-5 border-l border-foreground/10">
+            <Link href="/contact">
+              <Button 
+                className={cn(
+                  "group relative overflow-hidden px-7 py-2.5 text-sm font-semibold tracking-wide",
+                  "bg-[#451842] text-white",
+                  "hover:bg-[#451842]/95 hover:scale-105",
+                  "active:scale-95 transition-all duration-300",
+                  "before:absolute before:inset-0 before:bg-white/0 hover:before:bg-white/5 before:transition-all before:duration-300"
+                )}
+              >
+                <span className="relative z-10 flex items-center gap-2.5">
+                  CONTACT US
+                  <ArrowRightSvg className="h-4 w-4 transition-all duration-300 group-hover:translate-x-1 group-hover:scale-110" />
+                </span>
+              </Button>
+            </Link>
+          </div>
         </div>
-        <MobileMenu open={open} setOpen={setOpen} className="" />
+        <MobileMenu open={open} setOpen={setOpen} className="stroke-foreground" />
       </div>
     </nav>
   );
@@ -256,7 +286,7 @@ export function NavbarVariant() {
             {navData.map((item, idx) =>
               item.caseStudies ? (
                 <NavDropdownMenu
-                  className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
+                  className="text-xs font-medium transition-colors hover:text-foreground/80 text-foreground"
                   key={idx}
                   item={item}
                 />
@@ -265,7 +295,7 @@ export function NavbarVariant() {
                   key={idx}
                   href={item.url}
                   className={cn(
-                    "text-sm px-2 font-medium transition-colors hover:text-foreground/80",
+                    "text-sm px-2 font-medium transition-colors hover:text-foreground",
                     pathname === item.url
                       ? "text-foreground font-semibold border-b-2 border-foreground"
                       : "text-foreground/60"

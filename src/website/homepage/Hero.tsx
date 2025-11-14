@@ -2,7 +2,7 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "../shared/Navbar";
-import { GetStartedSvg } from "@/components/svgs";
+import { ArrowRight } from "lucide-react";
 import { useHeroAnimation } from "../animations";
 import TextPlugin from "gsap/TextPlugin";
 import gsap, { Power4, Power2 } from "gsap";
@@ -44,7 +44,8 @@ export default function Hero() {
         ease: Power4.easeOut,
         onStart: () => {
           wordRef.current.textContent = word.text;
-          wordRef.current.className = `relative ${word.style}`;
+          wordRef.current.className = `relative inline-flex items-center justify-center italic playfair-display text-custom-conic-gradient px-4 md:px-6 py-2 md:py-3 rounded-xl bg-white/10 backdrop-blur-md border-2 border-[#f27121] shadow-lg font-bold text-3xl md:text-4xl lg:text-5xl leading-tight whitespace-nowrap`;
+          wordRef.current.style.boxShadow = "0 8px 32px 0 rgba(242, 113, 33, 0.4)";
         },
       })
         .to({}, { duration: 1 })
@@ -79,9 +80,10 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="grid grid-rows-[auto_1fr] hero-section  h-[100svh] 2xl:h-[54rem] relative">
+    <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] 2xl:h-[54rem] relative overflow-hidden">
       <Navbar />
-      <div className="grid grid-cols-1 grid-rows-1">
+      <div className="grid grid-cols-1 grid-rows-1 relative">
+        {/* Background Image with Enhanced Overlay */}
         <Image
           priority
           alt="Hero background"
@@ -89,49 +91,74 @@ export default function Hero() {
           fill
           className="object-cover col-span-full row-span-full"
         />
-        <section className="relative py-14 col-span-full pt-[5rem]  row-span-full z-10 container max-w-7xl mx-auto px-5  lg:py-24 flex flex-col md:justify-center">
-          <div className="grid gap-5 lg:gap-[7rem]">
-            <h1
-              data-animation="hero-fade-in-y"
-              className="lg:text-6xl opacity-0 text-4xl font-semibold lg:font-medium tracking-tight text-accent"
-            >
-              Fueling Your Business <br />
-              Growth through <br />
-              <p className="relative gap-2 flex flex-col md:flex-row overflow-hidden md:h-[4rem]">
-                Personalized
-                <span
-                  ref={wordRef}
-                  className="relative italic playfair-display text-custom-conic-gradient"
-                  style={{ display: "block", transform: "translateY(100%)" }}
-                >
-                  {words[0].text}
+        {/* Enhanced gradient overlay for better contrast and depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#191919]/70 via-[#191919]/55 to-[#191919]/75 col-span-full row-span-full z-[1]" />
+        
+        {/* Subtle purple accent overlay */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/5 via-transparent to-transparent col-span-full row-span-full z-[1]" />
+        
+        {/* Refined decorative geometric elements */}
+        <div className="absolute top-20 right-10 w-40 h-40 bg-[#451842]/10 rounded-full blur-3xl z-[2] hidden lg:block" />
+        <div className="absolute bottom-32 left-10 w-32 h-32 bg-[#451842]/8 rounded-full blur-2xl z-[2] hidden lg:block" />
+
+        <section className="relative py-14 col-span-full pt-[5rem] row-span-full z-10 container max-w-7xl mx-auto px-5 lg:px-8 lg:py-24 flex flex-col md:justify-center">
+          <div className="grid gap-10 lg:gap-14 max-w-6xl w-full">
+            {/* Main Heading with Enhanced Typography */}
+            <div data-animation="hero-fade-in-y" className="opacity-0">
+              <h1 className="lg:text-7xl text-5xl font-bold lg:font-semibold tracking-tight text-white leading-[1.1] break-words mb-4">
+                Fueling Your Business <br />
+                <span className="text-white/90 font-medium">Growth through</span> <br />
+                <span className="relative inline-block mt-3">
+                  <span className="text-white">Personalized</span>
+                  <span className="relative inline-flex items-center justify-center ml-3 md:ml-4">
+                    <span
+                      ref={wordRef}
+                      className="relative inline-flex items-center justify-center italic playfair-display text-custom-conic-gradient px-4 md:px-6 py-2 md:py-3 rounded-xl bg-white/10 backdrop-blur-md border-2 border-[#f27121] shadow-lg font-bold text-3xl md:text-4xl lg:text-5xl leading-tight whitespace-nowrap"
+                      style={{ transform: "translateY(100%)", boxShadow: "0 8px 32px 0 rgba(242, 113, 33, 0.4)" }}
+                    >
+                      {words[0].text}
+                    </span>
+                  </span>
                 </span>
-              </p>
-            </h1>
-            <div className="max-w-4xl flex gap-10 items-center text-accent">
-              <p
-                data-animation="hero-fade-in-y"
-                className="lg:text-xl opacity-0"
-              >
+              </h1>
+            </div>
+
+            {/* Enhanced Description */}
+            <div className="max-w-3xl" data-animation="hero-fade-in-y">
+              <p className="lg:text-xl opacity-0 text-lg text-white/85 leading-relaxed font-light tracking-wide">
                 We fuse creativity, effective management, and a shared industry
                 experience of over two decades to help you stand out in a
                 competitive market
               </p>
+            </div>
+
+            {/* CTA Buttons */}
+            <div 
+              data-animation="hero-fade-in-y"
+              className="opacity-0 flex flex-col sm:flex-row gap-4 mt-2"
+            >
+              {/* Primary CTA */}
               <Link
                 href="/contact"
-                className="absolute cursor-pointer transition-all duration-300 ease-out bottom-10 md:bottom-20 right-[2rem] group hover:scale-110 hover:drop-shadow-2xl active:scale-95"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_8px_24px_rgba(69,24,66,0.4)] transition-all duration-300 ease-out"
+                aria-label="Get Started - Contact Us"
               >
-                <GetStartedSvg className="lg:w-[10rem] lg:h-[10rem] w-[6rem] h-[6rem] transition-transform duration-300 group-hover:rotate-12" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+              </Link>
+
+              {/* Secondary CTA */}
+              <Link
+                href="/services"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-white/5 backdrop-blur-sm text-white border-2 border-[#f27121]/60 hover:bg-white/10 hover:border-[#f27121] hover:shadow-[0_8px_24px_rgba(242,113,33,0.2)] transition-all duration-300 ease-out"
+                aria-label="View Our Services"
+              >
+                <span>Our Services</span>
+                <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
               </Link>
             </div>
           </div>
         </section>
-        {/* <Link
-          href="/contact"
-          className="md:hidden absolute left-0 right-0 mr-auto cursor-pointer transition-all z-20"
-        >
-          <GetStartedSvg className="w-[6rem] h-[6rem]" />
-        </Link> */}
       </div>
     </div>
   );
