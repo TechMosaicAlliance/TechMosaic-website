@@ -44,6 +44,13 @@ const data = [
     gradient: "from-amber-500/20 via-yellow-500/20 to-orange-500/20",
     number: "05",
   },
+  {
+    name: "Project Management",
+    text: "Streamline your projects with expert management that ensures timely delivery and quality results.",
+    image: "/services/pexels-polina-zimmerman-3747266.jpg",
+    gradient: "from-violet-500/20 via-purple-500/20 to-fuchsia-500/20",
+    number: "06",
+  },
 ];
 
 export default function OurService() {

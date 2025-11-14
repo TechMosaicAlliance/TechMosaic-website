@@ -17,7 +17,7 @@ export default function HomeMarque() {
   if (data && data?.length > 4) {
     return (
       <Marquee>
-        <div className="flex gap-10 justify-center items-center">
+        <div className="flex gap-10 justify-center items-center" data-animation="trigger-fade-in-y">
           {data.map((item, idx) => (
             <div key={idx} className="w-[280px]  h-[60px]">
               <img
@@ -34,7 +34,7 @@ export default function HomeMarque() {
 
   return (
     <Marquee>
-      <div className="flex gap-10 items-center">
+      <div className="flex gap-10 items-center" data-animation="trigger-fade-in-y">
         {companyMarqueeData.map((item, idx) => (
           <div key={idx}>{item.icon}</div>
         ))}

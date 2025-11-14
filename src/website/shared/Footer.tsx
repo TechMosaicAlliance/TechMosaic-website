@@ -66,7 +66,7 @@ function FooterLinks() {
           <p className="text-sm text-primary-foreground/70 font-normal leading-relaxed max-w-sm">
             Building innovative digital solutions that drive growth and transform businesses.
           </p>
-          <ul className="grid gap-3 pt-2">
+            <ul className="grid gap-3 pt-2">
             <li>
               <Link 
                 href="/portfolio" 
@@ -114,6 +114,16 @@ function FooterLinks() {
               >
                 Contact Us
               </Link>
+            </li>
+            <li>
+              <a 
+                href="https://tally.so" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sm font-medium text-primary-foreground/80 hover:text-primary-foreground transition-colors duration-200 inline-block"
+              >
+                Fill Basic Biodata
+              </a>
             </li>
           </ul>
         </div>
