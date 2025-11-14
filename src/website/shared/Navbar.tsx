@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import React, { SetStateAction, useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useRef, useState } from "react";
 
 const navData = [
   {
@@ -53,28 +53,62 @@ function NavDropdownMenu({
   item: any;
   className: string;
 }) {
+  const [open, setOpen] = useState(false);
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    timeoutRef.current = setTimeout(() => {
+      setOpen(false);
+    }, 150); // Small delay to allow moving to dropdown content
+  };
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          className={cn(
-            "flex items-center uppercase text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
-            className
-          )}
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        className="relative"
+      >
+        <DropdownMenuTrigger asChild>
+          <button
+            className={cn(
+              "flex items-center uppercase text-accent border-none focus:ring-0 focus:border-none focus-visible:outline-none  focus:outline-none text-sm",
+              className
+            )}
+          >
+            {item.name}
+            <ChevronDown className="ml-1 h-4 w-4" />
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent
+          className="w-40 mt-2 z-[99999]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          {item.name}
-          <ChevronDown className="ml-1 h-4 w-4" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40 mt-2 z-[99999] ">
-        {item.caseStudies.map((study: any, idx: number) => (
-          <DropdownMenuItem className="" key={idx} asChild>
-            <Link href={study.url} className="w-full ">
-              {study.name}
-            </Link>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
+          {item.caseStudies.map((study: any, idx: number) => (
+            <DropdownMenuItem className="" key={idx} asChild>
+              <Link href={study.url} className="w-full ">
+                {study.name}
+              </Link>
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </div>
     </DropdownMenu>
   );
 }

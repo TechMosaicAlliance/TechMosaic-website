@@ -119,9 +119,9 @@ export default function Hero() {
               </p>
               <Link
                 href="/contact"
-                className="absolute  cursor-pointer transition-all bottom-10 md:bottom-20 right-[2rem]"
+                className="absolute cursor-pointer transition-all duration-300 ease-out bottom-10 md:bottom-20 right-[2rem] group hover:scale-110 hover:drop-shadow-2xl active:scale-95"
               >
-                <GetStartedSvg className="lg:w-[10rem] lg:h-[10rem] w-[6rem] h-[6rem]" />
+                <GetStartedSvg className="lg:w-[10rem] lg:h-[10rem] w-[6rem] h-[6rem] transition-transform duration-300 group-hover:rotate-12" />
               </Link>
             </div>
           </div>
