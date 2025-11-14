@@ -14,6 +14,7 @@ export default function HomePage() {
       <Hero />
       <HomeMarque />
       <OurService />
+      <OurBlog />
       <OurPortfolio />
       <Marquee>
         <div className="flex lg:pt-[4rem] lg:pb-[2rem] gap-10 items-center">

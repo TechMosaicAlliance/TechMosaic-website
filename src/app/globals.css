@@ -89,6 +89,16 @@ input:-webkit-autofill:focus {
   scrollbar-width: none; /* Firefox */
 }
 
+/* Hide scrollbar utility class */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
 html {
   scroll-behavior: smooth;
 }
