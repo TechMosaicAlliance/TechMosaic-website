@@ -1,9 +1,8 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, Plus, Minus } from "lucide-react";
 import { BlurImage } from "@/components/ui/blurImage";
 import Link from "next/link";
 import { ArrowRightSvg } from "@/components/svgs";
@@ -13,97 +12,214 @@ const data = [
   {
     name: "Graphic Design",
     text: "Creative designs that tell your story. elevate your brand image and drive growth",
+    image: "/services/pexels-polina-zimmerman-3747266.jpg",
+    gradient: "from-purple-500/20 via-pink-500/20 to-orange-500/20",
+    number: "01",
   },
   {
     name: "Copywriting",
     text: "Craft compelling copy that resonates with your audience and inspires action.",
+    image: "/services/emily-bernal-BM3U_D2lygo-unsplash.jpg",
+    gradient: "from-blue-500/20 via-cyan-500/20 to-teal-500/20",
+    number: "02",
   },
   {
     name: "UI/UX Design",
     text: "Design user-friendly interfaces that offer an engaging and intuitive experience.",
+    image: "/services/alvaro-reyes-zvmZiw3vdsQ-unsplash (1).jpg",
+    gradient: "from-indigo-500/20 via-purple-500/20 to-pink-500/20",
+    number: "03",
   },
   {
     name: "Web Development",
     text: "Develop robust websites that are fast, secure, and tailored to your business needs.",
+    image: "/services/daniel-korpai-pKRNxEguRgM-unsplash.jpg",
+    gradient: "from-emerald-500/20 via-green-500/20 to-lime-500/20",
+    number: "04",
   },
   {
     name: "Brand Design",
     text: "Build a strong and recognizable brand that stands out in the competitive market.",
+    image: "/services/balazs-ketyi-LPWl2pEVGKc-unsplash.jpg",
+    gradient: "from-amber-500/20 via-yellow-500/20 to-orange-500/20",
+    number: "05",
   },
 ];
 
 export default function OurService() {
   const [open, setOpen] = useState(0);
-  return (
-    <section className="container max-w-7xl p-4 lg:pt-[3rem]">
-      <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-end justify-between">
-        <div data-animation="trigger-fade-in-y" className="grid gap-4 ">
-          <h3 className="tracking-wider ">OUR SERVICES</h3>
-          <h1 className="text-3xl lg:text-5xl">
-            Reliable and
-            <br /> affordable custom
-            <br /> solutions that work
-          </h1>
-        </div>
-        <div className="mb-2">
-          <Link
-            href="/services"
-            className={cn(
-              buttonVariants({
-                className: "border-white group border",
-                variant: "default",
-              })
-            )}
-          >
-            EXPLORE OUR SERVICES
-            <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
-          </Link>
-        </div>
-      </div>
+  const [isHovering, setIsHovering] = useState(false);
+  const imageRef = useRef<HTMLDivElement>(null);
 
-      <div className="pt-8 lg:pt-[4rem]">
-        <div className="grid w-full h-fit gap-10">
-          <section className="flex flex-col lg:flex-row items-center  w-full lg:gap-[7rem]">
-            <div className=" grid max-w-xl gap-8">
-              <div className="flex flex-shrink-0 flex-col gap-3">
-                {data.map((item, idx) => (
-                  <div
-                    onClick={() => setOpen(idx)}
-                    key={idx}
-                    className={cn(
-                      open === idx
-                        ? "bg-[#FAFAF9]  text-accent-foreground"
-                        : "",
-                      "flex group border-b transition-all hover:text-accent-foreground  hover:bg-[#FAFAF9]   p-4 gap-2 "
-                    )}
-                  >
-                    <Plus className="flex-shrink-0  mt-1" size={18} />
-                    <div className="grid gap-3">
-                      <h1 className=" flex gap-1 font-medium text-xl">
+  useEffect(() => {
+    if (imageRef.current) {
+      imageRef.current.style.opacity = "0";
+      setTimeout(() => {
+        if (imageRef.current) {
+          imageRef.current.style.opacity = "1";
+        }
+      }, 50);
+    }
+  }, [open]);
+
+  return (
+    <section className="relative container max-w-7xl px-4 py-12 lg:py-20 lg:px-6 overflow-hidden">
+      {/* Subtle background gradient */}
+      <div className={cn(
+        "absolute inset-0 -z-10 opacity-20 blur-3xl transition-all duration-1000 ease-in-out",
+        `bg-gradient-to-br ${data[open]?.gradient}`
+      )} />
+      
+      {/* Minimal floating elements */}
+      <div className="absolute top-32 right-16 w-64 h-64 bg-gradient-to-br from-accent-foreground/3 to-transparent rounded-full blur-3xl" />
+      <div className="absolute bottom-32 left-16 w-80 h-80 bg-gradient-to-tr from-purple-500/3 to-transparent rounded-full blur-3xl" />
+
+      <div className="relative z-10">
+        {/* Header Section */}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
+          <div data-animation="trigger-fade-in-y" className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="w-0.5 h-10 bg-gradient-to-b from-accent-foreground to-transparent rounded-full" />
+              <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-neutral-600">
+                OUR SERVICES
+              </h3>
+            </div>
+            <p className="text-base lg:text-lg font-light text-neutral-500 leading-relaxed max-w-lg pl-4">
+              Reliable and affordable custom solutions that work
+            </p>
+          </div>
+          <div>
+            <Link
+              href="/services"
+              className={cn(
+                buttonVariants({
+                  className: "border-neutral-200/60 group border bg-white/80 hover:bg-white backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md text-slate-600",
+                  variant: "default",
+                })
+              )}
+            >
+              EXPLORE OUR SERVICES
+              <ArrowRightSvg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-10 xl:gap-12">
+          {/* Services List - Left Side */}
+          <div className="w-full lg:w-[48%] xl:w-[50%] h-[32rem] lg:h-[42rem] xl:h-[46rem] flex flex-col space-y-3 overflow-hidden">
+            {data.map((item, idx) => (
+              <div
+                onClick={() => setOpen(idx)}
+                onMouseEnter={() => setIsHovering(true)}
+                onMouseLeave={() => setIsHovering(false)}
+                key={idx}
+                className={cn(
+                  "relative group cursor-pointer transition-all duration-300 ease-out",
+                  "rounded-xl border overflow-hidden",
+                  open === idx
+                    ? "bg-white shadow-lg border-accent-foreground/20"
+                    : "bg-white/80 backdrop-blur-sm border-neutral-200/50 hover:border-neutral-300/70 hover:shadow-md"
+                )}
+              >
+                {/* Active indicator */}
+                {open === idx && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-foreground to-accent-foreground/60" />
+                )}
+                
+                <div className="relative flex items-center p-5 lg:p-6 gap-4">
+                  {/* Number badge */}
+                  <div className={cn(
+                    "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-semibold text-base transition-all duration-300",
+                    open === idx
+                      ? "bg-accent-foreground text-white"
+                      : "bg-neutral-100 text-neutral-500 group-hover:bg-neutral-200 group-hover:text-neutral-700"
+                  )}>
+                    {item.number}
+                  </div>
+
+                  <div className="flex-1 min-w-0 space-y-1">
+                    <div className="flex items-center justify-between gap-3">
+                      <h2 className={cn(
+                        "text-lg lg:text-xl font-semibold transition-colors duration-300",
+                        open === idx 
+                          ? "text-accent-foreground" 
+                          : "text-neutral-900 group-hover:text-accent-foreground"
+                      )}>
                         {item.name}
-                      </h1>
-                      {idx === open && (
-                        <p className="  text-neutral-700   group-hover:text-neutral-700 ">
-                          {item.text}
-                        </p>
-                      )}
+                      </h2>
+                      <div className={cn(
+                        "flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300",
+                        open === idx 
+                          ? "border-accent-foreground bg-accent-foreground" 
+                          : "border-neutral-300 group-hover:border-neutral-400"
+                      )}>
+                        {open === idx ? (
+                          <Minus className="text-white" size={14} strokeWidth={3} />
+                        ) : (
+                          <Plus className="text-neutral-400 group-hover:text-neutral-600" size={14} strokeWidth={2.5} />
+                        )}
+                      </div>
+                    </div>
+                    <div className={cn(
+                      "overflow-hidden transition-all duration-500 ease-in-out",
+                      open === idx ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
+                    )}>
+                      <p className="text-neutral-600 text-sm font-normal leading-relaxed pt-1">
+                        {item.text}
+                      </p>
                     </div>
                   </div>
-                ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Image Display - Right Side */}
+          <div
+            ref={imageRef}
+            data-animation="trigger-fade-in-y"
+            className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0"
+            onMouseEnter={() => setIsHovering(true)}
+            onMouseLeave={() => setIsHovering(false)}
+          >
+            {/* Gradient overlay */}
+            <div className={cn(
+              "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10 transition-all duration-700",
+              `bg-gradient-to-br ${data[open]?.gradient}`
+            )} />
+            
+            <BlurImage
+              key={data[open]?.image}
+              className={cn(
+                "object-cover transition-all duration-700 ease-out",
+                isHovering ? "scale-105" : "scale-100"
+              )}
+              src={data[open]?.image || "/services/alvaro-reyes-zvmZiw3vdsQ-unsplash.jpg"}
+              alt={data[open]?.name || "Our Services"}
+              fill
+            />
+            
+            {/* Content overlay */}
+            <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 lg:p-10">
+              <div className="bg-black/40 backdrop-blur-md rounded-xl p-6 lg:p-8 border border-white/10">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                      <span className="text-white font-semibold text-sm">{data[open]?.number}</span>
+                    </div>
+                    <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
+                  </div>
+                  <h3 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-white leading-tight">
+                    {data[open]?.name}
+                  </h3>
+                  <p className="text-white/95 text-sm lg:text-base font-light leading-relaxed max-w-md">
+                    {data[open]?.text}
+                  </p>
+                </div>
               </div>
             </div>
-            <div
-              data-animation="trigger-fade-in-y"
-              className=" opacity-0  lg:flex h-[23rem] lg:h-[35rem] w-full relative overflow-hidden  rounded-sm lg:w-1/2 border bg-background p-10 gap-3"
-            >
-              <BlurImage
-                className="object-cover"
-                src="/assets/services1.png"
-                alt=""
-                fill
-              />
-            </div>
-          </section>
+          </div>
         </div>
       </div>
     </section>
