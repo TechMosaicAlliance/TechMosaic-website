@@ -27,7 +27,7 @@ export default function Footer(props: IFooter) {
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
         </div>
-        
+
         <FooterLinks />
         <section className="relative border-t border-primary-foreground/10 bg-primary/50 backdrop-blur-sm">
           <div className="container max-w-7xl mx-auto px-4 lg:px-6 py-8 lg:py-10">
@@ -42,16 +42,16 @@ export default function Footer(props: IFooter) {
               </div>
               <ul className="flex items-center gap-8 text-sm font-medium">
                 <li>
-                  <Link 
-                    href="/terms" 
+                  <Link
+                    href="/terms"
                     className="text-primary-foreground/70 hover:text-primary-foreground transition-all duration-300 hover:underline underline-offset-4"
                   >
                     Terms & Conditions
                   </Link>
                 </li>
                 <li>
-                  <Link 
-                    href="/terms" 
+                  <Link
+                    href="/terms"
                     className="text-primary-foreground/70 hover:text-primary-foreground transition-all duration-300 hover:underline underline-offset-4"
                   >
                     Privacy Policy
@@ -74,17 +74,18 @@ function FooterLinks() {
           <div className="transform transition-transform duration-300 hover:scale-105">
             <LogoSvg className="w-[12rem] lg:w-[14rem] drop-shadow-lg" />
           </div>
-          <p className="text-sm text-primary-foreground/75 font-normal leading-relaxed max-w-sm">
+          <p className="text-sm text-primary-foreground/80 font-normal leading-relaxed max-w-sm">
             Building innovative digital solutions that drive growth and transform businesses.
           </p>
           <div className="pt-4">
-            <h3 className="text-xs font-semibold text-primary-foreground/90 uppercase tracking-wider mb-4">
+            <h3 className="text-sm font-bold text-primary-foreground uppercase tracking-wider mb-5 flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-primary-foreground/50 rounded-full"></div>
               Quick Links
             </h3>
             <ul className="grid grid-cols-2 gap-2.5">
               <li>
-                <Link 
-                  href="/portfolio" 
+                <Link
+                  href="/portfolio"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>Portfolio</span>
@@ -92,8 +93,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/about-us" 
+                <Link
+                  href="/about-us"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>About Us</span>
@@ -101,8 +102,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/career" 
+                <Link
+                  href="/career"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>Join Our Team</span>
@@ -110,8 +111,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/casestudy" 
+                <Link
+                  href="/casestudy"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>Case Study</span>
@@ -119,8 +120,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/services#testimonial" 
+                <Link
+                  href="/services#testimonial"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>Testimonials</span>
@@ -128,8 +129,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
                 >
                   <span>Contact Us</span>
@@ -138,8 +139,8 @@ function FooterLinks() {
               </li>
             </ul>
             <div className="pt-2">
-              <a 
-                href="https://tally.so" 
+              <a
+                href="https://tally.so"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
@@ -154,8 +155,8 @@ function FooterLinks() {
         {/* Contact Information */}
         <div className="lg:col-span-3 space-y-6">
           <div>
-            <h3 className="text-xs font-semibold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary-foreground/30"></div>
+            <h3 className="text-sm font-bold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-primary-foreground/50 rounded-full"></div>
               Contact
             </h3>
             <ul className="space-y-4 text-sm font-normal text-primary-foreground/80 leading-relaxed">
@@ -169,8 +170,8 @@ function FooterLinks() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 text-primary-foreground/60 group-hover:text-primary-foreground transition-colors duration-300" />
-                <a 
-                  href="mailto:info@techmosaic.org" 
+                <a
+                  href="mailto:info@techmosaic.org"
                   className="hover:text-primary-foreground transition-all duration-300 hover:underline underline-offset-4"
                 >
                   info@techmosaic.org
@@ -178,8 +179,8 @@ function FooterLinks() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-4 h-4 text-primary-foreground/60 group-hover:text-primary-foreground transition-colors duration-300" />
-                <a 
-                  href="tel:+2348095555658" 
+                <a
+                  href="tel:+2348095555658"
                   className="hover:text-primary-foreground transition-all duration-300 hover:underline underline-offset-4"
                 >
                   +234 809 555 5658
@@ -192,14 +193,14 @@ function FooterLinks() {
         {/* Resources */}
         <div className="lg:col-span-2 space-y-6">
           <div>
-            <h3 className="text-xs font-semibold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary-foreground/30"></div>
+            <h3 className="text-sm font-bold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-primary-foreground/50 rounded-full"></div>
               Resources
             </h3>
             <ul className="space-y-3.5">
               <li>
-                <Link 
-                  href="/blogs" 
+                <Link
+                  href="/blogs"
                   className="group text-sm font-normal text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 hover:translate-x-1"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground/40 group-hover:bg-primary-foreground transition-colors duration-300"></div>
@@ -207,8 +208,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/contact" 
+                <Link
+                  href="/contact"
                   className="group text-sm font-normal text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 hover:translate-x-1"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground/40 group-hover:bg-primary-foreground transition-colors duration-300"></div>
@@ -222,8 +223,8 @@ function FooterLinks() {
         {/* Social Links */}
         <div className="lg:col-span-2 space-y-6">
           <div>
-            <h3 className="text-xs font-semibold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary-foreground/30"></div>
+            <h3 className="text-sm font-bold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-primary-foreground/50 rounded-full"></div>
               Follow Us
             </h3>
             <ul className="space-y-3.5">
@@ -267,14 +268,14 @@ function FooterLinks() {
         {/* Legal */}
         <div className="lg:col-span-1 space-y-6">
           <div>
-            <h3 className="text-xs font-semibold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
-              <div className="w-1 h-4 bg-primary-foreground/30"></div>
+            <h3 className="text-sm font-bold text-primary-foreground uppercase tracking-wider mb-6 flex items-center gap-2">
+              <div className="w-1.5 h-5 bg-primary-foreground/50 rounded-full"></div>
               Legal
             </h3>
             <ul className="space-y-3.5">
               <li>
-                <Link 
-                  href="/terms" 
+                <Link
+                  href="/terms"
                   className="group text-sm font-normal text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 hover:translate-x-1"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground/40 group-hover:bg-primary-foreground transition-colors duration-300"></div>
@@ -282,8 +283,8 @@ function FooterLinks() {
                 </Link>
               </li>
               <li>
-                <Link 
-                  href="/terms" 
+                <Link
+                  href="/terms"
                   className="group text-sm font-normal text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-2 hover:translate-x-1"
                 >
                   <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground/40 group-hover:bg-primary-foreground transition-colors duration-300"></div>
@@ -332,7 +333,7 @@ function NewsLetterFooter() {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
-      
+
       <div className="relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between container max-w-7xl mx-auto px-4 lg:px-6 pt-20 lg:pt-24 z-10">
         <div className="flex-1 max-w-2xl">
           <div className="space-y-5 text-white">
@@ -445,7 +446,7 @@ function ContactUsFooter() {
       />
       <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
-      
+
       <div className="relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-start justify-between container max-w-7xl mx-auto px-4 lg:px-6 pt-20 lg:pt-24 z-10">
         <div className="flex-1 max-w-2xl pt-8 lg:pt-12">
           <div className="space-y-6 text-white">
