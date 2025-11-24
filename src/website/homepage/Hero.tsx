@@ -91,23 +91,23 @@ export default function Hero() {
           fill
           className="object-cover col-span-full row-span-full"
         />
-        {/* Enhanced gradient overlay for better contrast and depth */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#191919]/70 via-[#191919]/55 to-[#191919]/75 col-span-full row-span-full z-[1]" />
-        
-        {/* Subtle purple accent overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/5 via-transparent to-transparent col-span-full row-span-full z-[1]" />
-        
+        {/* Enhanced gradient overlay for MAXIMUM contrast and readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/85 col-span-full row-span-full z-[1]" />
+
+        {/* Subtle accent overlays for visual interest */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/10 via-transparent to-[#f27121]/5 col-span-full row-span-full z-[1]" />
+
         {/* Refined decorative geometric elements */}
-        <div className="absolute top-20 right-10 w-40 h-40 bg-[#451842]/10 rounded-full blur-3xl z-[2] hidden lg:block" />
-        <div className="absolute bottom-32 left-10 w-32 h-32 bg-[#451842]/8 rounded-full blur-2xl z-[2] hidden lg:block" />
+        <div className="absolute top-20 right-10 w-64 h-64 bg-[#f27121]/8 rounded-full blur-3xl z-[2] hidden lg:block" />
+        <div className="absolute bottom-32 left-10 w-52 h-52 bg-[#451842]/12 rounded-full blur-3xl z-[2] hidden lg:block" />
 
         <section className="relative py-14 col-span-full pt-[5rem] row-span-full z-10 container max-w-7xl mx-auto px-5 lg:px-8 lg:py-24 flex flex-col md:justify-center">
           <div className="grid gap-10 lg:gap-14 max-w-6xl w-full">
-            {/* Main Heading with Enhanced Typography */}
+            {/* Main Heading with Enhanced Typography and Contrast */}
             <div data-animation="hero-fade-in-y" className="opacity-0">
-              <h1 className="lg:text-7xl text-5xl font-bold lg:font-semibold tracking-tight text-white leading-[1.1] break-words mb-4">
+              <h1 className="lg:text-7xl text-5xl font-bold lg:font-semibold tracking-tight text-white leading-[1.1] break-words mb-4 drop-shadow-2xl">
                 Fueling Your Business <br />
-                <span className="text-white/90 font-medium">Growth through</span> <br />
+                <span className="text-white/95 font-medium">Growth through</span> <br />
                 <span className="relative inline-block mt-3">
                   <span className="text-white">Personalized</span>
                   <span className="relative inline-flex items-center justify-center ml-3 md:ml-4">
@@ -123,34 +123,34 @@ export default function Hero() {
               </h1>
             </div>
 
-            {/* Enhanced Description */}
+            {/* Enhanced Description with Better Contrast */}
             <div className="max-w-3xl" data-animation="hero-fade-in-y">
-              <p className="lg:text-xl opacity-0 text-lg text-white/85 leading-relaxed font-light tracking-wide">
+              <p className="lg:text-xl opacity-0 text-lg text-white/95 leading-relaxed font-light tracking-wide drop-shadow-lg">
                 We fuse creativity, effective management, and a shared industry
                 experience of over two decades to help you stand out in a
                 competitive market
               </p>
             </div>
 
-            {/* CTA Buttons */}
-            <div 
+            {/* CTA Buttons with Enhanced Visibility */}
+            <div
               data-animation="hero-fade-in-y"
               className="opacity-0 flex flex-col sm:flex-row gap-4 mt-2"
             >
-              {/* Primary CTA */}
+              {/* Primary CTA - Enhanced */}
               <Link
                 href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_8px_24px_rgba(69,24,66,0.4)] transition-all duration-300 ease-out"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_12px_36px_rgba(69,24,66,0.6)] transition-all duration-300 ease-out hover:-translate-y-0.5 shadow-lg"
                 aria-label="Get Started - Contact Us"
               >
                 <span>Get Started</span>
                 <ArrowRight className="w-4 h-4 md:w-5 md:h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
               </Link>
 
-              {/* Secondary CTA */}
+              {/* Secondary CTA - Enhanced */}
               <Link
                 href="/services"
-                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-white/5 backdrop-blur-sm text-white border-2 border-[#f27121]/60 hover:bg-white/10 hover:border-[#f27121] hover:shadow-[0_8px_24px_rgba(242,113,33,0.2)] transition-all duration-300 ease-out"
+                className="group relative inline-flex items-center justify-center gap-2.5 px-8 py-4 md:px-10 md:py-5 rounded-xl font-semibold text-sm md:text-base bg-white/10 backdrop-blur-sm text-white border-2 border-[#f27121]/70 hover:bg-white/15 hover:border-[#f27121] hover:shadow-[0_12px_32px_rgba(242,113,33,0.4)] transition-all duration-300 ease-out shadow-md"
                 aria-label="View Our Services"
               >
                 <span>Our Services</span>
