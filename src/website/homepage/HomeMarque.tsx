@@ -52,15 +52,22 @@ export default function HomeMarque() {
 
   if (validLogos.length > 4) {
     return (
-      <section className="py-16 lg:py-24 bg-gradient-to-b from-white via-neutral-50/50 to-white relative overflow-hidden">
-        {/* Subtle background decoration */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(209,213,219,0.15),transparent_50%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(209,213,219,0.15),transparent_50%)]" />
+      <section className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-neutral-50/30 to-white overflow-hidden">
+        {/* Subtle background decoration with brand color */}
+        <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl -z-10" />
+        <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl -z-10" />
 
-        <div className="container mx-auto px-4 mb-8">
-          <p className="text-center text-sm font-medium tracking-wider text-neutral-500 uppercase">
-            Trusted by leading companies
-          </p>
+        <div className="container mx-auto px-4 mb-12 lg:mb-16">
+          {/* Enhanced Header */}
+          <div className="flex flex-col items-center gap-4 max-w-2xl mx-auto">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-[2px] bg-primary rounded-full" />
+              <p className="text-center text-xs lg:text-sm font-semibold tracking-[0.15em] text-primary uppercase">
+                Trusted by leading companies
+              </p>
+              <div className="w-12 h-[2px] bg-primary rounded-full" />
+            </div>
+          </div>
         </div>
 
         <Marquee speed={50}>
@@ -76,8 +83,8 @@ export default function HomeMarque() {
                   key={item.id || idx}
                   className="group relative"
                 >
-                  {/* Card container with subtle styling */}
-                  <div className="relative flex items-center justify-center px-8 py-6 rounded-xl bg-white/80 backdrop-blur-sm border border-neutral-200/60 shadow-sm hover:shadow-md transition-all duration-500 hover:border-neutral-300/80">
+                  {/* Card container with enhanced styling */}
+                  <div className="relative flex items-center justify-center px-8 py-6 rounded-xl bg-white/90 backdrop-blur-sm border-2 border-neutral-200/60 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-500">
                     {/* Logo */}
                     <div
                       className={cn(
@@ -99,8 +106,8 @@ export default function HomeMarque() {
                       aria-label={item.title?.rendered || `Company logo ${idx + 1}`}
                     />
 
-                    {/* Subtle glow effect on hover */}
-                    <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-orange-500/0 via-pink-500/0 to-purple-500/0 group-hover:from-orange-500/5 group-hover:via-pink-500/5 group-hover:to-purple-500/5 transition-all duration-700 pointer-events-none" />
+                    {/* Subtle glow effect on hover with brand color */}
+                    <div className="absolute inset-0 rounded-xl bg-primary/0 group-hover:bg-primary/5 transition-all duration-700 pointer-events-none" />
                   </div>
                 </div>
               );
