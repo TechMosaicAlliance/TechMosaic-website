@@ -70,37 +70,38 @@ export default function OurService() {
   }, [open]);
 
   return (
-    <section className="relative container max-w-7xl px-4 py-12 lg:py-20 lg:px-6 overflow-hidden">
-      {/* Subtle background gradient */}
-      <div className={cn(
-        "absolute inset-0 -z-10 opacity-20 blur-3xl transition-all duration-1000 ease-in-out",
-        `bg-gradient-to-br ${data[open]?.gradient}`
-      )} />
-
-      {/* Minimal floating elements */}
-      <div className="absolute top-32 right-16 w-64 h-64 bg-gradient-to-br from-accent-foreground/3 to-transparent rounded-full blur-3xl" />
-      <div className="absolute bottom-32 left-16 w-80 h-80 bg-gradient-to-tr from-purple-500/3 to-transparent rounded-full blur-3xl" />
+    <section className="relative container max-w-7xl px-4 py-16 lg:py-24 lg:px-6 overflow-hidden">
+      {/* Subtle background decoration with brand color */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
 
       <div className="relative z-10">
         {/* Header Section */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
-          <div className="space-y-3">
+          <div className="space-y-4">
+            {/* Eyebrow with accent */}
             <div className="flex items-center gap-3">
-              <div className="w-0.5 h-10 bg-gradient-to-b from-accent-foreground to-transparent rounded-full" />
-              <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-neutral-600">
+              <div className="w-12 h-[2px] bg-primary rounded-full" />
+              <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-primary">
                 OUR SERVICES
               </h3>
             </div>
-            <p className="text-base lg:text-lg font-light text-neutral-500 leading-relaxed max-w-lg pl-4">
-              Reliable and affordable custom solutions that work
-            </p>
+
+            {/* Main heading */}
+            <h1 className="text-4xl lg:text-6xl font-semibold leading-tight text-neutral-900 playfair-display">
+              Reliable and affordable
+              <br className="hidden lg:block" />
+              <span className="text-primary">custom solutions</span>
+              <br className="hidden lg:block" /> that work
+            </h1>
           </div>
-          <div>
+
+          <div className="flex-shrink-0">
             <Link
               href="/services"
               className={cn(
                 buttonVariants({
-                  className: "border-neutral-200/60 group border bg-white/80 hover:bg-white backdrop-blur-sm transition-all duration-300 shadow-sm hover:shadow-md text-slate-600",
+                  className: "group border-2 border-primary/30 bg-white hover:bg-primary hover:border-primary text-primary hover:text-white transition-all duration-300 shadow-sm hover:shadow-md font-semibold px-6 py-6",
                   variant: "default",
                 })
               )}
@@ -125,13 +126,13 @@ export default function OurService() {
                   "relative group cursor-pointer transition-all duration-300 ease-out",
                   "rounded-xl border overflow-hidden",
                   open === idx
-                    ? "bg-white shadow-lg border-accent-foreground/20"
-                    : "bg-white/80 backdrop-blur-sm border-neutral-200/50 hover:border-neutral-300/70 hover:shadow-md"
+                    ? "bg-white shadow-lg border-primary/40"
+                    : "bg-white/80 backdrop-blur-sm border-neutral-200/50 hover:border-primary/30 hover:shadow-md"
                 )}
               >
                 {/* Active indicator */}
                 {open === idx && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-foreground to-accent-foreground/60" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-primary/60" />
                 )}
 
                 <div className="relative flex items-center p-5 lg:p-6 gap-4">
@@ -139,8 +140,8 @@ export default function OurService() {
                   <div className={cn(
                     "flex-shrink-0 w-12 h-12 rounded-lg flex items-center justify-center font-semibold text-base transition-all duration-300",
                     open === idx
-                      ? "bg-accent-foreground text-white"
-                      : "bg-neutral-100 text-neutral-500 group-hover:bg-neutral-200 group-hover:text-neutral-700"
+                      ? "bg-primary text-white"
+                      : "bg-neutral-100 text-neutral-500 group-hover:bg-primary/10 group-hover:text-primary"
                   )}>
                     {item.number}
                   </div>
@@ -150,21 +151,21 @@ export default function OurService() {
                       <h2 className={cn(
                         "text-lg lg:text-xl font-semibold transition-colors duration-300",
                         open === idx
-                          ? "text-accent-foreground"
-                          : "text-neutral-900 group-hover:text-accent-foreground"
+                          ? "text-primary"
+                          : "text-neutral-900 group-hover:text-primary"
                       )}>
                         {item.name}
                       </h2>
                       <div className={cn(
                         "flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300",
                         open === idx
-                          ? "border-accent-foreground bg-accent-foreground"
-                          : "border-neutral-300 group-hover:border-neutral-400"
+                          ? "border-primary bg-primary"
+                          : "border-neutral-300 group-hover:border-primary group-hover:bg-primary/10"
                       )}>
                         {open === idx ? (
                           <Minus className="text-white" size={14} strokeWidth={3} />
                         ) : (
-                          <Plus className="text-neutral-400 group-hover:text-neutral-600" size={14} strokeWidth={2.5} />
+                          <Plus className="text-neutral-400 group-hover:text-primary" size={14} strokeWidth={2.5} />
                         )}
                       </div>
                     </div>
@@ -185,15 +186,12 @@ export default function OurService() {
           {/* Image Display - Right Side */}
           <div
             ref={imageRef}
-            className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0"
+            className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border-2 border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
-            {/* Gradient overlay */}
-            <div className={cn(
-              "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10 transition-all duration-700",
-              `bg-gradient-to-br ${data[open]?.gradient}`
-            )} />
+            {/* Gradient overlay with brand color */}
+            <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/20 to-transparent z-10 transition-all duration-700" />
 
             <BlurImage
               key={data[open]?.image}
@@ -211,7 +209,7 @@ export default function OurService() {
               <div className="bg-black/40 backdrop-blur-md rounded-xl p-6 lg:p-8 border border-white/10">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-lg bg-primary/30 backdrop-blur-sm border border-white/30 flex items-center justify-center">
                       <span className="text-white font-semibold text-sm">{data[open]?.number}</span>
                     </div>
                     <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
