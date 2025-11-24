@@ -76,7 +76,7 @@ export default function OurService() {
         "absolute inset-0 -z-10 opacity-20 blur-3xl transition-all duration-1000 ease-in-out",
         `bg-gradient-to-br ${data[open]?.gradient}`
       )} />
-      
+
       {/* Minimal floating elements */}
       <div className="absolute top-32 right-16 w-64 h-64 bg-gradient-to-br from-accent-foreground/3 to-transparent rounded-full blur-3xl" />
       <div className="absolute bottom-32 left-16 w-80 h-80 bg-gradient-to-tr from-purple-500/3 to-transparent rounded-full blur-3xl" />
@@ -84,7 +84,7 @@ export default function OurService() {
       <div className="relative z-10">
         {/* Header Section */}
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
-          <div data-animation="trigger-fade-in-y" className="space-y-3">
+          <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="w-0.5 h-10 bg-gradient-to-b from-accent-foreground to-transparent rounded-full" />
               <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-neutral-600">
@@ -133,7 +133,7 @@ export default function OurService() {
                 {open === idx && (
                   <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-accent-foreground to-accent-foreground/60" />
                 )}
-                
+
                 <div className="relative flex items-center p-5 lg:p-6 gap-4">
                   {/* Number badge */}
                   <div className={cn(
@@ -149,16 +149,16 @@ export default function OurService() {
                     <div className="flex items-center justify-between gap-3">
                       <h2 className={cn(
                         "text-lg lg:text-xl font-semibold transition-colors duration-300",
-                        open === idx 
-                          ? "text-accent-foreground" 
+                        open === idx
+                          ? "text-accent-foreground"
                           : "text-neutral-900 group-hover:text-accent-foreground"
                       )}>
                         {item.name}
                       </h2>
                       <div className={cn(
                         "flex-shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300",
-                        open === idx 
-                          ? "border-accent-foreground bg-accent-foreground" 
+                        open === idx
+                          ? "border-accent-foreground bg-accent-foreground"
                           : "border-neutral-300 group-hover:border-neutral-400"
                       )}>
                         {open === idx ? (
@@ -185,7 +185,6 @@ export default function OurService() {
           {/* Image Display - Right Side */}
           <div
             ref={imageRef}
-            data-animation="trigger-fade-in-y"
             className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
@@ -195,7 +194,7 @@ export default function OurService() {
               "absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent z-10 transition-all duration-700",
               `bg-gradient-to-br ${data[open]?.gradient}`
             )} />
-            
+
             <BlurImage
               key={data[open]?.image}
               className={cn(
@@ -206,7 +205,7 @@ export default function OurService() {
               alt={data[open]?.name || "Our Services"}
               fill
             />
-            
+
             {/* Content overlay */}
             <div className="absolute inset-0 z-20 flex flex-col justify-end p-8 lg:p-10">
               <div className="bg-black/40 backdrop-blur-md rounded-xl p-6 lg:p-8 border border-white/10">

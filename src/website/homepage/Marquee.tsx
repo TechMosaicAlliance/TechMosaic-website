@@ -55,7 +55,7 @@ export default function Marquee({
 
   return (
     <div
-      className=" z-0 marquee-container  py-8 max-w-[100rem] mx-auto relative overflow-hidden"
+      className="z-0 marquee-container py-8 max-w-[100rem] mx-auto relative overflow-hidden"
       ref={containerRef}
     >
       <motion.div className="flex whitespace-nowrap" style={{ x }}>

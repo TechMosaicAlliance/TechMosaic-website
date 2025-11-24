@@ -15,7 +15,7 @@ export default function OurPortfolio() {
     <>
       {data && data.length > 0 ? (
         <section className="container max-w-7xl p-4  pt-[4rem] lg:pt-[7rem]">
-          <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-end justify-between" data-animation="trigger-fade-in-y">
+          <div className="flex flex-col gap-4 lg:gap-0 lg:flex-row lg:items-end justify-between">
             <div className="grid gap-4">
               <h3 className="tracking-wider">OUR PORTFOLIO</h3>
               <h1 className="text-3xl lg:text-5xl">
@@ -49,8 +49,8 @@ export default function OurPortfolio() {
             <div className="lg:grid flex lg:grid-cols-3 gap-4">
               {data.length > 3
                 ? data
-                    .slice(0, 3)
-                    .map((item, idx) => <Card item={item} key={idx} index={idx} />)
+                  .slice(0, 3)
+                  .map((item, idx) => <Card item={item} key={idx} index={idx} />)
                 : data.map((item, idx) => <Card item={item} key={idx} index={idx} />)}
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function OurPortfolio() {
 function Card({ item, index }: { item: any; index: number }) {
   return (
     <Link href={`/portfolio/${item.id}`}>
-      <article className="grid w-[18rem] lg:w-full gap-2" data-animation="trigger-fade-in-y" style={{ animationDelay: `${index * 0.1}s` }}>
+      <article className="grid w-[18rem] lg:w-full gap-2" style={{ animationDelay: `${index * 0.1}s` }}>
         <div className="h-[18rem] overflow-hidden relative w-full">
           <BlurImage
             className="object-cover transition-transform hover:scale-110 "

@@ -24,10 +24,10 @@ export default function OurBlog() {
 
     const scroll = () => {
       if (!container) return;
-      
+
       if (!isHovered) {
         container.scrollLeft += scrollSpeed;
-        
+
         // Reset to beginning when reaching the end for seamless loop
         if (container.scrollLeft >= container.scrollWidth - container.clientWidth - 1) {
           container.scrollLeft = 0;
@@ -50,7 +50,7 @@ export default function OurBlog() {
   return (
     <section className="container max-w-7xl px-4 py-12 lg:py-20 lg:px-6">
       {/* Header Section */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16" data-animation="trigger-fade-in-y">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
         <div className="space-y-3">
           <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-neutral-600">
             STORIES FROM OUR BLOG
@@ -79,7 +79,7 @@ export default function OurBlog() {
       </div>
 
       {!isPending && data && data.length > 0 ? (
-        <div className="relative" data-animation="trigger-fade-in-y">
+        <div className="relative">
           <div
             ref={scrollContainerRef}
             onMouseEnter={() => setIsHovered(true)}
@@ -88,8 +88,8 @@ export default function OurBlog() {
             style={{ scrollBehavior: "auto" }}
           >
             {data.map((item, idx) => (
-              <Link 
-                href={`/blogs/${item.id}`} 
+              <Link
+                href={`/blogs/${item.id}`}
                 key={item.id}
                 className="flex-shrink-0 w-[320px] lg:w-[380px] group"
                 style={{ animationDelay: `${idx * 0.1}s` }}

@@ -66,7 +66,6 @@ export default function HomeMarque() {
         <Marquee speed={50}>
           <div
             className="flex items-center gap-8 lg:gap-12 px-4"
-            data-animation="trigger-fade-in-y"
           >
             {validLogos.map((item, idx) => {
               const logoUrl = normalizeLogoUrl(item.acf?.logo);
