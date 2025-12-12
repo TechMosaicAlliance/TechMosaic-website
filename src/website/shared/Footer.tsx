@@ -21,7 +21,7 @@ export default function Footer(props: IFooter) {
   return (
     <footer className="pt-14 relative">
       {path.includes(pathname) ? <NewsLetterFooter /> : <ContactUsFooter />}
-      <section className="relative bg-gradient-to-br from-primary via-primary to-primary/95 text-primary-foreground overflow-hidden">
+      <section className="relative bg-gradient-to-br from-primary via-primary to-primary/95 text-primary-foreground overflow-hidden rounded-2xl m-4">
         {/* Decorative background elements */}
         <div className="absolute inset-0 opacity-5">
           <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
@@ -324,15 +324,15 @@ function NewsLetterFooter() {
     });
   };
   return (
-    <div className="relative w-full pb-20 lg:pb-24 flex overflow-hidden">
+    <div className="relative w-full pb-20 lg:pb-24 flex overflow-hidden rounded-2xl m-4">
       <Image
         alt="Newsletter subscription"
         src="/assets/footer.jpg"
         fill
-        className="object-cover absolute scale-105 transition-transform duration-700 hover:scale-100"
+        className="object-cover absolute scale-105 transition-transform duration-700 hover:scale-100 rounded-2xl"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70 rounded-2xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)] rounded-2xl" />
 
       <div className="relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-center justify-between container max-w-7xl mx-auto px-4 lg:px-6 pt-20 lg:pt-24 z-10">
         <div className="flex-1 max-w-2xl">
@@ -437,15 +437,15 @@ function ContactUsFooter() {
     }
   };
   return (
-    <div className="relative w-full pb-20 lg:pb-24 flex overflow-hidden">
+    <div className="relative pb-20 lg:pb-24 flex overflow-hidden rounded-2xl m-4">
       <Image
         alt="Contact us"
         src="/assets/footer.jpg"
         fill
-        className="object-cover absolute scale-105 transition-transform duration-700 hover:scale-100"
+        className="object-cover absolute scale-105 transition-transform duration-700 hover:scale-100 rounded-2xl"
       />
-      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70 rounded-2xl" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_50%,rgba(255,255,255,0.05)_0%,transparent_50%)] rounded-2xl" />
 
       <div className="relative flex flex-col lg:flex-row gap-12 lg:gap-16 items-start justify-between container max-w-7xl mx-auto px-4 lg:px-6 pt-20 lg:pt-24 z-10">
         <div className="flex-1 max-w-2xl pt-8 lg:pt-12">
