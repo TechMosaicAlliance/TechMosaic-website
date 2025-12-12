@@ -3,14 +3,17 @@ import { NextResponse } from 'next/server';
 export async function GET() {
   const isProduction = process.env.NODE_ENV === 'production';
   const isVercel = process.env.VERCEL === '1';
+  const hasTursoUrl = !!process.env.TURSO_DATABASE_URL;
   
   let dbStatus = 'unknown';
   let dbError = null;
+  let dbType = 'turso';
 
   try {
-    // Try to import and initialize database
-    const { getDatabase } = await import('@/lib/db');
-    const db = getDatabase();
+    // Try to connect to Turso database
+    const { getTursoClient, ensureInitialized } = await import('@/lib/db-turso');
+    const db = getTursoClient();
+    await ensureInitialized();
     dbStatus = 'connected';
   } catch (error: any) {
     dbStatus = 'failed';
@@ -18,7 +21,7 @@ export async function GET() {
   }
 
   return NextResponse.json({
-    status: 'ok',
+    status: dbStatus === 'connected' ? 'ok' : 'error',
     environment: {
       isProduction,
       isVercel,
@@ -28,12 +31,14 @@ export async function GET() {
     database: {
       status: dbStatus,
       error: dbError,
-      type: 'better-sqlite3',
-      note: isVercel ? 'SQLite does not work on Vercel serverless functions' : undefined,
+      type: dbType,
+      configured: hasTursoUrl,
+      note: !hasTursoUrl ? 'TURSO_DATABASE_URL environment variable not set' : undefined,
     },
-    recommendation: isVercel && dbStatus === 'failed' 
-      ? 'Please switch to Vercel Postgres, Turso, or Supabase for production deployment'
+    recommendation: !hasTursoUrl 
+      ? 'Please set TURSO_DATABASE_URL and TURSO_AUTH_TOKEN environment variables. See TURSO_SETUP.md for instructions.'
+      : dbStatus === 'failed'
+      ? 'Database connection failed. Check your Turso credentials.'
       : undefined,
   });
 }
-

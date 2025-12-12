@@ -20,6 +20,7 @@
     "db:reset": "tsx scripts/db-utils.ts reset --confirm"
   },
   "dependencies": {
+    "@libsql/client": "^0.15.15",
     "@motionone/utils": "^10.18.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-aspect-ratio": "^1.1.0",

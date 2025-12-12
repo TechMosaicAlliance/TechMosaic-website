@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/db';
+import { getTursoClient, ensureInitialized } from '@/lib/db-turso';
 import bcrypt from 'bcryptjs';
 
 export async function POST(request: NextRequest) {
@@ -15,21 +15,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Get database connection
-    let db;
-    try {
-      db = getDatabase();
-    } catch (dbError) {
-      console.error('Database connection error:', dbError);
-      return NextResponse.json(
-        { error: 'Database connection failed. SQLite may not be supported on this platform.' },
-        { status: 500 }
-      );
-    }
+    // Ensure database is initialized
+    await ensureInitialized();
+
+    // Get database client
+    const db = getTursoClient();
 
     // Find user by email
-    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
-    const user = stmt.get(email) as any;
+    const result = await db.execute({
+      sql: 'SELECT * FROM users WHERE email = ?',
+      args: [email]
+    });
+
+    const user = result.rows[0] as any;
 
     if (!user) {
       return NextResponse.json(
@@ -47,7 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verify password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(password, user.password as string);
 
     if (!isPasswordValid) {
       return NextResponse.json(
@@ -59,7 +57,7 @@ export async function POST(request: NextRequest) {
     // Remove password from response
     const { password: _, ...userWithoutPassword } = user;
 
-    // Return user data (in a real app, you'd also create a session/JWT token)
+    // Return user data
     return NextResponse.json(
       {
         message: 'Login successful',
@@ -75,4 +73,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

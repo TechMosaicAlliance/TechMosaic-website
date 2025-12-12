@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/db';
+import { getTursoClient, ensureInitialized } from '@/lib/db-turso';
 import bcrypt from 'bcryptjs';
 
 // GET single user
@@ -8,25 +8,23 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Note: In production, add proper authentication check here
-    // const user = await getSessionUser(request);
-    // if (user.role !== 'Super Admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    await ensureInitialized();
+    const db = getTursoClient();
     
-    const db = getDatabase();
-    const stmt = db.prepare(`
-      SELECT id, name, username, email, role, status, avatar, created_at, updated_at
-      FROM users WHERE id = ?
-    `);
-    const user = stmt.get(params.id);
+    const result = await db.execute({
+      sql: `SELECT id, name, username, email, role, status, avatar, created_at, updated_at
+            FROM users WHERE id = ?`,
+      args: [params.id]
+    });
 
-    if (!user) {
+    if (result.rows.length === 0) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
 
-    return NextResponse.json({ user }, { status: 200 });
+    return NextResponse.json({ user: result.rows[0] }, { status: 200 });
   } catch (error) {
     console.error('Error fetching user:', error);
     return NextResponse.json(
@@ -42,29 +40,26 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Note: In production, add proper authentication check here
-    // const user = await getSessionUser(request);
-    // if (user.role !== 'Super Admin') {
-    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
-    // }
-    
     const body = await request.json();
     const { name, username, email, password, role, status, avatar } = body;
 
-    const db = getDatabase();
+    await ensureInitialized();
+    const db = getTursoClient();
 
     // Check if user exists
-    const checkStmt = db.prepare('SELECT id FROM users WHERE id = ?');
-    const existingUser = checkStmt.get(params.id);
+    const checkResult = await db.execute({
+      sql: 'SELECT id FROM users WHERE id = ?',
+      args: [params.id]
+    });
 
-    if (!existingUser) {
+    if (checkResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
 
-    // Build update query dynamically based on provided fields
+    // Build update query dynamically
     const updates: string[] = [];
     const values: any[] = [];
 
@@ -75,10 +70,12 @@ export async function PUT(
 
     if (username) {
       // Check if username already exists for another user
-      const usernameCheck = db.prepare('SELECT id FROM users WHERE username = ? AND id != ?');
-      const duplicateUsername = usernameCheck.get(username, params.id);
+      const usernameCheck = await db.execute({
+        sql: 'SELECT id FROM users WHERE username = ? AND id != ?',
+        args: [username, params.id]
+      });
       
-      if (duplicateUsername) {
+      if (usernameCheck.rows.length > 0) {
         return NextResponse.json(
           { error: 'Username already exists' },
           { status: 409 }
@@ -99,10 +96,12 @@ export async function PUT(
       }
 
       // Check if email already exists for another user
-      const emailCheck = db.prepare('SELECT id FROM users WHERE email = ? AND id != ?');
-      const duplicateEmail = emailCheck.get(email, params.id);
+      const emailCheck = await db.execute({
+        sql: 'SELECT id FROM users WHERE email = ? AND id != ?',
+        args: [email, params.id]
+      });
       
-      if (duplicateEmail) {
+      if (emailCheck.rows.length > 0) {
         return NextResponse.json(
           { error: 'Email already exists' },
           { status: 409 }
@@ -152,18 +151,21 @@ export async function PUT(
     values.push(params.id);
 
     const updateQuery = `UPDATE users SET ${updates.join(', ')} WHERE id = ?`;
-    const updateStmt = db.prepare(updateQuery);
-    updateStmt.run(...values);
+    
+    await db.execute({
+      sql: updateQuery,
+      args: values
+    });
 
     // Get updated user
-    const getUser = db.prepare(`
-      SELECT id, name, username, email, role, status, avatar, created_at, updated_at
-      FROM users WHERE id = ?
-    `);
-    const updatedUser = getUser.get(params.id);
+    const updatedUserResult = await db.execute({
+      sql: `SELECT id, name, username, email, role, status, avatar, created_at, updated_at
+            FROM users WHERE id = ?`,
+      args: [params.id]
+    });
 
     return NextResponse.json(
-      { message: 'User updated successfully', user: updatedUser },
+      { message: 'User updated successfully', user: updatedUserResult.rows[0] },
       { status: 200 }
     );
   } catch (error) {
@@ -181,24 +183,23 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Note: In production, add proper authentication check here
-    // const user = await getSessionUser(request);
-    // if (user.role !== 'Super Admin') {
-    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
-    // }
-    
-    const db = getDatabase();
+    await ensureInitialized();
+    const db = getTursoClient();
 
     // Check if user exists
-    const checkStmt = db.prepare('SELECT id, username FROM users WHERE id = ?');
-    const existingUser = checkStmt.get(params.id) as any;
+    const checkResult = await db.execute({
+      sql: 'SELECT id, username FROM users WHERE id = ?',
+      args: [params.id]
+    });
 
-    if (!existingUser) {
+    if (checkResult.rows.length === 0) {
       return NextResponse.json(
         { error: 'User not found' },
         { status: 404 }
       );
     }
+
+    const existingUser = checkResult.rows[0] as any;
 
     // Prevent deleting super admin accounts
     if (existingUser.username === 'superadmin') {
@@ -209,8 +210,10 @@ export async function DELETE(
     }
 
     // Delete user
-    const deleteStmt = db.prepare('DELETE FROM users WHERE id = ?');
-    deleteStmt.run(params.id);
+    await db.execute({
+      sql: 'DELETE FROM users WHERE id = ?',
+      args: [params.id]
+    });
 
     return NextResponse.json(
       { message: 'User deleted successfully' },
@@ -224,4 +227,3 @@ export async function DELETE(
     );
   }
 }
-

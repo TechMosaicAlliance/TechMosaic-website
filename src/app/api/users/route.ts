@@ -1,23 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDatabase } from '@/lib/db';
+import { getTursoClient, ensureInitialized } from '@/lib/db-turso';
 import bcrypt from 'bcryptjs';
-
-// Helper to check if user is Super Admin (in production, get from session/JWT)
-function isSuperAdmin(request: NextRequest): boolean {
-  // In production, you would verify JWT token or session
-  // For now, we'll check localStorage on client side
-  // API should verify with proper session management
-  return true; // Placeholder - implement proper auth middleware
-}
 
 // GET all users
 export async function GET(request: NextRequest) {
   try {
-    // Note: In production, add proper authentication check here
-    // const user = await getSessionUser(request);
-    // if (user.role !== 'Super Admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
-    
-    const db = getDatabase();
+    await ensureInitialized();
+    const db = getTursoClient();
     
     // Get query parameters
     const searchParams = request.nextUrl.searchParams;
@@ -26,30 +15,29 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get('search');
 
     let query = 'SELECT id, name, username, email, role, status, avatar, created_at, updated_at FROM users WHERE 1=1';
-    const params: any[] = [];
+    const args: any[] = [];
 
     if (role) {
       query += ' AND role = ?';
-      params.push(role);
+      args.push(role);
     }
 
     if (status) {
       query += ' AND status = ?';
-      params.push(status);
+      args.push(status);
     }
 
     if (search) {
       query += ' AND (name LIKE ? OR username LIKE ? OR email LIKE ?)';
       const searchTerm = `%${search}%`;
-      params.push(searchTerm, searchTerm, searchTerm);
+      args.push(searchTerm, searchTerm, searchTerm);
     }
 
     query += ' ORDER BY created_at DESC';
 
-    const stmt = db.prepare(query);
-    const users = stmt.all(...params);
+    const result = await db.execute({ sql: query, args });
 
-    return NextResponse.json({ users }, { status: 200 });
+    return NextResponse.json({ users: result.rows }, { status: 200 });
   } catch (error) {
     console.error('Error fetching users:', error);
     return NextResponse.json(
@@ -62,12 +50,6 @@ export async function GET(request: NextRequest) {
 // POST - Create new user (Super Admin only)
 export async function POST(request: NextRequest) {
   try {
-    // Note: In production, add proper authentication check here
-    // const user = await getSessionUser(request);
-    // if (user.role !== 'Super Admin') {
-    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
-    // }
-    
     const body = await request.json();
     const { name, username, email, password, role, status, avatar } = body;
 
@@ -97,13 +79,16 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const db = getDatabase();
+    await ensureInitialized();
+    const db = getTursoClient();
 
     // Check if username already exists
-    const usernameCheck = db.prepare('SELECT id FROM users WHERE username = ?');
-    const existingUsername = usernameCheck.get(username);
+    const usernameCheck = await db.execute({
+      sql: 'SELECT id FROM users WHERE username = ?',
+      args: [username]
+    });
     
-    if (existingUsername) {
+    if (usernameCheck.rows.length > 0) {
       return NextResponse.json(
         { error: 'Username already exists' },
         { status: 409 }
@@ -111,10 +96,12 @@ export async function POST(request: NextRequest) {
     }
 
     // Check if email already exists
-    const emailCheck = db.prepare('SELECT id FROM users WHERE email = ?');
-    const existingEmail = emailCheck.get(email);
+    const emailCheck = await db.execute({
+      sql: 'SELECT id FROM users WHERE email = ?',
+      args: [email]
+    });
     
-    if (existingEmail) {
+    if (emailCheck.rows.length > 0) {
       return NextResponse.json(
         { error: 'Email already exists' },
         { status: 409 }
@@ -133,30 +120,21 @@ export async function POST(request: NextRequest) {
       .slice(0, 2);
 
     // Insert user
-    const insert = db.prepare(`
-      INSERT INTO users (name, username, email, password, role, status, avatar)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
-    `);
+    const insertResult = await db.execute({
+      sql: `INSERT INTO users (name, username, email, password, role, status, avatar)
+            VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      args: [name, username, email, hashedPassword, role, status || 'Active', userAvatar]
+    });
 
-    const result = insert.run(
-      name,
-      username,
-      email,
-      hashedPassword,
-      role,
-      status || 'Active',
-      userAvatar
-    );
-
-    // Get the created user (without password)
-    const getUser = db.prepare(`
-      SELECT id, name, username, email, role, status, avatar, created_at, updated_at
-      FROM users WHERE id = ?
-    `);
-    const newUser = getUser.get(result.lastInsertRowid);
+    // Get the created user
+    const newUserResult = await db.execute({
+      sql: `SELECT id, name, username, email, role, status, avatar, created_at, updated_at
+            FROM users WHERE id = ?`,
+      args: [Number(insertResult.lastInsertRowid)]
+    });
 
     return NextResponse.json(
-      { message: 'User created successfully', user: newUser },
+      { message: 'User created successfully', user: newUserResult.rows[0] },
       { status: 201 }
     );
   } catch (error) {
@@ -167,4 +145,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
