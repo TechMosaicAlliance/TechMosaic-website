@@ -363,20 +363,47 @@ export default function ProjectEditPage() {
     }
 
     setUploadingMedia(true);
+    setMediaUploadProgress(0);
+    
     try {
       const formData = new FormData();
       formData.append('file', file);
 
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      // Use XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setMediaUploadProgress(percentComplete);
+        }
       });
 
-      if (!response.ok) {
-        throw new Error('Upload failed');
-      }
+      // Handle completion
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (error) {
+              reject(new Error('Invalid response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
 
-      const data = await response.json();
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed'));
+        });
+
+        xhr.open('POST', '/api/upload');
+        xhr.send(formData);
+      });
+
+      const data = await uploadPromise;
       setFormData((prev: any) => ({
         ...prev,
         mediaFiles: [...(prev.mediaFiles || []), data.url],
@@ -387,6 +414,7 @@ export default function ProjectEditPage() {
       toast.error('Failed to upload media');
     } finally {
       setUploadingMedia(false);
+      setMediaUploadProgress(0);
     }
   };
 
@@ -438,57 +466,80 @@ export default function ProjectEditPage() {
             </label>
             
             {formData.image ? (
-              <div className="relative group">
-                <div className="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200">
-                  <Image
-                    src={formData.image}
-                    alt="Project preview"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-3">
-                  <label className="cursor-pointer">
-                    <input
-                      type="file"
-                      accept="image/png,image/jpeg,image/jpg,image/webp"
-                      onChange={handleImageUpload}
-                      className="hidden"
-                      disabled={uploadingImage}
+              <div className="space-y-3">
+                <div className="relative group">
+                  <div className="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200">
+                    <Image
+                      src={formData.image}
+                      alt="Project preview"
+                      fill
+                      className="object-cover"
                     />
+                  </div>
+                  <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-3">
+                    <label className="cursor-pointer">
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/jpg,image/webp"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        disabled={uploadingImage}
+                      />
+                      <Button
+                        type="button"
+                        variant="secondary"
+                        size="sm"
+                        disabled={uploadingImage}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.currentTarget.previousElementSibling?.dispatchEvent(new MouseEvent('click'));
+                        }}
+                      >
+                        {uploadingImage ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Change Image
+                          </>
+                        )}
+                      </Button>
+                    </label>
                     <Button
                       type="button"
-                      variant="secondary"
+                      variant="destructive"
                       size="sm"
+                      onClick={() => setFormData({ ...formData, image: '' })}
                       disabled={uploadingImage}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.currentTarget.previousElementSibling?.dispatchEvent(new MouseEvent('click'));
-                      }}
                     >
-                      {uploadingImage ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Uploading...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Change Image
-                        </>
-                      )}
+                      <X className="w-4 h-4 mr-2" />
+                      Remove
                     </Button>
-                  </label>
-                  <Button
-                    type="button"
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => setFormData({ ...formData, image: '' })}
-                  >
-                    <X className="w-4 h-4 mr-2" />
-                    Remove
-                  </Button>
+                  </div>
                 </div>
+                
+                {/* Upload Progress Bar when changing image */}
+                {uploadingImage && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-blue-900">
+                        Uploading to Cloudinary
+                      </span>
+                      <span className="text-sm font-bold text-blue-700">
+                        {uploadProgress}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-blue-600 h-full transition-all duration-300 ease-out"
+                        style={{ width: `${uploadProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <label className="block cursor-pointer">
@@ -503,9 +554,21 @@ export default function ProjectEditPage() {
                   {uploadingImage ? (
                     <>
                       <Loader2 className="w-12 h-12 text-primary mx-auto mb-3 animate-spin" />
-                      <p className="text-sm text-gray-600 mb-1">
+                      <p className="text-sm text-gray-600 mb-3">
                         Uploading to Cloudinary...
                       </p>
+                      {/* Progress Bar */}
+                      <div className="w-full max-w-xs mx-auto">
+                        <div className="w-full bg-gray-200 rounded-full h-2.5 overflow-hidden">
+                          <div
+                            className="bg-primary h-full transition-all duration-300 ease-out"
+                            style={{ width: `${uploadProgress}%` }}
+                          ></div>
+                        </div>
+                        <p className="text-sm text-gray-700 mt-2 font-semibold">
+                          {uploadProgress}%
+                        </p>
+                      </div>
                     </>
                   ) : (
                     <>
@@ -775,42 +838,64 @@ export default function ProjectEditPage() {
               <label className="block text-sm font-semibold text-gray-900 mb-2">
                 Project Media (Pictures & Videos)
               </label>
-              <div className="flex gap-2 mb-3">
-                <input
-                  type="url"
-                  value={mediaUrl}
-                  onChange={(e) => setMediaUrl(e.target.value)}
-                  placeholder="Enter media URL or upload..."
-                  className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                />
-                <Button onClick={handleAddMedia} type="button" disabled={uploadingMedia}>
-                  <Plus className="w-4 h-4 mr-2" />
-                  Add URL
-                </Button>
-                <label className="cursor-pointer">
+              <div className="space-y-3">
+                <div className="flex gap-2">
                   <input
-                    type="file"
-                    accept="image/*,video/*"
-                    onChange={handleMediaUpload}
-                    className="hidden"
-                    disabled={uploadingMedia}
+                    type="url"
+                    value={mediaUrl}
+                    onChange={(e) => setMediaUrl(e.target.value)}
+                    placeholder="Enter media URL or upload..."
+                    className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   />
-                  <Button type="button" variant="outline" disabled={uploadingMedia} asChild>
-                    <span>
-                      {uploadingMedia ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          Uploading...
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4 mr-2" />
-                          Upload File
-                        </>
-                      )}
-                    </span>
+                  <Button onClick={handleAddMedia} type="button" disabled={uploadingMedia}>
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add URL
                   </Button>
-                </label>
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/*,video/*"
+                      onChange={handleMediaUpload}
+                      className="hidden"
+                      disabled={uploadingMedia}
+                    />
+                    <Button type="button" variant="outline" disabled={uploadingMedia} asChild>
+                      <span>
+                        {uploadingMedia ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4 mr-2" />
+                            Upload File
+                          </>
+                        )}
+                      </span>
+                    </Button>
+                  </label>
+                </div>
+                
+                {/* Upload Progress Bar */}
+                {uploadingMedia && (
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-sm font-medium text-blue-900">
+                        Uploading media to Cloudinary
+                      </span>
+                      <span className="text-sm font-bold text-blue-700">
+                        {mediaUploadProgress}%
+                      </span>
+                    </div>
+                    <div className="w-full bg-blue-200 rounded-full h-2 overflow-hidden">
+                      <div
+                        className="bg-blue-600 h-full transition-all duration-300 ease-out"
+                        style={{ width: `${mediaUploadProgress}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )}
               </div>
               {(formData.mediaFiles || []).length > 0 && (
                 <div className="space-y-2">
