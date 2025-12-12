@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { Search, Filter, Calendar, Building2, CheckCircle, Clock, Layers } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ProjectsGridSkeleton } from "@/components/ui/skeletons/ProjectCardSkeleton";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const impactAreas = [
   "All",
@@ -58,19 +59,53 @@ interface Project {
   mediaFiles?: string[];
 }
 
-export default function ProjectManagementPage() {
+function ProjectManagementPageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedImpactArea, setSelectedImpactArea] = useState("All");
-  const [selectedStatus, setSelectedStatus] = useState("All");
-  const [selectedServiceType, setSelectedServiceType] = useState("All");
   const [showFilters, setShowFilters] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
+  // Get filter values from query params
+  const searchQuery = searchParams.get('search') || "";
+  const selectedImpactArea = searchParams.get('impactArea') || "All";
+  const selectedStatus = searchParams.get('status') || "All";
+  const selectedServiceType = searchParams.get('serviceType') || "All";
+
+  // Sync search input with query param on mount/change
+  useEffect(() => {
+    setSearchInput(searchQuery);
+  }, [searchQuery]);
+
+  // Function to update query params
+  const updateQueryParams = useCallback((updates: Record<string, string | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "" || value === "All") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    });
+
+    router.push(`/project-management?${params.toString()}`);
+  }, [searchParams, router]);
 
   // Fetch projects from API
   useEffect(() => {
     fetchProjects();
   }, []);
+
+  // Debounced search query param update
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      updateQueryParams({ search: searchInput || null });
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchInput, updateQueryParams]);
 
   const fetchProjects = async () => {
     try {
@@ -181,8 +216,8 @@ export default function ProjectManagementPage() {
               <input
                 type="text"
                 placeholder="Search projects by name, client, or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
                 className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-gray-900 placeholder-gray-500"
               />
             </div>
@@ -209,7 +244,7 @@ export default function ProjectManagementPage() {
               </label>
               <select
                 value={selectedImpactArea}
-                onChange={(e) => setSelectedImpactArea(e.target.value)}
+                onChange={(e) => updateQueryParams({ impactArea: e.target.value === "All" ? null : e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900"
               >
                 {impactAreas.map((area) => (
@@ -227,7 +262,7 @@ export default function ProjectManagementPage() {
               </label>
               <select
                 value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
+                onChange={(e) => updateQueryParams({ status: e.target.value === "All" ? null : e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900"
               >
                 {statuses.map((status) => (
@@ -245,7 +280,7 @@ export default function ProjectManagementPage() {
               </label>
               <select
                 value={selectedServiceType}
-                onChange={(e) => setSelectedServiceType(e.target.value)}
+                onChange={(e) => updateQueryParams({ serviceType: e.target.value === "All" ? null : e.target.value })}
                 className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-gray-900"
               >
                 {serviceTypes.map((type) => (
@@ -264,7 +299,10 @@ export default function ProjectManagementPage() {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
                   Search: &quot;{searchQuery}&quot;
                   <button
-                    onClick={() => setSearchQuery("")}
+                    onClick={() => {
+                      setSearchInput("");
+                      updateQueryParams({ search: null });
+                    }}
                     className="ml-2 hover:text-primary-dark"
                   >
                     ×
@@ -275,7 +313,7 @@ export default function ProjectManagementPage() {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-700">
                   {selectedImpactArea}
                   <button
-                    onClick={() => setSelectedImpactArea("All")}
+                    onClick={() => updateQueryParams({ impactArea: null })}
                     className="ml-2 hover:text-blue-900"
                   >
                     ×
@@ -286,7 +324,7 @@ export default function ProjectManagementPage() {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-green-100 text-green-700">
                   Status: {selectedStatus}
                   <button
-                    onClick={() => setSelectedStatus("All")}
+                    onClick={() => updateQueryParams({ status: null })}
                     className="ml-2 hover:text-green-900"
                   >
                     ×
@@ -297,7 +335,7 @@ export default function ProjectManagementPage() {
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-purple-100 text-purple-700">
                   {selectedServiceType}
                   <button
-                    onClick={() => setSelectedServiceType("All")}
+                    onClick={() => updateQueryParams({ serviceType: null })}
                     className="ml-2 hover:text-purple-900"
                   >
                     ×
@@ -324,10 +362,8 @@ export default function ProjectManagementPage() {
             </p>
             <Button
               onClick={() => {
-                setSearchQuery("");
-                setSelectedImpactArea("All");
-                setSelectedStatus("All");
-                setSelectedServiceType("All");
+                setSearchInput("");
+                updateQueryParams({ search: null, impactArea: null, status: null, serviceType: null });
               }}
             >
               Clear All Filters
@@ -493,6 +529,18 @@ export default function ProjectManagementPage() {
         </section>
       )}
     </div>
+  );
+}
+
+export default function ProjectManagementPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+        <ProjectsGridSkeleton count={6} />
+      </div>
+    }>
+      <ProjectManagementPageContent />
+    </Suspense>
   );
 }
 

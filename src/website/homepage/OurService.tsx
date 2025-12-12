@@ -75,7 +75,7 @@ export default function OurService() {
 
   const handleServiceClick = (serviceName: string) => {
     const serviceType = mapServiceToServiceType(serviceName);
-    router.push(`/dashboard/projects?serviceType=${encodeURIComponent(serviceType)}`);
+    router.push(`/project-management?serviceType=${encodeURIComponent(serviceType)}`);
   };
 
   useEffect(() => {
