@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Plus, Search, ArrowLeft, X, Filter, Eye, Edit, Trash2, Lock, Upload, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { getPermissions, UserRole } from "@/lib/permissions";
@@ -41,7 +41,7 @@ interface Project {
   image?: string;
 }
 
-export default function ProjectsPage() {
+function ProjectsPageContent() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -879,6 +879,18 @@ export default function ProjectsPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function ProjectsPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+        <p className="text-gray-500">Loading projects...</p>
+      </div>
+    }>
+      <ProjectsPageContent />
+    </Suspense>
   );
 }
 
