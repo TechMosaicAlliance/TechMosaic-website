@@ -16,7 +16,16 @@ export async function POST(request: NextRequest) {
     }
 
     // Get database connection
-    const db = getDatabase();
+    let db;
+    try {
+      db = getDatabase();
+    } catch (dbError) {
+      console.error('Database connection error:', dbError);
+      return NextResponse.json(
+        { error: 'Database connection failed. SQLite may not be supported on this platform.' },
+        { status: 500 }
+      );
+    }
 
     // Find user by email
     const stmt = db.prepare('SELECT * FROM users WHERE email = ?');

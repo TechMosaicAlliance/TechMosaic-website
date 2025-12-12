@@ -4,10 +4,10 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { 
+import {
   Users, 
-  FolderKanban, 
-  LogOut, 
+  FolderKanban,
+  LogOut,
   Loader2,
   Shield,
   BarChart3,
@@ -74,8 +74,8 @@ export default function DashboardPage() {
                 className="flex items-center gap-2"
               >
                 <LogOut className="w-4 h-4" />
-                Logout
-              </Button>
+              Logout
+            </Button>
             </div>
           </div>
         </div>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
               <Shield className="w-12 h-12" />
             </div>
           </div>
-        </div>
+                      </div>
 
         {/* Quick Actions */}
         <div className="mb-8">
@@ -111,9 +111,9 @@ export default function DashboardPage() {
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <Users className="w-7 h-7 text-white" />
-                  </div>
+                    </div>
                   <h4 className="text-lg font-bold text-gray-900 mb-2">User Management</h4>
-                  <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600">
                     Manage users, roles, and permissions
                   </p>
                   <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">

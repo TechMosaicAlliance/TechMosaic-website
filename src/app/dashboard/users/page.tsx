@@ -190,7 +190,7 @@ function UsersPageContent() {
 
       if (response.ok) {
         toast.success('User updated successfully!');
-        setIsDrawerOpen(false);
+    setIsDrawerOpen(false);
         setIsEditMode(false);
         resetForm();
         fetchUsers();
