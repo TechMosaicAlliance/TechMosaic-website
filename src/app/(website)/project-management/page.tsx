@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search, Filter, Loader2, Calendar, Building2, CheckCircle, Clock, Layers } from "lucide-react";
+import { Search, Filter, Calendar, Building2, CheckCircle, Clock, Layers } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { ProjectsGridSkeleton } from "@/components/ui/skeletons/ProjectCardSkeleton";
 
 const impactAreas = [
   "All",
@@ -311,10 +312,7 @@ export default function ProjectManagementPage() {
       {/* Projects Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {loading ? (
-          <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <span className="ml-3 text-gray-600">Loading projects...</span>
-          </div>
+          <ProjectsGridSkeleton count={6} />
         ) : filteredProjects.length === 0 ? (
           <div className="text-center py-20">
             <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">

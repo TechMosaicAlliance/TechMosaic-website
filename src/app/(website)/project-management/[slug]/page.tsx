@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Calendar, Building2, CheckCircle, Clock, Layers, ExternalLink, FileText, Target, Briefcase, Loader2 } from "lucide-react";
+import { ArrowLeft, Calendar, Building2, CheckCircle, Clock, Layers, ExternalLink, FileText, Target, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ProjectDetailSkeleton } from "@/components/ui/skeletons/ProjectDetailSkeleton";
 
 // Tool logos mapping
 const toolLogos: Record<string, string> = {
@@ -99,12 +100,7 @@ export default function ProjectDetailPage() {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        <span className="ml-3 text-gray-600">Loading project...</span>
-      </div>
-    );
+    return <ProjectDetailSkeleton />;
   }
 
   if (error || !project) {
