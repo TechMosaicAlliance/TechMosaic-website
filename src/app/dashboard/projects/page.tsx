@@ -1,10 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, Search, ArrowLeft, X, Filter } from "lucide-react";
+import { Plus, Search, ArrowLeft, X, Filter, Eye, Edit, Trash2, Lock } from "lucide-react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { getPermissions, UserRole } from "@/lib/permissions";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const impactAreas = [
   "Digital Solutions & Innovation",
@@ -37,10 +41,22 @@ interface Project {
 }
 
 export default function ProjectsPage() {
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
+  // Get user permissions
+  const permissions = user ? getPermissions(user.role as UserRole) : null;
+
+  // Check authentication
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, authLoading, router]);
   const [selectedImpactArea, setSelectedImpactArea] = useState<string>("All");
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
   const [selectedServiceType, setSelectedServiceType] = useState<string>("All");
@@ -58,11 +74,7 @@ export default function ProjectsPage() {
   });
 
   // Fetch projects from API
-  useEffect(() => {
-    fetchProjects();
-  }, [selectedImpactArea, selectedStatus, selectedServiceType]);
-
-  const fetchProjects = async () => {
+  const fetchProjects = useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -81,7 +93,11 @@ export default function ProjectsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [searchQuery, selectedImpactArea, selectedStatus, selectedServiceType]);
+
+  useEffect(() => {
+    fetchProjects();
+  }, [fetchProjects]);
 
   // Debounced search effect
   useEffect(() => {
@@ -90,7 +106,7 @@ export default function ProjectsPage() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [searchQuery]);
+  }, [fetchProjects]);
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -132,6 +148,11 @@ export default function ProjectsPage() {
   };
 
   const handleCreateProject = async () => {
+    if (!permissions?.canCreateProjects) {
+      toast.error('You do not have permission to create projects');
+      return;
+    }
+
     try {
       const response = await fetch('/api/projects', {
         method: 'POST',
@@ -143,10 +164,11 @@ export default function ProjectsPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Failed to create project');
+        toast.error(error.error || 'Failed to create project');
         return;
       }
 
+      toast.success('Project created successfully!');
       // Refresh projects list
       await fetchProjects();
       setIsDrawerOpen(false);
@@ -165,7 +187,7 @@ export default function ProjectsPage() {
       });
     } catch (error) {
       console.error('Error creating project:', error);
-      alert('Failed to create project');
+      toast.error('Failed to create project');
     }
   };
 
@@ -176,19 +198,39 @@ export default function ProjectsPage() {
         <div className="max-w-7xl mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/admin/dashboard">
+              <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
                 </Button>
               </Link>
-              <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
+                <p className="text-sm text-gray-600">
+                  {permissions?.canEditProjects ? 'Manage your projects' : 'View projects'}
+                </p>
+              </div>
             </div>
 
-            <Button onClick={() => setIsDrawerOpen(true)}>
-              <Plus className="w-4 h-4 mr-2" />
-              New Project
-            </Button>
+            <div className="flex items-center gap-3">
+              {user && (
+                <div className="text-right">
+                  <div className="text-xs text-gray-500">Logged in as</div>
+                  <div className="text-sm font-semibold text-gray-900">{user.role}</div>
+                </div>
+              )}
+              {permissions?.canCreateProjects ? (
+                <Button onClick={() => setIsDrawerOpen(true)}>
+                  <Plus className="w-4 h-4 mr-2" />
+                  New Project
+                </Button>
+              ) : (
+                <Button disabled variant="outline" className="cursor-not-allowed">
+                  <Lock className="w-4 h-4 mr-2" />
+                  View Only
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </header>
@@ -287,71 +329,113 @@ export default function ProjectsPage() {
         {!loading && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-            <Link
-              key={project.id}
-              href={`/dashboard/projects/${project.slug}`}
-              className="group"
-            >
-              <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
-                {/* Project Image */}
-                <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-white/20">
-                      {project.name.charAt(0)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Project Info */}
-                <div className="p-6">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
-                        {project.name}
-                      </h3>
-                      <p className="text-sm text-gray-600">{project.client}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-3">
-                    <span
-                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
-                        project.status
-                      )}`}
-                    >
-                      {project.status}
-                    </span>
-                  </div>
-
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">Service:</span>
-                      <span className="font-medium text-gray-700">
-                        {project.serviceType}
+              <div key={project.id} className="group">
+                <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                  {/* Project Image */}
+                  <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-4xl font-bold text-white/20">
+                        {project.name.charAt(0)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">Impact:</span>
-                      <span className="font-medium text-gray-700 text-right">
-                        {project.impactArea}
-                      </span>
+                    
+                    {/* Role Badge */}
+                    <div className="absolute top-3 right-3">
+                      {!permissions?.canEditProjects && (
+                        <span className="px-2 py-1 bg-gray-900/80 backdrop-blur-sm text-white text-xs font-semibold rounded flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          View Only
+                        </span>
+                      )}
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-4 border-t border-gray-100">
-                    <span className="text-xs text-gray-500">
-                      {new Date(project.date).toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
+                  {/* Project Info */}
+                  <div className="p-6">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold text-gray-900 mb-1">
+                          {project.name}
+                        </h3>
+                        <p className="text-sm text-gray-600">{project.client}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between mb-3">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                          project.status
+                        )}`}
+                      >
+                        {project.status}
+                      </span>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-500">Service:</span>
+                        <span className="font-medium text-gray-700">
+                          {project.serviceType}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between text-xs">
+                        <span className="text-gray-500">Impact:</span>
+                        <span className="font-medium text-gray-700 text-right">
+                          {project.impactArea}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
+                      <span className="text-xs text-gray-500">
+                        {new Date(project.date).toLocaleDateString("en-US", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })}
+                      </span>
+                      
+                      {/* Action Buttons */}
+                      <div className="flex items-center gap-2">
+                        <Link href={`/dashboard/projects/${project.slug}`}>
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-3"
+                            title="View details"
+                          >
+                            <Eye className="w-4 h-4" />
+                          </Button>
+                        </Link>
+                        
+                        {permissions?.canEditProjects && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            title="Edit project"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                        )}
+                        
+                        {permissions?.canDeleteProjects && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            className="h-8 px-3 text-red-600 hover:text-red-700 hover:bg-red-50"
+                            title="Delete project"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
-            </Link>
-          ))}
+            ))}
           </div>
         )}
 

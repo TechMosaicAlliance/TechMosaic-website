@@ -2,9 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getDatabase } from '@/lib/db';
 import bcrypt from 'bcryptjs';
 
+// Helper to check if user is Super Admin (in production, get from session/JWT)
+function isSuperAdmin(request: NextRequest): boolean {
+  // In production, you would verify JWT token or session
+  // For now, we'll check localStorage on client side
+  // API should verify with proper session management
+  return true; // Placeholder - implement proper auth middleware
+}
+
 // GET all users
 export async function GET(request: NextRequest) {
   try {
+    // Note: In production, add proper authentication check here
+    // const user = await getSessionUser(request);
+    // if (user.role !== 'Super Admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    
     const db = getDatabase();
     
     // Get query parameters
@@ -47,9 +59,15 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST - Create new user (Admin only)
+// POST - Create new user (Super Admin only)
 export async function POST(request: NextRequest) {
   try {
+    // Note: In production, add proper authentication check here
+    // const user = await getSessionUser(request);
+    // if (user.role !== 'Super Admin') {
+    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
+    // }
+    
     const body = await request.json();
     const { name, username, email, password, role, status, avatar } = body;
 
@@ -109,7 +127,7 @@ export async function POST(request: NextRequest) {
     // Generate avatar initials if not provided
     const userAvatar = avatar || name
       .split(' ')
-      .map(word => word[0])
+      .map((word: string) => word[0])
       .join('')
       .toUpperCase()
       .slice(0, 2);

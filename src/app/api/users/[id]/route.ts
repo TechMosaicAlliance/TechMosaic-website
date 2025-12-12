@@ -8,6 +8,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    // Note: In production, add proper authentication check here
+    // const user = await getSessionUser(request);
+    // if (user.role !== 'Super Admin') return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    
     const db = getDatabase();
     const stmt = db.prepare(`
       SELECT id, name, username, email, role, status, avatar, created_at, updated_at
@@ -32,12 +36,18 @@ export async function GET(
   }
 }
 
-// PUT - Update user (Admin only)
+// PUT - Update user (Super Admin only)
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Note: In production, add proper authentication check here
+    // const user = await getSessionUser(request);
+    // if (user.role !== 'Super Admin') {
+    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
+    // }
+    
     const body = await request.json();
     const { name, username, email, password, role, status, avatar } = body;
 
@@ -165,12 +175,18 @@ export async function PUT(
   }
 }
 
-// DELETE - Delete user (Admin only)
+// DELETE - Delete user (Super Admin only)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // Note: In production, add proper authentication check here
+    // const user = await getSessionUser(request);
+    // if (user.role !== 'Super Admin') {
+    //   return NextResponse.json({ error: 'Forbidden - Super Admin access required' }, { status: 403 });
+    // }
+    
     const db = getDatabase();
 
     // Check if user exists

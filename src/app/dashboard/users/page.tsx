@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const roles = ["Super Admin", "Admin", "Editor", "Viewer"];
 
@@ -23,7 +24,7 @@ interface User {
   updated_at: string;
 }
 
-export default function UsersPage() {
+function UsersPageContent() {
   const { user: currentUser, isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
   const [users, setUsers] = useState<User[]>([]);
@@ -863,5 +864,14 @@ export default function UsersPage() {
         </>
       )}
     </div>
+  );
+}
+
+// Wrap with ProtectedRoute - Super Admin Only
+export default function UsersPage() {
+  return (
+    <ProtectedRoute allowedRoles={['Super Admin']}>
+      <UsersPageContent />
+    </ProtectedRoute>
   );
 }

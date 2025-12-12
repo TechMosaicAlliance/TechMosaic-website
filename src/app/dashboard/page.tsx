@@ -11,10 +11,13 @@ import {
   Loader2,
   Shield,
   BarChart3,
-  Settings
+  Settings,
+  Eye,
+  Edit3
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { getPermissions, getRoleCapabilities, UserRole } from "@/lib/permissions";
 
 export default function DashboardPage() {
   const { user, isAuthenticated, isLoading, logout } = useAuth();
@@ -31,6 +34,10 @@ export default function DashboardPage() {
     toast.success('Logged out successfully');
     router.push('/login');
   };
+
+  // Get user permissions
+  const permissions = user ? getPermissions(user.role as UserRole) : null;
+  const capabilities = user ? getRoleCapabilities(user.role as UserRole) : [];
 
   if (isLoading || !user) {
     return (
@@ -82,7 +89,7 @@ export default function DashboardPage() {
             <div>
               <h2 className="text-3xl font-bold mb-2">Welcome, {user.name}!</h2>
               <p className="text-white/90 text-lg">
-                You're logged in as <span className="font-semibold">{user.role}</span>
+                You&apos;re logged in as <span className="font-semibold">{user.role}</span>
               </p>
               <p className="text-white/70 text-sm mt-2">
                 Email: {user.email} • Username: @{user.username}
@@ -98,8 +105,8 @@ export default function DashboardPage() {
         <div className="mb-8">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Actions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Users Management */}
-            {(user.role === 'Super Admin' || user.role === 'Admin') && (
+            {/* Users Management - Super Admin Only */}
+            {permissions?.canViewUsers && (
               <Link href="/dashboard/users">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
                   <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
@@ -109,36 +116,55 @@ export default function DashboardPage() {
                   <p className="text-sm text-gray-600">
                     Manage users, roles, and permissions
                   </p>
+                  <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                    Super Admin Only
+                  </span>
                 </div>
               </Link>
             )}
 
             {/* Projects Management */}
-            <Link href="/dashboard/projects">
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <FolderKanban className="w-7 h-7 text-white" />
+            {permissions?.canViewProjects && (
+              <Link href="/dashboard/projects">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <FolderKanban className="w-7 h-7 text-white" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Projects</h4>
+                  <p className="text-sm text-gray-600">
+                    {permissions.canEditProjects ? 'View and manage your projects' : 'View projects'}
+                  </p>
+                  {!permissions.canEditProjects && (
+                    <span className="inline-block mt-2 px-2 py-1 bg-gray-100 text-gray-700 text-xs font-semibold rounded flex items-center gap-1 w-fit">
+                      <Eye className="w-3 h-3" />
+                      View Only
+                    </span>
+                  )}
+                  {permissions.canEditProjects && (
+                    <span className="inline-block mt-2 px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded flex items-center gap-1 w-fit">
+                      <Edit3 className="w-3 h-3" />
+                      Full Access
+                    </span>
+                  )}
                 </div>
-                <h4 className="text-lg font-bold text-gray-900 mb-2">Projects</h4>
-                <p className="text-sm text-gray-600">
-                  View and manage your projects
-                </p>
-              </div>
-            </Link>
+              </Link>
+            )}
 
             {/* Analytics */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <BarChart3 className="w-7 h-7 text-white" />
+            {permissions?.canViewAnalytics && (
+              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <BarChart3 className="w-7 h-7 text-white" />
+                </div>
+                <h4 className="text-lg font-bold text-gray-900 mb-2">Analytics</h4>
+                <p className="text-sm text-gray-600">
+                  View system analytics and reports
+                </p>
               </div>
-              <h4 className="text-lg font-bold text-gray-900 mb-2">Analytics</h4>
-              <p className="text-sm text-gray-600">
-                View system analytics and reports
-              </p>
-            </div>
+            )}
 
-            {/* Settings */}
-            {(user.role === 'Super Admin' || user.role === 'Admin') && (
+            {/* Settings - Super Admin Only */}
+            {permissions?.canAccessSettings && (
               <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Settings className="w-7 h-7 text-white" />
@@ -147,6 +173,9 @@ export default function DashboardPage() {
                 <p className="text-sm text-gray-600">
                   Configure system settings
                 </p>
+                <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                  Super Admin Only
+                </span>
               </div>
             )}
           </div>
@@ -154,77 +183,41 @@ export default function DashboardPage() {
 
         {/* Role Permissions */}
         <div className="bg-white rounded-2xl p-6 border border-gray-200">
-          <h3 className="text-lg font-bold text-gray-900 mb-4">Your Permissions</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {user.role === 'Super Admin' && (
-              <>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Full system access</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Manage all users</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Manage all projects</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">System configuration</span>
-                </div>
-              </>
-            )}
-            {user.role === 'Admin' && (
-              <>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Manage users</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Manage content</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">View analytics</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Manage projects</span>
-                </div>
-              </>
-            )}
-            {user.role === 'Editor' && (
-              <>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Create content</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Edit content</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">View projects</span>
-                </div>
-              </>
-            )}
-            {user.role === 'Viewer' && (
-              <>
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">View content</span>
-                </div>
-                <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">View projects</span>
-                </div>
-              </>
-            )}
+          <h3 className="text-lg font-bold text-gray-900 mb-4">Your Capabilities</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {capabilities.map((capability, index) => (
+              <div 
+                key={index}
+                className={`flex items-center gap-3 p-3 rounded-lg ${
+                  user.role === 'Super Admin' ? 'bg-purple-50' :
+                  user.role === 'Admin' ? 'bg-blue-50' :
+                  user.role === 'Editor' ? 'bg-green-50' :
+                  'bg-gray-50'
+                }`}
+              >
+                <div className={`w-2 h-2 rounded-full ${
+                  user.role === 'Super Admin' ? 'bg-purple-500' :
+                  user.role === 'Admin' ? 'bg-blue-500' :
+                  user.role === 'Editor' ? 'bg-green-500' :
+                  'bg-gray-500'
+                }`}></div>
+                <span className="text-sm text-gray-700">{capability}</span>
+              </div>
+            ))}
           </div>
+
+          {/* Restrictions Notice */}
+          {user.role !== 'Super Admin' && (
+            <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <p className="text-xs text-yellow-800">
+                <strong>Note:</strong> {
+                  user.role === 'Admin' ? 'You cannot manage users. Contact a Super Admin for user management access.' :
+                  user.role === 'Editor' ? 'You cannot delete projects or manage users. Contact an Admin for additional permissions.' :
+                  'You have view-only access. Contact an Admin to request edit permissions.'
+                }
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Status Info */}
