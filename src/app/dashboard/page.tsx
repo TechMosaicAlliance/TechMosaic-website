@@ -17,40 +17,20 @@ export default function AdminDashboard() {
 
   const managementCards = [
     {
-      title: "Portfolio",
-      description: "Showcase your best work",
-      icon: <Briefcase className="w-8 h-8" />,
-      color: "from-blue-500 to-indigo-600",
-      href: "#",
-    },
-    {
       title: "Projects",
       description: "Manage client projects",
       icon: <FolderKanban className="w-8 h-8" />,
       color: "from-purple-500 to-pink-600",
-      href: "/admin/projects",
+      href: "/dashboard/projects",
     },
     {
       title: "Users",
       description: "Manage team access",
       icon: <Users className="w-8 h-8" />,
       color: "from-orange-500 to-red-600",
-      href: "/admin/users",
+      href: "/dashboard/users",
     },
-    {
-      title: "Services",
-      description: "What you offer",
-      icon: <Layers className="w-8 h-8" />,
-      color: "from-green-500 to-emerald-600",
-      href: "#",
-    },
-    {
-      title: "Media",
-      description: "Images and files",
-      icon: <ImageIcon className="w-8 h-8" />,
-      color: "from-cyan-500 to-blue-600",
-      href: "#",
-    },
+    
     {
       title: "Messages",
       description: "Client inquiries",
