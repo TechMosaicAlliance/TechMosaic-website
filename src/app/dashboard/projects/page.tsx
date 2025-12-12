@@ -181,12 +181,6 @@ function ProjectsPageContent() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Check file size (max 2MB)
-    if (file.size > 2 * 1024 * 1024) {
-      toast.error('File size must be less than 2MB');
-      return;
-    }
-
     // Check file type
     const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
@@ -686,7 +680,7 @@ function ProjectsPageContent() {
                             Click to upload project image
                           </p>
                           <p className="text-xs text-gray-500">
-                            PNG, JPG or WEBP (max. 2MB)
+                            PNG, JPG or WEBP
                           </p>
                         </>
                       )}
