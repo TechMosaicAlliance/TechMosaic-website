@@ -7,7 +7,7 @@ import {
   Briefcase,
   FolderKanban,
   Users,
-  Image,
+  Image as ImageIcon,
   Mail,
   Layers,
   LogOut,
@@ -31,11 +31,11 @@ export default function AdminDashboard() {
       href: "/admin/projects",
     },
     {
-      title: "Team",
-      description: "Your amazing people",
+      title: "Users",
+      description: "Manage team access",
       icon: <Users className="w-8 h-8" />,
       color: "from-orange-500 to-red-600",
-      href: "#",
+      href: "/admin/users",
     },
     {
       title: "Services",
@@ -47,7 +47,7 @@ export default function AdminDashboard() {
     {
       title: "Media",
       description: "Images and files",
-      icon: <Image className="w-8 h-8" />,
+      icon: <ImageIcon className="w-8 h-8" />,
       color: "from-cyan-500 to-blue-600",
       href: "#",
     },
