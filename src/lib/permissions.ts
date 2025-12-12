@@ -83,18 +83,30 @@ const rolePermissions: Record<UserRole, Permission> = {
 };
 
 // Get permissions for a specific role
-export function getPermissions(role: UserRole): Permission {
-  return rolePermissions[role];
+export function getPermissions(role: UserRole | string | null | undefined): Permission {
+  // Default to Viewer permissions if role is invalid or undefined
+  if (!role || !(role in rolePermissions)) {
+    return rolePermissions['Viewer'];
+  }
+  return rolePermissions[role as UserRole];
 }
 
 // Check if a role has a specific permission
-export function hasPermission(role: UserRole, permission: keyof Permission): boolean {
-  return rolePermissions[role][permission];
+export function hasPermission(role: UserRole | string | null | undefined, permission: keyof Permission): boolean {
+  if (!role || !(role in rolePermissions)) {
+    return false;
+  }
+  return rolePermissions[role as UserRole][permission];
 }
 
 // Check if user can access a specific route
-export function canAccessRoute(role: UserRole, route: string): boolean {
+export function canAccessRoute(role: UserRole | string | null | undefined, route: string): boolean {
   const permissions = getPermissions(role);
+
+  // Safety check - if permissions is undefined, deny access
+  if (!permissions) {
+    return false;
+  }
 
   // Define route access based on permissions
   const routeAccess: Record<string, boolean> = {
@@ -117,20 +129,30 @@ export function canAccessRoute(role: UserRole, route: string): boolean {
 }
 
 // Get user-friendly role description
-export function getRoleDescription(role: UserRole): string {
+export function getRoleDescription(role: UserRole | string | null | undefined): string {
   const descriptions: Record<UserRole, string> = {
     'Super Admin': 'Full system access with user management capabilities',
     'Admin': 'Manage projects and content without user management access',
     'Editor': 'Create and edit projects, but cannot delete',
     'Viewer': 'View-only access to projects and dashboard',
   };
-  return descriptions[role];
+  
+  if (!role || !(role in descriptions)) {
+    return descriptions['Viewer'];
+  }
+  
+  return descriptions[role as UserRole];
 }
 
 // Get role capabilities list
-export function getRoleCapabilities(role: UserRole): string[] {
+export function getRoleCapabilities(role: UserRole | string | null | undefined): string[] {
   const permissions = getPermissions(role);
   const capabilities: string[] = [];
+
+  // Safety check - if permissions is undefined, return empty array
+  if (!permissions) {
+    return capabilities;
+  }
 
   if (permissions.canAccessDashboard) capabilities.push('Access Dashboard');
   if (permissions.canViewProjects) capabilities.push('View Projects');
@@ -150,17 +172,19 @@ export function getRoleCapabilities(role: UserRole): string[] {
 }
 
 // Check if role is admin level (Super Admin only)
-export function isAdminLevel(role: UserRole): boolean {
+export function isAdminLevel(role: UserRole | string | null | undefined): boolean {
   return role === 'Super Admin';
 }
 
 // Check if role has write access
-export function hasWriteAccess(role: UserRole): boolean {
+export function hasWriteAccess(role: UserRole | string | null | undefined): boolean {
+  if (!role) return false;
   return role === 'Super Admin' || role === 'Admin' || role === 'Editor';
 }
 
 // Check if role has delete access
-export function hasDeleteAccess(role: UserRole): boolean {
+export function hasDeleteAccess(role: UserRole | string | null | undefined): boolean {
+  if (!role) return false;
   return role === 'Super Admin' || role === 'Admin';
 }
 
