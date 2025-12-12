@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Save, Trash2, Upload, Plus, X } from "lucide-react";
 import Link from "next/link";
-import { useState, use } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 
 const impactAreas = [
   "Digital Solutions & Innovation",
@@ -146,17 +147,61 @@ const sampleProjects: Record<string, any> = {
   },
 };
 
-export default function ProjectEditPage({
-  params,
-}: {
-  params: Promise<{ slug: string }>;
-}) {
-  const { slug } = use(params);
-  const project = sampleProjects[slug] || sampleProjects["ecommerce-redesign"];
-
-  const [formData, setFormData] = useState(project);
+export default function ProjectEditPage() {
+  const params = useParams();
+  const slug = params.slug as string;
+  
+  const [project, setProject] = useState<any>(null);
+  const [formData, setFormData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [newTool, setNewTool] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
+
+  // Fetch project from API
+  useEffect(() => {
+    async function fetchProject() {
+      if (!slug) return;
+
+      try {
+        const response = await fetch(`/api/projects/${slug}`);
+        if (response.ok) {
+          const data = await response.json();
+          const projectData = {
+            ...data.project,
+            tools: data.project.tools || [],
+            mediaFiles: data.project.mediaFiles || [],
+          };
+          setProject(projectData);
+          setFormData(projectData);
+        } else {
+          // Fallback to sample data if not found
+          const fallbackProject = {
+            ...(sampleProjects[slug] || sampleProjects["ecommerce-redesign"]),
+            tools: (sampleProjects[slug] || sampleProjects["ecommerce-redesign"]).tools || [],
+            mediaFiles: (sampleProjects[slug] || sampleProjects["ecommerce-redesign"]).mediaFiles || [],
+          };
+          setProject(fallbackProject);
+          setFormData(fallbackProject);
+        }
+      } catch (error) {
+        console.error('Error fetching project:', error);
+        // Fallback to sample data
+        const fallbackProject = {
+          ...(sampleProjects[slug] || sampleProjects["ecommerce-redesign"]),
+          tools: (sampleProjects[slug] || sampleProjects["ecommerce-redesign"]).tools || [],
+          mediaFiles: (sampleProjects[slug] || sampleProjects["ecommerce-redesign"]).mediaFiles || [],
+        };
+        setProject(fallbackProject);
+        setFormData(fallbackProject);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    if (slug) {
+      fetchProject();
+    }
+  }, [slug]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -169,13 +214,33 @@ export default function ProjectEditPage({
     });
   };
 
-  const handleSave = () => {
-    console.log("Saving project:", formData);
-    // Just UI - no actual save logic
+  const handleSave = async () => {
+    if (!formData || !slug) return;
+    
+    try {
+      const response = await fetch(`/api/projects/${slug}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        alert(error.error || 'Failed to save project');
+        return;
+      }
+
+      alert('Project saved successfully!');
+    } catch (error) {
+      console.error('Error saving project:', error);
+      alert('Failed to save project');
+    }
   };
 
   const handleAddTool = () => {
-    if (newTool && !formData.tools.includes(newTool)) {
+    if (newTool && formData.tools && !formData.tools.includes(newTool)) {
       setFormData({
         ...formData,
         tools: [...formData.tools, newTool],
@@ -192,7 +257,7 @@ export default function ProjectEditPage({
   };
 
   const handleAddMedia = () => {
-    if (mediaUrl && !formData.mediaFiles.includes(mediaUrl)) {
+    if (mediaUrl && formData.mediaFiles && !formData.mediaFiles.includes(mediaUrl)) {
       setFormData({
         ...formData,
         mediaFiles: [...formData.mediaFiles, mediaUrl],
@@ -208,6 +273,14 @@ export default function ProjectEditPage({
     });
   };
 
+  if (loading || !formData) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+        <p className="text-gray-500">Loading project...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
       {/* Header */}
@@ -215,7 +288,7 @@ export default function ProjectEditPage({
         <div className="max-w-5xl mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/admin/projects">
+              <Link href="/dashboard/projects">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Projects
@@ -427,7 +500,7 @@ export default function ProjectEditPage({
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2">
-                {formData.tools.map((tool: string) => (
+                {(formData.tools || []).map((tool: string) => (
                   <div
                     key={tool}
                     className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 rounded-lg"
@@ -522,9 +595,9 @@ export default function ProjectEditPage({
                   Add Media
                 </Button>
               </div>
-              {formData.mediaFiles.length > 0 && (
+              {(formData.mediaFiles || []).length > 0 && (
                 <div className="space-y-2">
-                  {formData.mediaFiles.map((url: string, index: number) => (
+                  {(formData.mediaFiles || []).map((url: string, index: number) => (
                     <div
                       key={index}
                       className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"

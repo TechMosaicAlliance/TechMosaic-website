@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Plus, Search, ArrowLeft, X, Filter } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
 const impactAreas = [
@@ -16,83 +16,29 @@ const impactAreas = [
 
 const serviceTypes = [
   "Web Development",
-  "Mobile App Development",
+  "Copywriting",
   "UI/UX Design",
   "Branding & Identity",
-  "Digital Marketing",
-  "Consulting",
+  "Project Management",
+  "Graphic Design",
 ];
 
-const sampleProjects = [
-  {
-    id: 1,
-    slug: "ecommerce-redesign",
-    name: "E-Commerce Platform for Local Artisans",
-    client: "ShopFlow Inc",
-    status: "Completed",
-    date: "2024-01-15",
-    impactArea: "Digital Solutions & Innovation",
-    serviceType: "Web Development",
-    image: "/assets/portfolio1.png",
-  },
-  {
-    id: 2,
-    slug: "mobile-banking-app",
-    name: "Mobile Banking for Rural Communities",
-    client: "FinTech Solutions",
-    status: "Ongoing",
-    date: "2024-02-20",
-    impactArea: "Digital Solutions & Innovation",
-    serviceType: "Mobile App Development",
-    image: "/assets/portfolio2.png",
-  },
-  {
-    id: 3,
-    slug: "refugee-support-platform",
-    name: "Refugee Support Platform",
-    client: "Humanity First",
-    status: "Completed",
-    date: "2024-03-10",
-    impactArea: "Humanity Hub & Missions",
-    serviceType: "Web Development",
-    image: "/assets/portfolio1.png",
-  },
-  {
-    id: 4,
-    slug: "climate-tracking-dashboard",
-    name: "Climate Data Tracking Dashboard",
-    client: "Green Earth Initiative",
-    status: "Ongoing",
-    date: "2024-03-25",
-    impactArea: "Climate Impact Projects",
-    serviceType: "Web Development",
-    image: "/assets/portfolio2.png",
-  },
-  {
-    id: 5,
-    slug: "ai-education-assistant",
-    name: "AI-Powered Education Assistant",
-    client: "EduTech Labs",
-    status: "Completed",
-    date: "2024-02-05",
-    impactArea: "Intelligent Systems & AI Innovation",
-    serviceType: "Mobile App Development",
-    image: "/assets/portfolio1.png",
-  },
-  {
-    id: 6,
-    slug: "skills-training-portal",
-    name: "Skills Training Portal",
-    client: "Career Development Corp",
-    status: "Ongoing",
-    date: "2024-04-01",
-    impactArea: "Skills & Capacity Development",
-    serviceType: "Web Development",
-    image: "/assets/portfolio2.png",
-  },
-];
+
+interface Project {
+  id: number;
+  slug: string;
+  name: string;
+  client: string;
+  status: string;
+  date: string;
+  impactArea: string;
+  serviceType: string;
+  image?: string;
+}
 
 export default function ProjectsPage() {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [selectedImpactArea, setSelectedImpactArea] = useState<string>("All");
@@ -111,7 +57,42 @@ export default function ProjectsPage() {
     projectSummary: "",
   });
 
-  const filteredProjects = sampleProjects.filter((project) => {
+  // Fetch projects from API
+  useEffect(() => {
+    fetchProjects();
+  }, [selectedImpactArea, selectedStatus, selectedServiceType]);
+
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const params = new URLSearchParams();
+      if (searchQuery) params.append('search', searchQuery);
+      if (selectedImpactArea !== 'All') params.append('impactArea', selectedImpactArea);
+      if (selectedStatus !== 'All') params.append('status', selectedStatus);
+      if (selectedServiceType !== 'All') params.append('serviceType', selectedServiceType);
+
+      const response = await fetch(`/api/projects?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch projects');
+      
+      const data = await response.json();
+      setProjects(data.projects);
+    } catch (error) {
+      console.error('Error fetching projects:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Debounced search effect
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchProjects();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.client.toLowerCase().includes(searchQuery.toLowerCase());
@@ -150,21 +131,42 @@ export default function ProjectsPage() {
     });
   };
 
-  const handleCreateProject = () => {
-    console.log("Creating new project:", newProject);
-    setIsDrawerOpen(false);
-    // Reset form
-    setNewProject({
-      name: "",
-      client: "",
-      impactArea: "",
-      serviceType: "",
-      status: "Ongoing",
-      date: "",
-      projectOverview: "",
-      scopeOfWork: "",
-      projectSummary: "",
-    });
+  const handleCreateProject = async () => {
+    try {
+      const response = await fetch('/api/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newProject),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        alert(error.error || 'Failed to create project');
+        return;
+      }
+
+      // Refresh projects list
+      await fetchProjects();
+      setIsDrawerOpen(false);
+      
+      // Reset form
+      setNewProject({
+        name: "",
+        client: "",
+        impactArea: "",
+        serviceType: "",
+        status: "Ongoing",
+        date: "",
+        projectOverview: "",
+        scopeOfWork: "",
+        projectSummary: "",
+      });
+    } catch (error) {
+      console.error('Error creating project:', error);
+      alert('Failed to create project');
+    }
   };
 
   return (
@@ -274,12 +276,20 @@ export default function ProjectsPage() {
           </div>
         </div>
 
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">Loading projects...</p>
+          </div>
+        )}
+
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProjects.map((project) => (
+        {!loading && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProjects.map((project) => (
             <Link
               key={project.id}
-              href={`/admin/projects/${project.slug}`}
+              href={`/dashboard/projects/${project.slug}`}
               className="group"
             >
               <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
@@ -342,10 +352,11 @@ export default function ProjectsPage() {
               </div>
             </Link>
           ))}
-        </div>
+          </div>
+        )}
 
         {/* No Results */}
-        {filteredProjects.length === 0 && (
+        {!loading && filteredProjects.length === 0 && (
           <div className="text-center py-12">
             <p className="text-gray-500">No projects found</p>
           </div>

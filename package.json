@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:list": "tsx scripts/db-utils.ts list",
+    "db:get": "tsx scripts/db-utils.ts get",
+    "db:count": "tsx scripts/db-utils.ts count",
+    "db:schema": "tsx scripts/db-utils.ts schema",
+    "db:query": "tsx scripts/db-utils.ts query",
+    "db:reset": "tsx scripts/db-utils.ts reset --confirm"
   },
   "dependencies": {
     "@motionone/utils": "^10.18.0",
@@ -18,6 +24,10 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@tailwindcss/typography": "^0.5.14",
     "@tanstack/react-query": "^5.52.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/better-sqlite3": "^7.6.13",
+    "bcryptjs": "^3.0.3",
+    "better-sqlite3": "^12.5.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.3.28",
@@ -39,6 +49,7 @@
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

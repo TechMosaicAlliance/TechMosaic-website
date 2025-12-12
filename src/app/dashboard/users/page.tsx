@@ -1,112 +1,88 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, Search, ArrowLeft, X, Edit, Trash2, Shield, User as UserIcon, UserX, UserCheck } from "lucide-react";
+import { Plus, Search, ArrowLeft, X, Edit, Trash2, Shield, User as UserIcon, UserX, UserCheck, Key, Loader2, AlertCircle, CheckCircle } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 const roles = ["Super Admin", "Admin", "Editor", "Viewer"];
 
-const sampleUsers = [
-  {
-    id: 1,
-    name: "John Doe",
-    username: "johndoe",
-    email: "john.doe@techmosaic.com",
-    role: "Super Admin",
-    status: "Active",
-    createdAt: "2024-01-15",
-    avatar: "JD",
-  },
-  {
-    id: 2,
-    name: "Jane Smith",
-    username: "janesmith",
-    email: "jane.smith@techmosaic.com",
-    role: "Admin",
-    status: "Active",
-    createdAt: "2024-02-20",
-    avatar: "JS",
-  },
-  {
-    id: 3,
-    name: "Michael Johnson",
-    username: "michaelj",
-    email: "michael.j@techmosaic.com",
-    role: "Editor",
-    status: "Active",
-    createdAt: "2024-03-10",
-    avatar: "MJ",
-  },
-  {
-    id: 4,
-    name: "Sarah Williams",
-    username: "sarahw",
-    email: "sarah.w@techmosaic.com",
-    role: "Editor",
-    status: "Active",
-    createdAt: "2024-03-25",
-    avatar: "SW",
-  },
-  {
-    id: 5,
-    name: "David Brown",
-    username: "davidb",
-    email: "david.b@techmosaic.com",
-    role: "Viewer",
-    status: "Inactive",
-    createdAt: "2024-02-05",
-    avatar: "DB",
-  },
-  {
-    id: 6,
-    name: "Emily Davis",
-    username: "emilyd",
-    email: "emily.d@techmosaic.com",
-    role: "Admin",
-    status: "Active",
-    createdAt: "2024-04-01",
-    avatar: "ED",
-  },
-  {
-    id: 7,
-    name: "Robert Miller",
-    username: "robertm",
-    email: "robert.m@techmosaic.com",
-    role: "Editor",
-    status: "Active",
-    createdAt: "2024-04-10",
-    avatar: "RM",
-  },
-  {
-    id: 8,
-    name: "Lisa Anderson",
-    username: "lisaa",
-    email: "lisa.a@techmosaic.com",
-    role: "Viewer",
-    status: "Active",
-    createdAt: "2024-04-15",
-    avatar: "LA",
-  },
-];
+interface User {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  role: string;
+  status: string;
+  avatar: string;
+  created_at: string;
+  updated_at: string;
+}
 
 export default function UsersPage() {
+  const { user: currentUser, isAuthenticated, isLoading: authLoading } = useAuth();
+  const router = useRouter();
+  const [users, setUsers] = useState<User[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [selectedRole, setSelectedRole] = useState<string>("All");
   const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [isPasswordResetOpen, setIsPasswordResetOpen] = useState(false);
+  const [resetPasswordUserId, setResetPasswordUserId] = useState<number | null>(null);
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [newUser, setNewUser] = useState({
+  const [formData, setFormData] = useState({
+    id: 0,
     name: "",
     username: "",
     email: "",
     password: "",
     role: "Viewer",
     status: "Active",
+    avatar: "",
   });
 
-  const filteredUsers = sampleUsers.filter((user) => {
+  // Check authentication
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Fetch users
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchUsers();
+    }
+  }, [isAuthenticated]);
+
+  const fetchUsers = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/users');
+      const data = await response.json();
+      
+      if (response.ok) {
+        setUsers(data.users);
+      } else {
+        toast.error('Failed to fetch users');
+      }
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      toast.error('An error occurred while fetching users');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -139,34 +115,233 @@ export default function UsersPage() {
       : "bg-red-100 text-red-700";
   };
 
-  const handleNewUserChange = (
+  const handleFormChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    setNewUser({
-      ...newUser,
+    setFormData({
+      ...formData,
       [e.target.name]: e.target.value,
     });
   };
 
-  const handleCreateUser = () => {
-    console.log("Creating new user:", newUser);
-    setIsDrawerOpen(false);
-    // Reset form
-    setNewUser({
+  const handleCreateUser = async () => {
+    // Validation
+    if (!formData.name || !formData.username || !formData.email || !formData.password) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('User created successfully!');
+        setIsDrawerOpen(false);
+        resetForm();
+        fetchUsers();
+      } else {
+        toast.error(data.error || 'Failed to create user');
+      }
+    } catch (error) {
+      console.error('Error creating user:', error);
+      toast.error('An error occurred while creating user');
+    }
+  };
+
+  const handleUpdateUser = async () => {
+    if (!formData.name || !formData.username || !formData.email) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      const updateData: any = {
+        name: formData.name,
+        username: formData.username,
+        email: formData.email,
+        role: formData.role,
+        status: formData.status,
+        avatar: formData.avatar,
+      };
+
+      // Only include password if it's been changed
+      if (formData.password) {
+        updateData.password = formData.password;
+      }
+
+      const response = await fetch(`/api/users/${formData.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updateData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('User updated successfully!');
+        setIsDrawerOpen(false);
+        setIsEditMode(false);
+        resetForm();
+        fetchUsers();
+      } else {
+        toast.error(data.error || 'Failed to update user');
+      }
+    } catch (error) {
+      console.error('Error updating user:', error);
+      toast.error('An error occurred while updating user');
+    }
+  };
+
+  const handleDeleteUser = async (userId: number, username: string) => {
+    if (!confirm(`Are you sure you want to delete user "${username}"? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/users/${userId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('User deleted successfully!');
+        fetchUsers();
+      } else {
+        toast.error(data.error || 'Failed to delete user');
+      }
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      toast.error('An error occurred while deleting user');
+    }
+  };
+
+  const handleToggleUserStatus = async (user: User) => {
+    const newStatus = user.status === 'Active' ? 'Inactive' : 'Active';
+
+    try {
+      const response = await fetch(`/api/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(`User ${newStatus === 'Active' ? 'activated' : 'deactivated'} successfully!`);
+        fetchUsers();
+      } else {
+        toast.error(data.error || 'Failed to update user status');
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      toast.error('An error occurred while updating user status');
+    }
+  };
+
+  const handleEditUser = (user: User) => {
+    setFormData({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      email: user.email,
+      password: "",
+      role: user.role,
+      status: user.status,
+      avatar: user.avatar,
+    });
+    setIsEditMode(true);
+    setIsDrawerOpen(true);
+  };
+
+  const handleResetPassword = async () => {
+    if (!newPassword || !confirmPassword) {
+      toast.error('Please enter both password fields');
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      toast.error('Passwords do not match');
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      toast.error('Password must be at least 6 characters');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/users/${resetPasswordUserId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: newPassword }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success('Password reset successfully!');
+        setIsPasswordResetOpen(false);
+        setResetPasswordUserId(null);
+        setNewPassword("");
+        setConfirmPassword("");
+      } else {
+        toast.error(data.error || 'Failed to reset password');
+      }
+    } catch (error) {
+      console.error('Error resetting password:', error);
+      toast.error('An error occurred while resetting password');
+    }
+  };
+
+  const openPasswordResetModal = (userId: number) => {
+    setResetPasswordUserId(userId);
+    setNewPassword("");
+    setConfirmPassword("");
+    setIsPasswordResetOpen(true);
+  };
+
+  const resetForm = () => {
+    setFormData({
+      id: 0,
       name: "",
       username: "",
       email: "",
       password: "",
       role: "Viewer",
       status: "Active",
+      avatar: "",
     });
   };
 
-  const handleToggleUserStatus = (userId: number) => {
-    console.log("Toggling user status for user ID:", userId);
-    // Just UI - no actual status change logic
-    // In a real app, this would update the user's status
+  const handleCloseDrawer = () => {
+    setIsDrawerOpen(false);
+    setIsEditMode(false);
+    resetForm();
   };
+
+  if (authLoading || isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
@@ -175,7 +350,7 @@ export default function UsersPage() {
         <div className="max-w-7xl mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Link href="/admin/dashboard">
+              <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back
@@ -329,7 +504,7 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                      {new Date(user.createdAt).toLocaleDateString("en-US", {
+                      {new Date(user.created_at).toLocaleDateString("en-US", {
                         month: "short",
                         day: "numeric",
                         year: "numeric",
@@ -337,31 +512,50 @@ export default function UsersPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleEditUser(user)}
+                          title="Edit user"
+                        >
                           <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => openPasswordResetModal(user.id)}
+                          title="Reset password"
+                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                        >
+                          <Key className="w-4 h-4" />
                         </Button>
                         {user.status === "Active" ? (
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleToggleUserStatus(user.id)}
+                            onClick={() => handleToggleUserStatus(user)}
                             className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
+                            title="Deactivate user"
                           >
-                            <UserX className="w-4 h-4 mr-1" />
-                            Deactivate
+                            <UserX className="w-4 h-4" />
                           </Button>
                         ) : (
                           <Button
                             variant="ghost"
                             size="sm"
-                            onClick={() => handleToggleUserStatus(user.id)}
+                            onClick={() => handleToggleUserStatus(user)}
                             className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                            title="Activate user"
                           >
-                            <UserCheck className="w-4 h-4 mr-1" />
-                            Activate
+                            <UserCheck className="w-4 h-4" />
                           </Button>
                         )}
-                        <Button variant="ghost" size="sm">
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleDeleteUser(user.id, user.username)}
+                          title="Delete user"
+                        >
                           <Trash2 className="w-4 h-4 text-red-600" />
                         </Button>
                       </div>
@@ -385,47 +579,49 @@ export default function UsersPage() {
         <div className="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="text-2xl font-bold text-gray-900">
-              {sampleUsers.length}
+              {users.length}
             </div>
             <div className="text-sm text-gray-600">Total Users</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="text-2xl font-bold text-green-600">
-              {sampleUsers.filter((u) => u.status === "Active").length}
+              {users.filter((u) => u.status === "Active").length}
             </div>
             <div className="text-sm text-gray-600">Active Users</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="text-2xl font-bold text-purple-600">
-              {sampleUsers.filter((u) => u.role === "Admin" || u.role === "Super Admin").length}
+              {users.filter((u) => u.role === "Admin" || u.role === "Super Admin").length}
             </div>
             <div className="text-sm text-gray-600">Admins</div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-gray-100">
             <div className="text-2xl font-bold text-blue-600">
-              {sampleUsers.filter((u) => u.role === "Editor").length}
+              {users.filter((u) => u.role === "Editor").length}
             </div>
             <div className="text-sm text-gray-600">Editors</div>
           </div>
         </div>
       </main>
 
-      {/* Drawer for New User */}
+      {/* Drawer for New/Edit User */}
       {isDrawerOpen && (
         <>
           {/* Backdrop */}
           <div
             className="fixed inset-0 bg-black/50 z-40 transition-opacity"
-            onClick={() => setIsDrawerOpen(false)}
+            onClick={handleCloseDrawer}
           ></div>
 
           {/* Drawer */}
           <div className="fixed right-0 top-0 h-full w-full md:w-[500px] bg-white shadow-2xl z-50 overflow-y-auto">
             {/* Drawer Header */}
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
-              <h2 className="text-xl font-bold text-gray-900">Add New User</h2>
+              <h2 className="text-xl font-bold text-gray-900">
+                {isEditMode ? 'Edit User' : 'Add New User'}
+              </h2>
               <button
-                onClick={() => setIsDrawerOpen(false)}
+                onClick={handleCloseDrawer}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-gray-600" />
@@ -442,8 +638,8 @@ export default function UsersPage() {
                 <input
                   type="text"
                   name="name"
-                  value={newUser.name}
-                  onChange={handleNewUserChange}
+                  value={formData.name}
+                  onChange={handleFormChange}
                   placeholder="John Doe"
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   required
@@ -462,8 +658,8 @@ export default function UsersPage() {
                   <input
                     type="text"
                     name="username"
-                    value={newUser.username}
-                    onChange={handleNewUserChange}
+                    value={formData.username}
+                    onChange={handleFormChange}
                     placeholder="johndoe"
                     className="w-full pl-8 pr-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                     required
@@ -479,8 +675,8 @@ export default function UsersPage() {
                 <input
                   type="email"
                   name="email"
-                  value={newUser.email}
-                  onChange={handleNewUserChange}
+                  value={formData.email}
+                  onChange={handleFormChange}
                   placeholder="john.doe@techmosaic.com"
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   required
@@ -490,17 +686,22 @@ export default function UsersPage() {
               {/* Password */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Password <span className="text-red-500">*</span>
+                  Password {!isEditMode && <span className="text-red-500">*</span>}
                 </label>
                 <input
                   type="password"
                   name="password"
-                  value={newUser.password}
-                  onChange={handleNewUserChange}
-                  placeholder="••••••••"
+                  value={formData.password}
+                  onChange={handleFormChange}
+                  placeholder={isEditMode ? "Leave blank to keep current password" : "••••••••"}
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                  required
+                  required={!isEditMode}
                 />
+                {isEditMode && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    Leave blank to keep the current password
+                  </p>
+                )}
               </div>
 
               {/* Role */}
@@ -510,8 +711,8 @@ export default function UsersPage() {
                 </label>
                 <select
                   name="role"
-                  value={newUser.role}
-                  onChange={handleNewUserChange}
+                  value={formData.role}
+                  onChange={handleFormChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   required
                 >
@@ -533,8 +734,8 @@ export default function UsersPage() {
                 </label>
                 <select
                   name="status"
-                  value={newUser.status}
-                  onChange={handleNewUserChange}
+                  value={formData.status}
+                  onChange={handleFormChange}
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                   required
                 >
@@ -560,13 +761,101 @@ export default function UsersPage() {
               <div className="flex gap-3 pt-4 border-t border-gray-200">
                 <Button
                   variant="outline"
-                  onClick={() => setIsDrawerOpen(false)}
+                  onClick={handleCloseDrawer}
                   className="flex-1"
                 >
                   Cancel
                 </Button>
-                <Button onClick={handleCreateUser} className="flex-1">
-                  Create User
+                <Button 
+                  onClick={isEditMode ? handleUpdateUser : handleCreateUser}
+                  className="flex-1"
+                >
+                  {isEditMode ? 'Update User' : 'Create User'}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Password Reset Modal */}
+      {isPasswordResetOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+            onClick={() => setIsPasswordResetOpen(false)}
+          ></div>
+
+          {/* Modal */}
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md">
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
+                    <Key className="w-5 h-5 text-blue-600" />
+                  </div>
+                  <h2 className="text-xl font-bold text-gray-900">Reset Password</h2>
+                </div>
+                <button
+                  onClick={() => setIsPasswordResetOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+
+              {/* Modal Content */}
+              <div className="p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    New Password <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="Enter new password"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">
+                    Confirm Password <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm new password"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  />
+                </div>
+
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 flex items-start gap-2">
+                  <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                  <p className="text-xs text-yellow-800">
+                    The user will need to use this new password to log in. Make sure to communicate it securely.
+                  </p>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-4 border-t border-gray-200 flex gap-3">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsPasswordResetOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button 
+                  onClick={handleResetPassword}
+                  className="flex-1"
+                >
+                  Reset Password
                 </Button>
               </div>
             </div>
@@ -576,4 +865,3 @@ export default function UsersPage() {
     </div>
   );
 }
-
