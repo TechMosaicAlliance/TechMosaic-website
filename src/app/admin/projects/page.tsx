@@ -1,0 +1,556 @@
+"use client";
+
+import { Button } from "@/components/ui/button";
+import { Plus, Search, ArrowLeft, X, Filter } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
+
+const impactAreas = [
+  "Digital Solutions & Innovation",
+  "Humanity Hub & Missions",
+  "Climate Impact Projects",
+  "Intelligent Systems & AI Innovation",
+  "Skills & Capacity Development",
+];
+
+const serviceTypes = [
+  "Web Development",
+  "Mobile App Development",
+  "UI/UX Design",
+  "Branding & Identity",
+  "Digital Marketing",
+  "Consulting",
+];
+
+const sampleProjects = [
+  {
+    id: 1,
+    slug: "ecommerce-redesign",
+    name: "E-Commerce Platform for Local Artisans",
+    client: "ShopFlow Inc",
+    status: "Completed",
+    date: "2024-01-15",
+    impactArea: "Digital Solutions & Innovation",
+    serviceType: "Web Development",
+    image: "/assets/portfolio1.png",
+  },
+  {
+    id: 2,
+    slug: "mobile-banking-app",
+    name: "Mobile Banking for Rural Communities",
+    client: "FinTech Solutions",
+    status: "Ongoing",
+    date: "2024-02-20",
+    impactArea: "Digital Solutions & Innovation",
+    serviceType: "Mobile App Development",
+    image: "/assets/portfolio2.png",
+  },
+  {
+    id: 3,
+    slug: "refugee-support-platform",
+    name: "Refugee Support Platform",
+    client: "Humanity First",
+    status: "Completed",
+    date: "2024-03-10",
+    impactArea: "Humanity Hub & Missions",
+    serviceType: "Web Development",
+    image: "/assets/portfolio1.png",
+  },
+  {
+    id: 4,
+    slug: "climate-tracking-dashboard",
+    name: "Climate Data Tracking Dashboard",
+    client: "Green Earth Initiative",
+    status: "Ongoing",
+    date: "2024-03-25",
+    impactArea: "Climate Impact Projects",
+    serviceType: "Web Development",
+    image: "/assets/portfolio2.png",
+  },
+  {
+    id: 5,
+    slug: "ai-education-assistant",
+    name: "AI-Powered Education Assistant",
+    client: "EduTech Labs",
+    status: "Completed",
+    date: "2024-02-05",
+    impactArea: "Intelligent Systems & AI Innovation",
+    serviceType: "Mobile App Development",
+    image: "/assets/portfolio1.png",
+  },
+  {
+    id: 6,
+    slug: "skills-training-portal",
+    name: "Skills Training Portal",
+    client: "Career Development Corp",
+    status: "Ongoing",
+    date: "2024-04-01",
+    impactArea: "Skills & Capacity Development",
+    serviceType: "Web Development",
+    image: "/assets/portfolio2.png",
+  },
+];
+
+export default function ProjectsPage() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [selectedImpactArea, setSelectedImpactArea] = useState<string>("All");
+  const [selectedStatus, setSelectedStatus] = useState<string>("All");
+  const [selectedServiceType, setSelectedServiceType] = useState<string>("All");
+
+  const [newProject, setNewProject] = useState({
+    name: "",
+    client: "",
+    impactArea: "",
+    serviceType: "",
+    status: "Ongoing",
+    date: "",
+    projectOverview: "",
+    scopeOfWork: "",
+    projectSummary: "",
+  });
+
+  const filteredProjects = sampleProjects.filter((project) => {
+    const matchesSearch =
+      project.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.client.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    const matchesImpactArea =
+      selectedImpactArea === "All" || project.impactArea === selectedImpactArea;
+    
+    const matchesStatus =
+      selectedStatus === "All" || project.status === selectedStatus;
+    
+    const matchesServiceType =
+      selectedServiceType === "All" || project.serviceType === selectedServiceType;
+
+    return matchesSearch && matchesImpactArea && matchesStatus && matchesServiceType;
+  });
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "Completed":
+        return "bg-green-100 text-green-700";
+      case "Ongoing":
+        return "bg-blue-100 text-blue-700";
+      case "Planning":
+        return "bg-yellow-100 text-yellow-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const handleNewProjectChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    setNewProject({
+      ...newProject,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCreateProject = () => {
+    console.log("Creating new project:", newProject);
+    setIsDrawerOpen(false);
+    // Reset form
+    setNewProject({
+      name: "",
+      client: "",
+      impactArea: "",
+      serviceType: "",
+      status: "Ongoing",
+      date: "",
+      projectOverview: "",
+      scopeOfWork: "",
+      projectSummary: "",
+    });
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <div className="max-w-7xl mx-auto px-8 py-5">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <Link href="/admin/dashboard">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back
+                </Button>
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900">Projects</h1>
+            </div>
+
+            <Button onClick={() => setIsDrawerOpen(true)}>
+              <Plus className="w-4 h-4 mr-2" />
+              New Project
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-8 py-8">
+        {/* Search and Filter Bar */}
+        <div className="mb-8 space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search projects by name or client..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+            />
+          </div>
+
+          {/* Filters */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Filter className="w-4 h-4 text-gray-600" />
+              <span className="text-sm font-semibold text-gray-700">
+                Filters
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {/* Impact Area Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Impact Area
+                </label>
+                <select
+                  value={selectedImpactArea}
+                  onChange={(e) => setSelectedImpactArea(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="All">All Impact Areas</option>
+                  {impactAreas.map((area) => (
+                    <option key={area} value={area}>
+                      {area}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Status Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Status
+                </label>
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Planning">Planning</option>
+                </select>
+              </div>
+
+              {/* Service Type Filter */}
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">
+                  Service Type
+                </label>
+                <select
+                  value={selectedServiceType}
+                  onChange={(e) => setSelectedServiceType(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                >
+                  <option value="All">All Service Types</option>
+                  {serviceTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProjects.map((project) => (
+            <Link
+              key={project.id}
+              href={`/admin/projects/${project.slug}`}
+              className="group"
+            >
+              <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                {/* Project Image */}
+                <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-white/20">
+                      {project.name.charAt(0)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Project Info */}
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">
+                        {project.name}
+                      </h3>
+                      <p className="text-sm text-gray-600">{project.client}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between mb-3">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                        project.status
+                      )}`}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Service:</span>
+                      <span className="font-medium text-gray-700">
+                        {project.serviceType}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500">Impact:</span>
+                      <span className="font-medium text-gray-700 text-right">
+                        {project.impactArea}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <span className="text-xs text-gray-500">
+                      {new Date(project.date).toLocaleDateString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        {/* No Results */}
+        {filteredProjects.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-gray-500">No projects found</p>
+          </div>
+        )}
+      </main>
+
+      {/* Drawer for New Project */}
+      {isDrawerOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+            onClick={() => setIsDrawerOpen(false)}
+          ></div>
+
+          {/* Drawer */}
+          <div className="fixed right-0 top-0 h-full w-full md:w-[600px] bg-white shadow-2xl z-50 overflow-y-auto">
+            {/* Drawer Header */}
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-10">
+              <h2 className="text-xl font-bold text-gray-900">
+                Create New Project
+              </h2>
+              <button
+                onClick={() => setIsDrawerOpen(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+
+            {/* Drawer Content */}
+            <div className="p-6 space-y-6">
+              {/* Project Name */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Project Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={newProject.name}
+                  onChange={handleNewProjectChange}
+                  placeholder="Enter project name"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                />
+              </div>
+
+              {/* Client Name */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Client/Partner Name <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="client"
+                  value={newProject.client}
+                  onChange={handleNewProjectChange}
+                  placeholder="Enter client or partner name"
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                />
+              </div>
+
+              {/* Impact Area */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Impact Area <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="impactArea"
+                  value={newProject.impactArea}
+                  onChange={handleNewProjectChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                >
+                  <option value="">Select Impact Area</option>
+                  {impactAreas.map((area) => (
+                    <option key={area} value={area}>
+                      {area}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Service Type */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Service Type <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="serviceType"
+                  value={newProject.serviceType}
+                  onChange={handleNewProjectChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                >
+                  <option value="">Select Service Type</option>
+                  {serviceTypes.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Status <span className="text-red-500">*</span>
+                </label>
+                <select
+                  name="status"
+                  value={newProject.status}
+                  onChange={handleNewProjectChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                >
+                  <option value="Planning">Planning</option>
+                  <option value="Ongoing">Ongoing</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+
+              {/* Project Date */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Project Date <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="date"
+                  name="date"
+                  value={newProject.date}
+                  onChange={handleNewProjectChange}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                  required
+                />
+              </div>
+
+              {/* Project Overview */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Project Overview <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="projectOverview"
+                  value={newProject.projectOverview}
+                  onChange={handleNewProjectChange}
+                  placeholder="Brief overview of the project..."
+                  rows={4}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  required
+                />
+              </div>
+
+              {/* Scope of Work */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Scope of Work <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="scopeOfWork"
+                  value={newProject.scopeOfWork}
+                  onChange={handleNewProjectChange}
+                  placeholder="Detailed scope of work, deliverables, and milestones..."
+                  rows={6}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  required
+                />
+              </div>
+
+              {/* Project Summary */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Project Summary <span className="text-red-500">*</span>
+                </label>
+                <textarea
+                  name="projectSummary"
+                  value={newProject.projectSummary}
+                  onChange={handleNewProjectChange}
+                  placeholder="Summary of outcomes, impact, and key achievements..."
+                  rows={5}
+                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none"
+                  required
+                />
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3 pt-4 border-t border-gray-200">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDrawerOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button onClick={handleCreateProject} className="flex-1">
+                  Create Project
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+

@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import {
   Briefcase,
   FolderKanban,
@@ -20,36 +21,42 @@ export default function AdminDashboard() {
       description: "Showcase your best work",
       icon: <Briefcase className="w-8 h-8" />,
       color: "from-blue-500 to-indigo-600",
+      href: "#",
     },
     {
       title: "Projects",
       description: "Manage client projects",
       icon: <FolderKanban className="w-8 h-8" />,
       color: "from-purple-500 to-pink-600",
+      href: "/admin/projects",
     },
     {
       title: "Team",
       description: "Your amazing people",
       icon: <Users className="w-8 h-8" />,
       color: "from-orange-500 to-red-600",
+      href: "#",
     },
     {
       title: "Services",
       description: "What you offer",
       icon: <Layers className="w-8 h-8" />,
       color: "from-green-500 to-emerald-600",
+      href: "#",
     },
     {
       title: "Media",
       description: "Images and files",
       icon: <Image className="w-8 h-8" />,
       color: "from-cyan-500 to-blue-600",
+      href: "#",
     },
     {
       title: "Messages",
       description: "Client inquiries",
       icon: <Mail className="w-8 h-8" />,
       color: "from-pink-500 to-rose-600",
+      href: "#",
     },
   ];
 
@@ -87,39 +94,38 @@ export default function AdminDashboard() {
           {/* Management Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {managementCards.map((card, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden"
-              >
-                {/* Gradient Background */}
-                <div
-                  className={cn(
-                    "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300",
-                    card.color
-                  )}
-                ></div>
+              <Link key={index} href={card.href}>
+                <div className="group bg-white rounded-3xl p-8 shadow-sm border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer relative overflow-hidden">
+                  {/* Gradient Background */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-10 transition-opacity duration-300",
+                      card.color
+                    )}
+                  ></div>
 
-                {/* Card Content */}
-                <div className="relative z-10 text-center">
-                  <div className="flex justify-center mb-6">
-                    <div
-                      className={cn(
-                        "w-20 h-20 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300",
-                        card.color
-                      )}
-                    >
-                      {card.icon}
+                  {/* Card Content */}
+                  <div className="relative z-10 text-center">
+                    <div className="flex justify-center mb-6">
+                      <div
+                        className={cn(
+                          "w-20 h-20 rounded-2xl bg-gradient-to-br flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300",
+                          card.color
+                        )}
+                      >
+                        {card.icon}
+                      </div>
                     </div>
-                  </div>
 
-                  <h3 className="text-xl font-bold text-gray-900 mb-2">
-                    {card.title}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {card.description}
-                  </p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">
+                      {card.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {card.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
