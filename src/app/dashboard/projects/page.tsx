@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Plus, Search, ArrowLeft, X, Filter, Eye, Edit, Trash2, Lock } from "lucide-react";
+import { Plus, Search, ArrowLeft, X, Filter, Eye, Edit, Trash2, Lock, Upload, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getPermissions, UserRole } from "@/lib/permissions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Image from "next/image";
 
 const impactAreas = [
   "Digital Solutions & Innovation",
@@ -71,7 +72,11 @@ export default function ProjectsPage() {
     projectOverview: "",
     scopeOfWork: "",
     projectSummary: "",
+    image: "",
   });
+
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   // Fetch projects from API
   const fetchProjects = useCallback(async () => {
@@ -147,6 +152,79 @@ export default function ProjectsPage() {
     });
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File size must be less than 2MB');
+      return;
+    }
+
+    // Check file type
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Only PNG, JPG, and WEBP images are allowed');
+      return;
+    }
+
+    setUploadingImage(true);
+    setUploadProgress(0);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Use XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(percentComplete);
+        }
+      });
+
+      // Handle completion
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (error) {
+              reject(new Error('Invalid response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed'));
+        });
+
+        xhr.open('POST', '/api/upload');
+        xhr.send(formData);
+      });
+
+      const data = await uploadPromise;
+      setNewProject(prev => ({
+        ...prev,
+        image: data.url,
+      }));
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+      setUploadProgress(0);
+    }
+  };
+
   const handleCreateProject = async () => {
     if (!permissions?.canCreateProjects) {
       toast.error('You do not have permission to create projects');
@@ -184,6 +262,7 @@ export default function ProjectsPage() {
         projectOverview: "",
         scopeOfWork: "",
         projectSummary: "",
+        image: "",
       });
     } catch (error) {
       console.error('Error creating project:', error);
@@ -333,12 +412,23 @@ export default function ProjectsPage() {
                 <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   {/* Project Image */}
                   <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="text-4xl font-bold text-white/20">
-                        {project.name.charAt(0)}
-                      </span>
-                    </div>
+                    {project.image ? (
+                      <Image
+                        src={project.image}
+                        alt={project.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-4xl font-bold text-white/20">
+                            {project.name.charAt(0)}
+                          </span>
+                        </div>
+                      </>
+                    )}
                     
                     {/* Role Badge */}
                     <div className="absolute top-3 right-3">
@@ -410,14 +500,16 @@ export default function ProjectsPage() {
                         </Link>
                         
                         {permissions?.canEditProjects && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                            title="Edit project"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <Link href={`/dashboard/projects/${project.slug}`}>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              className="h-8 px-3 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                              title="Edit project"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </Link>
                         )}
                         
                         {permissions?.canDeleteProjects && (
@@ -473,6 +565,106 @@ export default function ProjectsPage() {
 
             {/* Drawer Content */}
             <div className="p-6 space-y-6">
+              {/* Project Image Upload */}
+              <div>
+                <label className="block text-sm font-semibold text-gray-900 mb-2">
+                  Project Image
+                </label>
+                
+                {newProject.image ? (
+                  <div className="relative group">
+                    <div className="relative w-full h-48 rounded-lg overflow-hidden border-2 border-gray-200">
+                      <Image
+                        src={newProject.image}
+                        alt="Project preview"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center gap-2">
+                      <label className="cursor-pointer">
+                        <input
+                          type="file"
+                          accept="image/png,image/jpeg,image/jpg,image/webp"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploadingImage}
+                        />
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="sm"
+                          disabled={uploadingImage}
+                        >
+                          {uploadingImage ? (
+                            <>
+                              <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                              Uploading...
+                            </>
+                          ) : (
+                            <>
+                              <Upload className="w-4 h-4 mr-2" />
+                              Change
+                            </>
+                          )}
+                        </Button>
+                      </label>
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setNewProject({ ...newProject, image: '' })}
+                      >
+                        <X className="w-4 h-4 mr-2" />
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="block cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg,image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={uploadingImage}
+                    />
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                      {uploadingImage ? (
+                        <>
+                          <Loader2 className="w-10 h-10 text-primary mx-auto mb-3 animate-spin" />
+                          <p className="text-sm text-gray-600 mb-3">
+                            Uploading to Cloudinary...
+                          </p>
+                          {/* Progress Bar */}
+                          <div className="w-full max-w-xs mx-auto">
+                            <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                              <div
+                                className="bg-primary h-full transition-all duration-300 ease-out"
+                                style={{ width: `${uploadProgress}%` }}
+                              ></div>
+                            </div>
+                            <p className="text-xs text-gray-500 mt-2 font-medium">
+                              {uploadProgress}%
+                            </p>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+                          <p className="text-sm text-gray-600 mb-1">
+                            Click to upload project image
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            PNG, JPG or WEBP (max. 2MB)
+                          </p>
+                        </>
+                      )}
+                    </div>
+                  </label>
+                )}
+              </div>
+
               {/* Project Name */}
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">

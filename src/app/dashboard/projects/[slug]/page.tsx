@@ -1,10 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Save, Trash2, Upload, Plus, X } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Upload, Plus, X, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
+import Image from "next/image";
+import { toast } from "sonner";
 
 const impactAreas = [
   "Digital Solutions & Innovation",
@@ -156,6 +158,10 @@ export default function ProjectEditPage() {
   const [loading, setLoading] = useState(true);
   const [newTool, setNewTool] = useState("");
   const [mediaUrl, setMediaUrl] = useState("");
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingMedia, setUploadingMedia] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
 
   // Fetch project from API
   useEffect(() => {
@@ -273,6 +279,117 @@ export default function ProjectEditPage() {
     });
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (max 2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      toast.error('File size must be less than 2MB');
+      return;
+    }
+
+    // Check file type
+    const allowedTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      toast.error('Only PNG, JPG, and WEBP images are allowed');
+      return;
+    }
+
+    setUploadingImage(true);
+    setUploadProgress(0);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Use XMLHttpRequest for progress tracking
+      const xhr = new XMLHttpRequest();
+
+      // Track upload progress
+      xhr.upload.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setUploadProgress(percentComplete);
+        }
+      });
+
+      // Handle completion
+      const uploadPromise = new Promise<any>((resolve, reject) => {
+        xhr.addEventListener('load', () => {
+          if (xhr.status === 200) {
+            try {
+              const data = JSON.parse(xhr.responseText);
+              resolve(data);
+            } catch (error) {
+              reject(new Error('Invalid response'));
+            }
+          } else {
+            reject(new Error(`Upload failed with status ${xhr.status}`));
+          }
+        });
+
+        xhr.addEventListener('error', () => {
+          reject(new Error('Upload failed'));
+        });
+
+        xhr.open('POST', '/api/upload');
+        xhr.send(formData);
+      });
+
+      const data = await uploadPromise;
+      setFormData((prev: any) => ({
+        ...prev,
+        image: data.url,
+      }));
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      toast.error('Failed to upload image');
+    } finally {
+      setUploadingImage(false);
+      setUploadProgress(0);
+    }
+  };
+
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file size (max 10MB for media)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('File size must be less than 10MB');
+      return;
+    }
+
+    setUploadingMedia(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+
+      const data = await response.json();
+      setFormData((prev: any) => ({
+        ...prev,
+        mediaFiles: [...(prev.mediaFiles || []), data.url],
+      }));
+      toast.success('Media uploaded successfully!');
+    } catch (error) {
+      console.error('Error uploading media:', error);
+      toast.error('Failed to upload media');
+    } finally {
+      setUploadingMedia(false);
+    }
+  };
+
   if (loading || !formData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
@@ -319,15 +436,91 @@ export default function ProjectEditPage() {
             <label className="block text-sm font-semibold text-gray-900 mb-3">
               Project Image
             </label>
-            <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary transition-colors cursor-pointer">
-              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-              <p className="text-sm text-gray-600 mb-1">
-                Click to upload or drag and drop
-              </p>
-              <p className="text-xs text-gray-500">
-                PNG, JPG or WEBP (max. 2MB)
-              </p>
-            </div>
+            
+            {formData.image ? (
+              <div className="relative group">
+                <div className="relative w-full h-64 rounded-xl overflow-hidden border-2 border-gray-200">
+                  <Image
+                    src={formData.image}
+                    alt="Project preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-3">
+                  <label className="cursor-pointer">
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/jpg,image/webp"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={uploadingImage}
+                    />
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      disabled={uploadingImage}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.currentTarget.previousElementSibling?.dispatchEvent(new MouseEvent('click'));
+                      }}
+                    >
+                      {uploadingImage ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Change Image
+                        </>
+                      )}
+                    </Button>
+                  </label>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setFormData({ ...formData, image: '' })}
+                  >
+                    <X className="w-4 h-4 mr-2" />
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <label className="block cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/jpg,image/webp"
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploadingImage}
+                />
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-primary transition-colors">
+                  {uploadingImage ? (
+                    <>
+                      <Loader2 className="w-12 h-12 text-primary mx-auto mb-3 animate-spin" />
+                      <p className="text-sm text-gray-600 mb-1">
+                        Uploading to Cloudinary...
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                      <p className="text-sm text-gray-600 mb-1">
+                        Click to upload or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        PNG, JPG or WEBP (max. 2MB)
+                      </p>
+                    </>
+                  )}
+                </div>
+              </label>
+            )}
           </div>
 
           {/* Form Grid */}
@@ -590,10 +783,34 @@ export default function ProjectEditPage() {
                   placeholder="Enter media URL or upload..."
                   className="flex-1 px-4 py-3 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 />
-                <Button onClick={handleAddMedia} type="button">
+                <Button onClick={handleAddMedia} type="button" disabled={uploadingMedia}>
                   <Plus className="w-4 h-4 mr-2" />
-                  Add Media
+                  Add URL
                 </Button>
+                <label className="cursor-pointer">
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    onChange={handleMediaUpload}
+                    className="hidden"
+                    disabled={uploadingMedia}
+                  />
+                  <Button type="button" variant="outline" disabled={uploadingMedia} asChild>
+                    <span>
+                      {uploadingMedia ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Uploading...
+                        </>
+                      ) : (
+                        <>
+                          <Upload className="w-4 h-4 mr-2" />
+                          Upload File
+                        </>
+                      )}
+                    </span>
+                  </Button>
+                </label>
               </div>
               {(formData.mediaFiles || []).length > 0 && (
                 <div className="space-y-2">
