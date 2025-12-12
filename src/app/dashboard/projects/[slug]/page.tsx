@@ -162,6 +162,7 @@ export default function ProjectEditPage() {
   const [uploadingMedia, setUploadingMedia] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [mediaUploadProgress, setMediaUploadProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
 
   // Fetch project from API
   useEffect(() => {
@@ -221,8 +222,9 @@ export default function ProjectEditPage() {
   };
 
   const handleSave = async () => {
-    if (!formData || !slug) return;
+    if (!formData || !slug || saving) return;
     
+    setSaving(true);
     try {
       const response = await fetch(`/api/projects/${slug}`, {
         method: 'PUT',
@@ -234,14 +236,16 @@ export default function ProjectEditPage() {
 
       if (!response.ok) {
         const error = await response.json();
-        alert(error.error || 'Failed to save project');
+        toast.error(error.error || 'Failed to save project');
         return;
       }
 
-      alert('Project saved successfully!');
+      toast.success('Project saved successfully!');
     } catch (error) {
       console.error('Error saving project:', error);
-      alert('Failed to save project');
+      toast.error('Failed to save project');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -447,9 +451,18 @@ export default function ProjectEditPage() {
                 <Trash2 className="w-4 h-4 mr-2" />
                 Delete
               </Button>
-              <Button onClick={handleSave} size="sm">
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
+              <Button onClick={handleSave} size="sm" disabled={saving}>
+                {saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Changes
+                  </>
+                )}
               </Button>
             </div>
           </div>
@@ -943,9 +956,18 @@ export default function ProjectEditPage() {
 
         {/* Save Button at Bottom */}
         <div className="mt-6 flex justify-end">
-          <Button onClick={handleSave} size="lg">
-            <Save className="w-4 h-4 mr-2" />
-            Save Changes
+          <Button onClick={handleSave} size="lg" disabled={saving}>
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4 mr-2" />
+                Save Changes
+              </>
+            )}
           </Button>
         </div>
       </main>

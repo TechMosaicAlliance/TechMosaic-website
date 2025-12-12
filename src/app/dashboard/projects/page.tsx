@@ -7,7 +7,7 @@ import { useState, useEffect, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { getPermissions, UserRole } from "@/lib/permissions";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Image from "next/image";
 
@@ -44,13 +44,40 @@ interface Project {
 export default function ProjectsPage() {
   const { user, isAuthenticated, isLoading: authLoading } = useAuth();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
   
   // Get user permissions
   const permissions = user ? getPermissions(user.role as UserRole) : null;
+
+  // Get filter values from query params
+  const searchQuery = searchParams.get('search') || "";
+  const selectedImpactArea = searchParams.get('impactArea') || "All";
+  const selectedStatus = searchParams.get('status') || "All";
+  const selectedServiceType = searchParams.get('serviceType') || "All";
+
+  // Sync search input with query param on mount/change
+  useEffect(() => {
+    setSearchInput(searchQuery);
+  }, [searchQuery]);
+
+  // Function to update query params
+  const updateQueryParams = useCallback((updates: Record<string, string | null>) => {
+    const params = new URLSearchParams(searchParams.toString());
+    
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value === null || value === "" || value === "All") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
+    });
+
+    router.push(`/dashboard/projects?${params.toString()}`);
+  }, [searchParams, router]);
 
   // Check authentication
   useEffect(() => {
@@ -58,9 +85,6 @@ export default function ProjectsPage() {
       router.push('/login');
     }
   }, [isAuthenticated, authLoading, router]);
-  const [selectedImpactArea, setSelectedImpactArea] = useState<string>("All");
-  const [selectedStatus, setSelectedStatus] = useState<string>("All");
-  const [selectedServiceType, setSelectedServiceType] = useState<string>("All");
 
   const [newProject, setNewProject] = useState({
     name: "",
@@ -77,6 +101,7 @@ export default function ProjectsPage() {
 
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [saving, setSaving] = useState(false);
 
   // Fetch projects from API
   const fetchProjects = useCallback(async () => {
@@ -104,14 +129,14 @@ export default function ProjectsPage() {
     fetchProjects();
   }, [fetchProjects]);
 
-  // Debounced search effect
+  // Debounced search query param update
   useEffect(() => {
     const timer = setTimeout(() => {
-      fetchProjects();
+      updateQueryParams({ search: searchInput || null });
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [fetchProjects]);
+  }, [searchInput, updateQueryParams]);
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -231,6 +256,9 @@ export default function ProjectsPage() {
       return;
     }
 
+    if (saving) return;
+
+    setSaving(true);
     try {
       const response = await fetch('/api/projects', {
         method: 'POST',
@@ -267,6 +295,8 @@ export default function ProjectsPage() {
     } catch (error) {
       console.error('Error creating project:', error);
       toast.error('Failed to create project');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -324,8 +354,8 @@ export default function ProjectsPage() {
             <input
               type="text"
               placeholder="Search projects by name or client..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             />
           </div>
@@ -346,7 +376,7 @@ export default function ProjectsPage() {
                 </label>
                 <select
                   value={selectedImpactArea}
-                  onChange={(e) => setSelectedImpactArea(e.target.value)}
+                  onChange={(e) => updateQueryParams({ impactArea: e.target.value === "All" ? null : e.target.value })}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option value="All">All Impact Areas</option>
@@ -365,7 +395,7 @@ export default function ProjectsPage() {
                 </label>
                 <select
                   value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  onChange={(e) => updateQueryParams({ status: e.target.value === "All" ? null : e.target.value })}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option value="All">All Statuses</option>
@@ -382,7 +412,7 @@ export default function ProjectsPage() {
                 </label>
                 <select
                   value={selectedServiceType}
-                  onChange={(e) => setSelectedServiceType(e.target.value)}
+                  onChange={(e) => updateQueryParams({ serviceType: e.target.value === "All" ? null : e.target.value })}
                   className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 >
                   <option value="All">All Service Types</option>
@@ -826,11 +856,22 @@ export default function ProjectsPage() {
                   variant="outline"
                   onClick={() => setIsDrawerOpen(false)}
                   className="flex-1"
+                  disabled={saving}
                 >
                   Cancel
                 </Button>
-                <Button onClick={handleCreateProject} className="flex-1">
-                  Create Project
+                <Button onClick={handleCreateProject} className="flex-1" disabled={saving}>
+                  {saving ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Creating...
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4 mr-2" />
+                      Create Project
+                    </>
+                  )}
                 </Button>
               </div>
             </div>
