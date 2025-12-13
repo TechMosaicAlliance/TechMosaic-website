@@ -1,9 +1,6 @@
 import React from "react";
 import { BlurImage } from "@/components/ui/blurImage";
 
-// Store reference to global Object before it gets shadowed by the Object component
-const GlobalObject = Object;
-
 // Preprocess MDX content to remove or convert string style attributes
 export const preprocessMDXContent = (content: string): string => {
   if (!content || typeof content !== "string") return content;
@@ -39,7 +36,7 @@ const parseStyle = (style: string | object | undefined): object | undefined => {
       styleObj[camelProperty] = value;
     }
   });
-  return GlobalObject.keys(styleObj).length > 0 ? styleObj : undefined;
+  return globalThis.Object.keys(styleObj).length > 0 ? styleObj : undefined;
 };
 
 // Helper to sanitize props and convert style strings to objects
