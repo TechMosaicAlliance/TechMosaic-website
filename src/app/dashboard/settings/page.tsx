@@ -16,6 +16,7 @@ export default function AdminSettingsPage() {
   const [error, setError] = useState("");
   const [gtmId, setGtmId] = useState("");
   const [injectionMethod, setInjectionMethod] = useState<"nextjs" | "raw">("nextjs");
+  const [tallyFormId, setTallyFormId] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -43,6 +44,13 @@ export default function AdminSettingsPage() {
       const methodData = await methodResponse.json();
       if (methodData.setting && methodData.setting.value) {
         setInjectionMethod(methodData.setting.value as "nextjs" | "raw");
+      }
+
+      // Load Tally form ID
+      const tallyResponse = await fetch("/api/settings?key=tally_form_id");
+      const tallyData = await tallyResponse.json();
+      if (tallyData.setting && tallyData.setting.value) {
+        setTallyFormId(tallyData.setting.value);
       }
     } catch (error) {
       console.error("Error loading settings:", error);
@@ -103,7 +111,23 @@ export default function AdminSettingsPage() {
         throw new Error("Failed to save injection method");
       }
 
-      toast.success("Google Tag Manager settings saved successfully!");
+      // Save Tally form ID
+      const tallyResponse = await fetch("/api/settings", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          key: "tally_form_id",
+          value: tallyFormId.trim(),
+        }),
+      });
+
+      if (!tallyResponse.ok) {
+        throw new Error("Failed to save Tally form ID");
+      }
+
+      toast.success("Settings saved successfully!");
     } catch (error) {
       console.error("Error saving settings:", error);
       toast.error("Failed to save settings");
@@ -314,6 +338,88 @@ export default function AdminSettingsPage() {
                         </p>
                         <p className="text-xs text-green-700 dark:text-green-300 mt-1">
                           Using: <span className="font-semibold">{injectionMethod === "nextjs" ? "Next.js Script Component" : "Raw Script Tag"}</span>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    disabled={isSaving}
+                    className="flex items-center gap-2"
+                    size="lg"
+                  >
+                    {isSaving ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4" />
+                        Save Settings
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </div>
+
+            {/* Tally Form Section */}
+            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 p-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Code className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Tally Form Integration
+                  </h2>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Configure the Tally form ID for the footer biodata form
+                  </p>
+                </div>
+              </div>
+
+              <form onSubmit={handleSave} className="space-y-6">
+                <div className="space-y-2">
+                  <label
+                    htmlFor="tally-form-id"
+                    className="text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Tally Form ID
+                  </label>
+                  <input
+                    id="tally-form-id"
+                    type="text"
+                    value={tallyFormId}
+                    onChange={(e) => setTallyFormId(e.target.value)}
+                    placeholder="your-form-id"
+                    className={cn(
+                      "w-full px-4 py-3 rounded-lg border border-input",
+                      "bg-background text-foreground",
+                      "focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+                      "placeholder:text-muted-foreground",
+                      "transition-all"
+                    )}
+                  />
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    Enter your Tally form ID (e.g., if your form URL is https://tally.so/r/abc123, enter &quot;abc123&quot;)
+                  </p>
+                </div>
+
+                {tallyFormId && (
+                  <div className="p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-green-900 dark:text-green-100">
+                          Preview
+                        </p>
+                        <p className="text-xs text-green-700 dark:text-green-300 mt-1">
+                          Form URL: <code className="font-mono bg-green-100 dark:bg-green-900/50 px-1 rounded">https://tally.so/r/{tallyFormId}</code>
                         </p>
                       </div>
                     </div>

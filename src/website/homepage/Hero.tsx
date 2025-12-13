@@ -174,7 +174,7 @@ export default function Hero() {
               </Link>
             </div>
             
-            {/* Scroll Down Button - Replaced Arrow with Button */}
+            {/*  Button - Replaced Arrow with Button */}
             <div
               data-animation="hero-fade-in-y"
               className="opacity-0 flex justify-center mt-8 sm:mt-12"
@@ -187,10 +187,7 @@ export default function Hero() {
                 className="group relative flex flex-col items-center gap-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110 active:scale-95"
                 aria-label="Scroll to next section"
               >
-                <span className="text-xs font-semibold uppercase tracking-wider">Scroll Down</span>
-                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:border-white/60 hover:bg-white/20 flex items-center justify-center transition-all duration-300 group-hover:shadow-lg">
-                  <ArrowRight className="w-5 h-5 rotate-90 transition-transform duration-300 group-hover:translate-y-1" strokeWidth={2.5} />
-                </div>
+              
               </button>
             </div>
           </div>

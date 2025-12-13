@@ -4,11 +4,12 @@ import { Button, buttonVariants } from "@/components/ui/button";
 
 import Link from "next/link";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowRight, Loader2, Mail, Phone, MapPin, Linkedin, Instagram, Youtube } from "lucide-react";
 import { toast } from "sonner";
 import { useAddContact, useAddNewsletter } from "../hooks";
 import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 type IFooter = {
   type: "newsletter" | "contact";
@@ -66,6 +67,29 @@ export default function Footer(props: IFooter) {
   );
 }
 function FooterLinks() {
+  const [tallyFormId, setTallyFormId] = useState<string | null>(null);
+  const [isLoadingTally, setIsLoadingTally] = useState(true);
+
+  useEffect(() => {
+    const fetchTallyFormId = async () => {
+      try {
+        const response = await fetch("/api/settings?key=tally_form_id");
+        const data = await response.json();
+        if (data.setting && data.setting.value) {
+          setTallyFormId(data.setting.value);
+        }
+      } catch (error) {
+        console.error("Error fetching Tally form ID:", error);
+      } finally {
+        setIsLoadingTally(false);
+      }
+    };
+
+    fetchTallyFormId();
+  }, []);
+
+  const tallyFormUrl = tallyFormId ? `https://tally.so/r/${tallyFormId}` : "#";
+
   return (
     <section className="relative container max-w-7xl mx-auto px-4 lg:px-6 pt-20 lg:pt-24 pb-16 lg:pb-20">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-10">
@@ -139,15 +163,25 @@ function FooterLinks() {
               </li>
             </ul>
             <div className="pt-2">
-              <a
-                href="https://tally.so/r/your-form-id"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1 bg-primary-foreground/5 hover:bg-primary-foreground/10 px-4 py-2 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20"
-              >
-                <span>Fill Basic Biodata</span>
-                <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </a>
+              {!isLoadingTally && (
+                <a
+                  href={tallyFormUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1 bg-primary-foreground/5 hover:bg-primary-foreground/10 px-4 py-2 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20",
+                    !tallyFormId && "opacity-50 cursor-not-allowed"
+                  )}
+                  onClick={(e) => {
+                    if (!tallyFormId) {
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  <span>Fill Basic Biodata</span>
+                  <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </a>
+              )}
             </div>
           </div>
         </div>
