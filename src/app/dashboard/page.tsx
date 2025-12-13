@@ -167,7 +167,7 @@ export default function DashboardPage() {
 
             {/* Settings - Super Admin Only */}
             {permissions?.canAccessSettings && (
-              <Link href="/admin/settings">
+              <Link href="/dashboard/settings">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
                   <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <Settings className="w-7 h-7 text-white" />
