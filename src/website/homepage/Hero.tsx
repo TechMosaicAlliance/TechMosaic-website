@@ -101,43 +101,46 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="grid grid-rows-[auto_1fr] hero-section min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50">
+    <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] min-h-[700px] sm:min-h-[800px] relative overflow-hidden bg-white">
       <Navbar />
-      
-      {/* Main Hero Content */}
-      <div className="relative">
-        {/* Subtle Background Pattern */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, #451842 1px, transparent 0)`,
-          backgroundSize: '40px 40px'
-        }} />
-        
-        {/* Decorative Gradient Orbs */}
-        <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-br from-[#451842]/5 to-transparent rounded-full blur-3xl" />
-        <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-tr from-[#8a3d7a]/5 to-transparent rounded-full blur-3xl" />
+      <div className="grid grid-cols-1 grid-rows-1 relative my-4 sm:my-6 lg:my-8 mx-4 sm:mx-6 lg:mx-8 rounded-2xl overflow-hidden min-h-[650px] sm:min-h-[750px] lg:min-h-[850px]">
+        {/* Background Image */}
+        <Image
+          priority
+          alt="Hero background"
+          src="/assets/hero-image.webp"
+          fill
+          className="object-cover col-span-full row-span-full"
+        />
+        {/* Light Overlay for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 col-span-full row-span-full z-[1]" />
 
-        <section className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
-          <div className="max-w-5xl mx-auto space-y-12 sm:space-y-16">
+        {/* Minimal Decorative Elements */}
+        <div className="absolute top-32 right-20 w-[500px] h-[500px] bg-[#451842]/8 rounded-full blur-[120px] z-[2] hidden lg:block" />
+        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-[#451842]/6 rounded-full blur-[100px] z-[2] hidden lg:block" />
+
+        <section className="relative col-span-full row-span-full z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-28 sm:py-32 lg:py-40 overflow-visible">
+          <div className="max-w-5xl mx-auto space-y-12 sm:space-y-16 w-full">
             
             {/* Trust Badge - Elegant */}
-            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
-              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#451842]/10 to-[#8a3d7a]/10 border border-[#451842]/20 shadow-sm">
-                <Sparkles className="w-4 h-4 text-[#451842]" />
-                <span className="text-xs font-bold text-gray-700 tracking-widest uppercase">Digital Excellence Since 2003</span>
+            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left pt-2">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 shadow-sm">
+                <Sparkles className="w-4 h-4 text-white flex-shrink-0" />
+                <span className="text-xs font-bold text-white tracking-widest uppercase whitespace-nowrap">Digital Excellence Since 2003</span>
               </div>
             </div>
 
             {/* Main Headline - Bold & Modern */}
             <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-[1.05] tracking-tight">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.05] tracking-tight">
                 We Craft
                 <br />
                 <span className="relative inline-flex items-baseline gap-3 sm:gap-4 flex-wrap">
-                  <span className="text-gray-400">Exceptional</span>
+                  <span className="text-white/80">Exceptional</span>
                   <span className="relative inline-block h-[1.2em] min-w-[280px] sm:min-w-[320px] lg:min-w-[400px]">
                     <span 
                       ref={wordRef}
-                      className="absolute left-0 top-0 font-bold bg-gradient-to-r from-[#451842] via-[#8a3d7a] to-[#451842] bg-clip-text text-transparent"
+                      className="absolute left-0 top-0 font-bold text-[#8a3d7a]"
                       style={{ 
                         transform: "translateY(100%)",
                         opacity: 0,
@@ -152,10 +155,10 @@ export default function Hero() {
 
             {/* Value Proposition - Refined */}
             <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left max-w-3xl mx-auto lg:mx-0">
-              <p className="text-xl sm:text-2xl lg:text-3xl text-gray-600 leading-relaxed font-light">
+              <p className="text-xl sm:text-2xl lg:text-3xl text-white leading-relaxed font-light">
                 Tailored digital solutions that{" "}
-                <span className="text-gray-900 font-medium">transform businesses</span> and{" "}
-                <span className="text-gray-900 font-medium">drive growth</span>
+                <span className="text-white font-medium">transform businesses</span> and{" "}
+                <span className="text-white font-medium">drive growth</span>
               </p>
             </div>
 
@@ -165,19 +168,19 @@ export default function Hero() {
                 {stats.map((stat, idx) => (
                   <div 
                     key={idx}
-                    className="group relative bg-white rounded-xl p-4 sm:p-5 border border-gray-200 shadow-sm hover:shadow-lg hover:border-[#451842]/20 transition-all duration-500"
+                    className="group relative bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-5 border border-white/20 shadow-sm hover:shadow-lg hover:border-white/30 hover:bg-white/15 transition-all duration-500"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/0 to-[#451842]/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/0 to-[#451842]/10 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500" />
                     <div className="relative">
-                      <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#451842] to-[#8a3d7a] bg-clip-text text-transparent mb-1.5">
+                      <div className="text-2xl sm:text-3xl font-bold text-white mb-1.5">
                         {stat.value}
                       </div>
-                      <div className="text-xs text-gray-600 font-medium">
+                      <div className="text-xs text-white/80 font-medium">
                         {stat.label}
                       </div>
                     </div>
-                    <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#451842]/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-[#451842]" />
+                    <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-white" />
                     </div>
                   </div>
                 ))}
@@ -199,7 +202,7 @@ export default function Hero() {
 
                 <Link
                   href="/portfolio"
-                  className="group inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-semibold text-lg bg-white text-gray-900 border-2 border-gray-200 hover:border-[#451842]/30 hover:bg-gray-50 transition-all duration-300 shadow-sm"
+                  className="group inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-semibold text-lg bg-white/10 backdrop-blur-sm text-white border-2 border-white/20 hover:border-white/30 hover:bg-white/15 transition-all duration-300 shadow-sm"
                   aria-label="View Our Work"
                 >
                   <span>View Our Work</span>
@@ -208,7 +211,7 @@ export default function Hero() {
               </div>
               
               {/* Trust Note */}
-              <p className="mt-6 text-sm text-gray-500 font-medium">
+              <p className="mt-6 text-sm text-white/70 font-medium pb-2">
                 ✓ Free consultation · No commitment · 24hr response time
               </p>
             </div>
