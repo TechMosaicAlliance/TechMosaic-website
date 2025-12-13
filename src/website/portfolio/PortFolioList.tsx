@@ -15,29 +15,49 @@ export default function PortFolioList({
   return (
     <>
       {data && data?.length > 0 ? (
-        <div className="grid pt-[2rem] lg:grid-cols-2 gap-10">
+        <div className="grid pt-[2rem] grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
           {data.map((item, idx) => (
             <Link href={`/portfolio/${item.id}`} key={item.id}>
-              <article key={idx} className="grid gap-2">
-                <div className="lg:h-[24rem] h-[18rem] group overflow-hidden relative w-full">
-                  <BlurImage
-                    className="object-cover"
-                    fill
-                    alt={item.title.rendered}
-                    src={item.acf.thumbnail}
-                  />
-                  <div className="absolute w-full  text-[#FCFCFC] transition-all ease-out duration-500 cursor-pointer overflow-hidden group-hover:h-full h-0 top-0 bottom-0">
-                    <div className="w-full h-full absolute top-0 bg-black/70"></div>
-                    <div className="pt-1 relative z-10 items-center text-center p-4  h-full justify-end pb-14 flex flex-col gap-1">
-                      <p className="text-sm line-clamp-2">
-                        Highlighted Section
-                      </p>
-                      <h1 className="text-2xl  line-clamp-2 font-medium">
-                        {item.title.rendered}
-                      </h1>
-                      <p className="text-sm line-clamp-3">Dummy TExt</p>
+              <article className="group cursor-pointer">
+                {/* Laptop Mockup */}
+                <div className="relative w-full mb-4">
+                  <div className="relative transition-transform duration-300 group-hover:scale-[1.02]">
+                    {/* Laptop Screen */}
+                    <div className="relative bg-gray-200 rounded-t-lg rounded-b-sm p-1.5 lg:p-2 shadow-lg">
+                      {/* Screen Bezel */}
+                      <div className="bg-black rounded overflow-hidden relative aspect-[16/10]">
+                        {/* Screen Content */}
+                        <div className="absolute inset-0">
+                          <BlurImage
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            alt={item.title.rendered}
+                            src={item.acf.thumbnail}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Laptop Base */}
+                    <div className="relative mt-1">
+                      {/* Keyboard Area */}
+                      <div className="h-2 lg:h-3 bg-gray-300 rounded-t-sm"></div>
+                      {/* Trackpad Area */}
+                      <div className="h-8 lg:h-10 bg-gray-200 rounded-b-lg flex items-center justify-center">
+                        <div className="w-16 lg:w-20 h-1 bg-gray-400/40 rounded-full"></div>
+                      </div>
                     </div>
                   </div>
+                </div>
+
+                {/* Title and Subtitle */}
+                <div className="space-y-1 mt-3">
+                  <h3 className="text-lg lg:text-xl font-semibold text-blue-600 group-hover:text-blue-700 transition-colors">
+                    {item.title.rendered}
+                  </h3>
+                  <p className="text-sm lg:text-base text-gray-600">
+                    {item.acf.services || item.acf.companyname || "Portfolio Item"}
+                  </p>
                 </div>
               </article>
             </Link>
