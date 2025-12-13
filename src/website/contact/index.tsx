@@ -56,10 +56,10 @@ export function ContactView() {
             <span className="text-xs font-semibold text-[#451842] tracking-wider uppercase">Contact Us</span>
           </div>
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] tracking-tight">
-            Let's Build Something <span className="text-[#451842]">Amazing Together</span>
+            Let&apos;s Build Something <span className="text-[#451842]">Amazing Together</span>
           </h1>
           <p className="text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
-            Have a project in mind? Share your vision and let's make it a reality.
+            Have a project in mind? Share your vision and let&apos;s make it a reality.
           </p>
         </div>
       </div>
@@ -73,7 +73,7 @@ export function ContactView() {
             <div className="bg-white p-6 sm:p-8 lg:p-10 rounded-2xl border border-gray-200/80 shadow-sm">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">Send us a message</h2>
-                <p className="text-sm text-gray-500">Fill out the form below and we'll get back to you within 24 hours.</p>
+                <p className="text-sm text-gray-500">Fill out the form below and we&apos;ll get back to you within 24 hours.</p>
               </div>
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -177,7 +177,7 @@ export function ContactView() {
             <div>
               <h2 className="text-2xl font-bold text-gray-900 mb-3">Contact Information</h2>
               <p className="text-sm text-gray-600 leading-relaxed">
-                Get in touch with us today. We're here to help bring your vision to life.
+                Get in touch with us today. We&apos;re here to help bring your vision to life.
               </p>
             </div>
 
