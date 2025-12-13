@@ -135,34 +135,34 @@ export default function Hero() {
             </div>
 
             {/* Social Proof Points */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+            <div data-animation="hero-fade-in-y" className="opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
               <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-[#451842]" />
-                  <span className="text-3xl sm:text-4xl font-bold text-white">72+</span>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <CheckCircle className="w-4 h-4 text-[#451842]" />
+                  <span className="text-xl sm:text-2xl font-bold text-white">72+</span>
                 </div>
-                <span className="text-sm text-white/70 font-medium">Happy Clients</span>
+                <span className="text-xs text-white/70 font-medium">Happy Clients</span>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-[#451842]" />
-                  <span className="text-3xl sm:text-4xl font-bold text-white">128+</span>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <CheckCircle className="w-4 h-4 text-[#451842]" />
+                  <span className="text-xl sm:text-2xl font-bold text-white">128+</span>
                 </div>
-                <span className="text-sm text-white/70 font-medium">Successful Projects</span>
+                <span className="text-xs text-white/70 font-medium">Successful Projects</span>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-[#451842]" />
-                  <span className="text-3xl sm:text-4xl font-bold text-white">57+</span>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <CheckCircle className="w-4 h-4 text-[#451842]" />
+                  <span className="text-xl sm:text-2xl font-bold text-white">57+</span>
                 </div>
-                <span className="text-sm text-white/70 font-medium">Team Members</span>
+                <span className="text-xs text-white/70 font-medium">Team Members</span>
               </div>
               <div className="flex flex-col">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle className="w-5 h-5 text-[#451842]" />
-                  <span className="text-3xl sm:text-4xl font-bold text-white">99%</span>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <CheckCircle className="w-4 h-4 text-[#451842]" />
+                  <span className="text-xl sm:text-2xl font-bold text-white">99%</span>
                 </div>
-                <span className="text-sm text-white/70 font-medium">Customer Satisfaction</span>
+                <span className="text-xs text-white/70 font-medium">Customer Satisfaction</span>
               </div>
             </div>
 
