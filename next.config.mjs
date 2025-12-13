@@ -14,6 +14,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "blanchedalmond-kudu-485569.hostingersite.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.jsdelivr.net",
+      },
     ],
   },
 };

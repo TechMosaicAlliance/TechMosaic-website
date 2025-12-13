@@ -100,10 +100,12 @@ const LI = (props: any) => {
 
 // Generic wrapper for any HTML element to sanitize style props
 const createSanitizedElement = (tag: string) => {
-  return (props: any) => {
+  const Component = (props: any) => {
     const sanitized = sanitizeProps(props);
     return React.createElement(tag, sanitized);
   };
+  Component.displayName = `Sanitized${tag.charAt(0).toUpperCase() + tag.slice(1)}`;
+  return Component;
 };
 
 // Common HTML elements that might appear in MDX content

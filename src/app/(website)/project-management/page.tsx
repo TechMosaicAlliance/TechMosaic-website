@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, Suspense } from "react";
 import { Search, Filter, Calendar, Building2, CheckCircle, Clock, Layers } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ProjectsGridSkeleton } from "@/components/ui/skeletons/ProjectCardSkeleton";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -400,9 +401,11 @@ function ProjectManagementPageContent() {
                         <div className="h-56 bg-gray-200 relative overflow-hidden">
                           <div className="absolute inset-0 bg-primary/20 group-hover:opacity-0 transition-opacity"></div>
                           {project.image ? (
-                            <img
+                            <Image
                               src={project.image}
                               alt={project.name}
+                              width={600}
+                              height={400}
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -479,13 +482,13 @@ function ProjectManagementPageContent() {
                                     title={tool}
                                   >
                                     {toolLogos[tool] && (
-                                      <img
+                                      <Image
                                         src={toolLogos[tool]}
                                         alt={tool}
+                                        width={16}
+                                        height={16}
                                         className="w-4 h-4"
-                                        onError={(e) => {
-                                          e.currentTarget.style.display = 'none';
-                                        }}
+                                        unoptimized
                                       />
                                     )}
                                     <span className="text-xs text-gray-700">{tool}</span>

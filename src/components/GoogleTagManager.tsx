@@ -59,11 +59,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   }
 
   // Option 2: Raw script tag format (exact HTML format)
-  // Uses beforeInteractive strategy to inject in <head> matching Google's exact format
+  // Uses afterInteractive strategy (beforeInteractive is only for pages/_document.js in Pages Router)
   return (
     <Script
       id="google-tag-manager"
-      strategy="beforeInteractive"
+      strategy="afterInteractive"
       dangerouslySetInnerHTML={{
         __html: scriptContent,
       }}

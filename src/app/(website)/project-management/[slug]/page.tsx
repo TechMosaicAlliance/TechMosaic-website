@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Calendar, Building2, CheckCircle, Clock, Layers, ExternalLink, FileText, Target, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { ProjectDetailSkeleton } from "@/components/ui/skeletons/ProjectDetailSkeleton";
 
 // Tool logos mapping
@@ -184,9 +185,11 @@ export default function ProjectDetailPage() {
             <div className="relative">
               <div className="aspect-video rounded-2xl overflow-hidden shadow-2xl">
                 {project.image ? (
-                  <img
+                  <Image
                     src={project.image}
                     alt={project.name}
+                    width={1200}
+                    height={675}
                     className="w-full h-full object-cover"
                   />
                 ) : (
@@ -259,9 +262,11 @@ export default function ProjectDetailPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {project.mediaFiles.map((media, index) => (
                     <div key={index} className="aspect-video rounded-xl overflow-hidden bg-gray-100">
-                      <img
+                      <Image
                         src={media}
                         alt={`${project.name} - Media ${index + 1}`}
+                        width={800}
+                        height={450}
                         className="w-full h-full object-cover"
                       />
                     </div>
@@ -316,13 +321,13 @@ export default function ProjectDetailPage() {
                       className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg border border-gray-200 hover:border-primary hover:bg-primary/5 transition-colors"
                     >
                       {toolLogos[tool] && (
-                        <img
+                        <Image
                           src={toolLogos[tool]}
                           alt={tool}
+                          width={24}
+                          height={24}
                           className="w-6 h-6"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                          }}
+                          unoptimized
                         />
                       )}
                       <span className="font-medium text-gray-900">{tool}</span>

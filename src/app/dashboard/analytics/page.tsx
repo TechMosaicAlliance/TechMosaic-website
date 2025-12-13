@@ -8,20 +8,16 @@ import {
   BarChart3,
   FolderKanban,
   Users,
-  TrendingUp,
   CheckCircle2,
-  Clock,
-  PlayCircle,
   Target,
   Globe,
-  Wrench,
   Loader2,
   ArrowLeft,
-  Calendar,
-  Award,
   Zap,
-  Sparkles,
   Eye,
+  Activity,
+  Clock,
+  TrendingUp,
 } from "lucide-react";
 import Link from "next/link";
 import { getPermissions, UserRole } from "@/lib/permissions";
@@ -121,487 +117,386 @@ export default function AnalyticsPage() {
     );
   }
 
-  const statusColors: Record<string, string> = {
-    Completed: "bg-green-600",
-    Ongoing: "bg-blue-600",
-    Planning: "bg-yellow-600",
-  };
-
-  const getStatusColor = (status: string) => {
-    return statusColors[status] || "bg-gray-600";
-  };
-
-  const formatMonth = (month: string) => {
-    const [year, monthNum] = month.split("-");
-    const date = new Date(parseInt(year), parseInt(monthNum) - 1);
-    return date.toLocaleDateString("en-US", { month: "short", year: "numeric" });
-  };
-
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-card border-b border-border sticky top-0 z-50">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 py-3">
-          <div className="flex items-center gap-3">
+      <header className="bg-card border-b border-border">
+        <div className="max-w-[1800px] mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
             <Link href="/dashboard">
               <Button variant="ghost" size="sm">
-                <ArrowLeft className="w-4 h-4 mr-1" />
+                <ArrowLeft className="w-4 h-4 mr-2" />
                 Back
               </Button>
             </Link>
             <div className="h-6 w-px bg-border" />
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-primary flex items-center justify-center text-primary-foreground">
-                <BarChart3 className="w-4 h-4" />
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-primary flex items-center justify-center">
+                <BarChart3 className="w-4 h-4 text-primary-foreground" />
               </div>
-              <div>
-                <h1 className="text-base sm:text-lg font-bold text-foreground">Analytics</h1>
-              </div>
+              <h1 className="text-lg font-bold text-foreground">Analytics Dashboard</h1>
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-[1600px] mx-auto px-4 sm:px-6 py-4 sm:py-6">
-        {/* Key Metrics */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-          <div className="bg-card border border-border p-4 hover:border-primary transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <BarChart3 className="w-4 h-4 text-primary" />
-              <TrendingUp className="w-3 h-3 text-green-600" />
-            </div>
-            <div className="text-2xl font-bold text-foreground">{analyticsData.pageVisits.total.toLocaleString()}</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">Page Visits</div>
+      <main className="max-w-[1800px] mx-auto px-6 py-6">
+        
+        {/* SECTION 1: OVERVIEW METRICS */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-border" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
+              Overview
+            </h2>
+            <div className="h-px flex-1 bg-border" />
           </div>
-
-          <div className="bg-card border border-border p-4 hover:border-primary transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <Eye className="w-4 h-4 text-primary" />
-              <Sparkles className="w-3 h-3 text-blue-600" />
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Eye className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Visits</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.pageVisits.total.toLocaleString()}
+              </div>
             </div>
-            <div className="text-2xl font-bold text-foreground">{analyticsData.pageVisits.uniqueVisitors.toLocaleString()}</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">Visitors</div>
-          </div>
 
-          <div className="bg-primary p-4 text-primary-foreground">
-            <div className="flex items-center justify-between mb-2">
-              <Clock className="w-4 h-4" />
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Users className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Visitors</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.pageVisits.uniqueVisitors.toLocaleString()}
+              </div>
             </div>
-            <div className="text-2xl font-bold">{analyticsData.pageVisits.today.toLocaleString()}</div>
-            <div className="text-[10px] uppercase tracking-wide mt-1 opacity-90">Today</div>
-          </div>
 
-          <div className="bg-card border border-border p-4 hover:border-primary transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <FolderKanban className="w-4 h-4 text-primary" />
-              <CheckCircle2 className="w-3 h-3 text-green-600" />
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Activity className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Today</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.pageVisits.today.toLocaleString()}
+              </div>
             </div>
-            <div className="text-2xl font-bold text-foreground">{analyticsData.projects.total}</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">Projects</div>
-          </div>
 
-          <div className="bg-card border border-border p-4 hover:border-primary transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <Target className="w-4 h-4 text-primary" />
-              <span className="text-[10px] font-bold text-green-600">{analyticsData.projects.completionRate}%</span>
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <FolderKanban className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Projects</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.projects.total}
+              </div>
             </div>
-            <div className="text-2xl font-bold text-foreground">{analyticsData.projects.completed}</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">Completed</div>
-          </div>
 
-          <div className="bg-card border border-border p-4 hover:border-primary transition-colors">
-            <div className="flex items-center justify-between mb-2">
-              <Users className="w-4 h-4 text-primary" />
-              <TrendingUp className="w-3 h-3 text-blue-600" />
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <CheckCircle2 className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Completed</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.projects.completed}
+              </div>
             </div>
-            <div className="text-2xl font-bold text-foreground">{analyticsData.users.total}</div>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wide mt-1">Users</div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          {/* Projects by Status */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Target className="w-3 h-3 text-primary" />
-              Projects by Status
-            </h3>
-            <div className="space-y-3">
-              {analyticsData.projects.byStatus.map((item) => (
-                <div key={item.status}>
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium text-foreground">{item.status}</span>
-                    <span className="text-sm font-bold text-foreground">{item.count}</span>
-                  </div>
-                  <div className="w-full bg-muted h-2">
-                    <div
-                      className={`h-2 ${getStatusColor(item.status)}`}
-                      style={{
-                        width: `${(item.count / analyticsData.projects.total) * 100}%`,
-                      }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Projects by Impact Area */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Award className="w-3 h-3 text-primary" />
-              Projects by Impact Area
-            </h3>
-            <div className="space-y-3">
-              {analyticsData.projects.byImpactArea.slice(0, 5).map((item) => (
-                <div key={item.impactArea} className="flex items-center justify-between">
-                  <span className="text-sm text-foreground flex-1 truncate mr-4">
-                    {item.impactArea}
-                  </span>
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 bg-muted h-2">
-                      <div
-                        className="bg-primary h-2"
-                        style={{
-                          width: `${
-                            (item.count / analyticsData.projects.total) * 100
-                          }%`,
-                        }}
-                      />
-                    </div>
-                    <span className="text-sm font-bold text-foreground w-8 text-right">
-                      {item.count}
-                    </span>
-                  </div>
-                </div>
-              ))}
+            <div className="bg-card border border-border p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <Target className="w-4 h-4 text-primary" />
+                <span className="text-xs text-muted-foreground uppercase tracking-wide">Rate</span>
+              </div>
+              <div className="text-2xl font-bold text-foreground">
+                {analyticsData.projects.completionRate}%
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          {/* Projects by Service Type */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Wrench className="w-3 h-3 text-primary" />
-              Service Types
-            </h3>
-            <div className="space-y-3">
-              {analyticsData.projects.byServiceType.map((item) => (
-                <div key={item.serviceType} className="flex items-center justify-between">
-                  <span className="text-sm text-foreground">{item.serviceType}</span>
-                  <div className="flex items-center gap-3">
-                    <div className="w-32 bg-muted h-2">
-                      <div
-                        className="bg-primary h-2"
-                        style={{
-                          width: `${
-                            (item.count / analyticsData.projects.total) * 100
-                          }%`,
-                        }}
-                      />
-                    </div>
-                    <span className="text-sm font-bold text-foreground w-8 text-right">
-                      {item.count}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* SECTION 2: TRAFFIC ANALYTICS */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-border" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
+              Traffic Analytics
+            </h2>
+            <div className="h-px flex-1 bg-border" />
           </div>
 
-          {/* Popular Tools */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Zap className="w-3 h-3 text-primary" />
-              Popular Tools
-            </h3>
-            <div className="space-y-3">
-              {analyticsData.tools.popular.length > 0 ? (
-                analyticsData.tools.popular.map((item, index) => (
-                  <div key={item.tool} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="w-6 h-6 bg-primary/10 flex items-center justify-center">
-                        <span className="text-xs font-bold text-primary">{index + 1}</span>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Traffic Chart */}
+            <div className="lg:col-span-2 bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                14-Day Traffic Trend
+              </h3>
+              <div className="flex items-end justify-between h-48 gap-1">
+                {analyticsData.pageVisits.byDay.slice(-14).map((day, i) => {
+                  const maxCount = Math.max(...analyticsData.pageVisits.byDay.slice(-14).map(d => d.count));
+                  const height = maxCount > 0 ? (day.count / maxCount) * 100 : 0;
+                  return (
+                    <div key={i} className="flex-1 flex flex-col items-center gap-2">
+                      <div 
+                        className="w-full bg-primary/20 hover:bg-primary transition-colors cursor-pointer relative group"
+                        style={{ height: `${height}%`, minHeight: '4px' }}
+                      >
+                        <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
+                          {day.count} visits
+                        </div>
                       </div>
-                      <span className="text-sm text-foreground">{item.tool}</span>
+                      <div className="text-[9px] text-muted-foreground">
+                        {new Date(day.date).getDate()}
+                      </div>
                     </div>
-                    <span className="text-sm font-bold text-foreground">{item.count}</span>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Top Pages */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                Top Pages
+              </h3>
+              <div className="space-y-3">
+                {analyticsData.pageVisits.byPage.slice(0, 6).map((page, i) => {
+                  const maxCount = Math.max(...analyticsData.pageVisits.byPage.map(p => p.count));
+                  const width = (page.count / maxCount) * 100;
+                  return (
+                    <div key={i} className="flex items-center gap-2">
+                      <div className="w-5 h-5 bg-primary/10 flex items-center justify-center shrink-0">
+                        <span className="text-[10px] font-bold text-primary">{i + 1}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-xs text-foreground truncate mb-1">{page.pagePath}</div>
+                        <div className="w-full bg-muted h-1.5">
+                          <div className="bg-primary h-1.5" style={{ width: `${width}%` }} />
+                        </div>
+                      </div>
+                      <div className="text-xs font-bold text-foreground shrink-0 w-10 text-right">
+                        {page.count}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 3: PROJECT ANALYTICS */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-border" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
+              Project Analytics
+            </h2>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Status Distribution */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                Status Distribution
+              </h3>
+              <div className="space-y-3">
+                {analyticsData.projects.byStatus.map((status, i) => (
+                  <div key={i}>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-xs text-foreground">{status.status}</span>
+                      <span className="text-xs font-bold text-foreground">{status.count}</span>
+                    </div>
+                    <div className="w-full bg-muted h-2">
+                      <div
+                        className={`h-2 ${
+                          status.status === 'Completed' ? 'bg-green-600' :
+                          status.status === 'Ongoing' ? 'bg-orange-500' :
+                          'bg-blue-500'
+                        }`}
+                        style={{
+                          width: `${(status.count / analyticsData.projects.total) * 100}%`,
+                        }}
+                      />
+                    </div>
                   </div>
-                ))
+                ))}
+              </div>
+            </div>
+
+            {/* Service Types */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                Service Types
+              </h3>
+              <div className="space-y-3">
+                {analyticsData.projects.byServiceType.slice(0, 6).map((service, i) => {
+                  const maxCount = Math.max(...analyticsData.projects.byServiceType.map(s => s.count));
+                  const width = (service.count / maxCount) * 100;
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs text-foreground truncate">{service.serviceType}</span>
+                        <span className="text-xs font-bold text-foreground">{service.count}</span>
+                      </div>
+                      <div className="w-full bg-muted h-2">
+                        <div className="bg-primary h-2" style={{ width: `${width}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Impact Areas */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                Impact Areas
+              </h3>
+              <div className="space-y-3">
+                {analyticsData.projects.byImpactArea.slice(0, 6).map((area, i) => {
+                  const maxCount = Math.max(...analyticsData.projects.byImpactArea.map(a => a.count));
+                  const width = (area.count / maxCount) * 100;
+                  return (
+                    <div key={i}>
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-xs text-foreground truncate">{area.impactArea}</span>
+                        <span className="text-xs font-bold text-foreground">{area.count}</span>
+                      </div>
+                      <div className="w-full bg-muted h-2">
+                        <div className="bg-primary h-2" style={{ width: `${width}%` }} />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SECTION 4: USERS & TOOLS */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-border" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
+              Users & Tools
+            </h2>
+            <div className="h-px flex-1 bg-border" />
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            {/* User Analytics */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                User Statistics
+              </h3>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="text-center p-3 bg-muted/30">
+                  <div className="text-xl font-bold text-foreground mb-1">
+                    {analyticsData.users.total}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Total</div>
+                </div>
+                <div className="text-center p-3 bg-green-50">
+                  <div className="text-xl font-bold text-green-600 mb-1">
+                    {analyticsData.users.active}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Active</div>
+                </div>
+                <div className="text-center p-3 bg-muted/30">
+                  <div className="text-xl font-bold text-foreground mb-1">
+                    {analyticsData.users.total - analyticsData.users.active}
+                  </div>
+                  <div className="text-[10px] text-muted-foreground uppercase">Inactive</div>
+                </div>
+              </div>
+              <div className="space-y-2 pt-4 border-t border-border">
+                {analyticsData.users.byRole.map((role, i) => (
+                  <div key={i} className="flex items-center justify-between text-xs">
+                    <span className="text-muted-foreground">{role.role}</span>
+                    <span className="font-bold text-foreground">{role.count}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Popular Tools */}
+            <div className="bg-card border border-border p-5">
+              <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4">
+                Popular Tools
+              </h3>
+              {analyticsData.tools.popular.length > 0 ? (
+                <div className="space-y-3">
+                  {analyticsData.tools.popular.slice(0, 8).map((tool, i) => {
+                    const maxCount = Math.max(...analyticsData.tools.popular.map(t => t.count));
+                    const width = (tool.count / maxCount) * 100;
+                    return (
+                      <div key={i}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="text-xs text-foreground">{tool.tool}</span>
+                          <span className="text-xs font-bold text-foreground">{tool.count}</span>
+                        </div>
+                        <div className="w-full bg-muted h-2">
+                          <div className="bg-primary h-2" style={{ width: `${width}%` }} />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No tool data available</p>
+                <div className="text-center py-8 text-xs text-muted-foreground">
+                  No tool data available
+                </div>
               )}
             </div>
           </div>
         </div>
 
-        {/* Page Visit Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          {/* Top Pages */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Globe className="w-3 h-3 text-primary" />
-              Top Pages
-            </h3>
-              <div className="space-y-3">
-                {analyticsData.pageVisits.byPage.map((page, index) => (
-                  <div key={page.pagePath} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="w-6 h-6 bg-primary/10 flex items-center justify-center">
-                        <span className="text-xs font-bold text-primary">{index + 1}</span>
-                      </div>
-                      <span className="text-sm text-foreground truncate">{page.pagePath}</span>
-                    </div>
-                    <span className="text-sm font-bold text-foreground ml-4">
-                      {page.count.toLocaleString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          {/* Top Referrers */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <TrendingUp className="w-3 h-3 text-primary" />
-              Traffic Sources
-            </h3>
-              <div className="space-y-3">
-                {analyticsData.pageVisits.topReferrers.length > 0 ? (
-                  analyticsData.pageVisits.topReferrers.map((referrer, index) => (
-                    <div key={referrer.referrer} className="flex items-center justify-between border-b border-border pb-3 last:border-0">
-                      <div className="flex items-center gap-3 flex-1">
-                        <div className="w-6 h-6 bg-primary/10 flex items-center justify-center">
-                          <span className="text-xs font-bold text-primary">{index + 1}</span>
-                        </div>
-                        <span className="text-sm text-foreground truncate max-w-xs">
-                          {referrer.referrer || 'Direct'}
-                        </span>
-                      </div>
-                      <span className="text-sm font-bold text-foreground">{referrer.count}</span>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-muted-foreground">No referrer data available</p>
-                )}
-              </div>
-          </div>
-        </div>
-
-        {/* Traffic Timeline */}
-        <div className="bg-card border border-border p-4 mb-6">
-          <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-            <Calendar className="w-3 h-3 text-primary" />
-            Daily Traffic (30 Days)
-          </h3>
-            <div className="space-y-2">
-              {analyticsData.pageVisits.byDay.slice().reverse().map((day) => (
-                <div key={day.date} className="flex items-center gap-4">
-                  <span className="text-[10px] text-muted-foreground w-16">
-                    {new Date(day.date).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                    })}
-                  </span>
-                  <div className="flex-1 bg-muted h-5">
-                    <div
-                      className="bg-primary h-5 flex items-center justify-end pr-2"
-                      style={{
-                        width: `${
-                          analyticsData.pageVisits.byDay.length > 0 &&
-                          Math.max(...analyticsData.pageVisits.byDay.map((d) => d.count)) > 0
-                            ? (day.count /
-                                Math.max(
-                                  ...analyticsData.pageVisits.byDay.map((d) => d.count)
-                                )) *
-                              100
-                            : 0
-                        }%`,
-                      }}
-                    >
-                      <span className="text-[10px] font-bold text-primary-foreground">{day.count}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-        </div>
-
-        {/* Timeline Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          {/* Projects Timeline */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <FolderKanban className="w-3 h-3 text-primary" />
-              Projects (12 Months)
-            </h3>
-            <div className="space-y-2">
-              {analyticsData.projects.byMonth.slice().reverse().map((item) => (
-                <div key={item.month} className="flex items-center gap-2">
-                  <span className="text-[10px] text-muted-foreground w-14">
-                    {formatMonth(item.month)}
-                  </span>
-                  <div className="flex-1 bg-muted h-5">
-                    <div
-                      className="bg-primary h-5 flex items-center justify-end pr-2"
-                        style={{
-                          width: `${
-                            (item.count /
-                              Math.max(
-                                ...analyticsData.projects.byMonth.map((m) => m.count)
-                              )) *
-                            100
-                          }%`,
-                        }}
-                      >
-                      <span className="text-[10px] font-bold text-primary-foreground">{item.count}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Users Timeline */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Users className="w-3 h-3 text-primary" />
-              Users (12 Months)
-            </h3>
-            <div className="space-y-2">
-              {analyticsData.users.byMonth.slice().reverse().map((item) => (
-                <div key={item.month} className="flex items-center gap-2">
-                  <span className="text-[10px] text-muted-foreground w-14">
-                    {formatMonth(item.month)}
-                  </span>
-                  <div className="flex-1 bg-muted h-5">
-                    <div
-                      className="bg-primary h-5 flex items-center justify-end pr-2"
-                        style={{
-                          width: `${
-                            analyticsData.users.byMonth.length > 0 &&
-                            Math.max(...analyticsData.users.byMonth.map((m) => m.count)) > 0
-                              ? (item.count /
-                                  Math.max(
-                                    ...analyticsData.users.byMonth.map((m) => m.count)
-                                  )) *
-                                100
-                              : 0
-                          }%`,
-                        }}
-                      >
-                      <span className="text-[10px] font-bold text-primary-foreground">{item.count}</span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-          {/* Recent Projects */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Clock className="w-3 h-3 text-primary" />
+        {/* SECTION 5: RECENT PROJECTS */}
+        <div>
+          <div className="flex items-center gap-2 mb-4">
+            <div className="h-px flex-1 bg-border" />
+            <h2 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3">
               Recent Projects
-            </h3>
-              <div className="space-y-3">
-                {analyticsData.projects.recent.map((project, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b border-border pb-3 last:border-0"
-                  >
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-foreground">{project.name}</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {new Date(project.createdAt).toLocaleDateString()}
-                      </div>
-                    </div>
-                    <span
-                      className={`px-3 py-1 text-xs font-semibold ${
-                        project.status === "Completed"
-                          ? "bg-green-100 text-green-700"
-                          : project.status === "Ongoing"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-yellow-100 text-yellow-700"
-                      }`}
-                    >
-                      {project.status}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            </h2>
+            <div className="h-px flex-1 bg-border" />
+          </div>
 
-          {/* Recent Users */}
-          <div className="bg-card border border-border p-4">
-            <h3 className="text-xs font-semibold text-foreground uppercase tracking-wider mb-4 flex items-center gap-2">
-              <Users className="w-3 h-3 text-primary" />
-              Recent Users
-            </h3>
-              <div className="space-y-3">
-                {analyticsData.users.recent.map((user, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between border-b border-border pb-3 last:border-0"
-                  >
-                    <div className="flex-1">
-                      <div className="text-sm font-medium text-foreground">{user.name}</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        {user.role} • {new Date(user.createdAt).toLocaleDateString()}
-                      </div>
+          <div className="bg-card border border-border p-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {analyticsData.projects.recent.map((project, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 bg-muted/30 hover:bg-muted/50 transition-colors">
+                  <div className="w-1 h-12 shrink-0"
+                    style={{
+                      backgroundColor: project.status === 'Completed' ? '#16a34a' :
+                                     project.status === 'Ongoing' ? '#f97316' : '#3b82f6'
+                    }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-foreground truncate mb-1">{project.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {new Date(project.createdAt).toLocaleDateString('en-US', { 
+                        month: 'short', 
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
                     </div>
-                    <span
-                      className={`px-3 py-1 text-xs font-semibold ${
-                        user.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
                   </div>
-                ))}
+                  <div className={`px-2 py-1 text-[10px] font-semibold shrink-0 ${
+                    project.status === 'Completed' ? 'bg-green-100 text-green-700' :
+                    project.status === 'Ongoing' ? 'bg-orange-100 text-orange-700' :
+                    'bg-blue-100 text-blue-700'
+                  }`}>
+                    {project.status}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        {/* Additional Stats */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Globe className="w-3 h-3 text-primary" />
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Live Projects</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">
-              {analyticsData.projects.live}
-            </div>
-          </div>
-
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <Clock className="w-3 h-3 text-primary" />
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">In Planning</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">
-              {analyticsData.projects.planning}
-            </div>
-          </div>
-
-          <div className="bg-card border border-border p-4">
-            <div className="flex items-center gap-2 mb-1">
-              <PlayCircle className="w-3 h-3 text-primary" />
-              <span className="text-[10px] uppercase tracking-wide text-muted-foreground">Active Users</span>
-            </div>
-            <div className="text-xl font-bold text-foreground">
-              {analyticsData.users.active}
-            </div>
-          </div>
-        </div>
       </main>
     </div>
   );
