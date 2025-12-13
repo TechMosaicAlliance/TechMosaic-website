@@ -99,7 +99,7 @@ export default function Hero() {
             <div data-animation="hero-fade-in-y" className="opacity-0">
               <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#451842]/10 backdrop-blur-sm border border-[#451842]/20">
                 <Star className="w-4 h-4 text-[#451842] fill-[#451842]" />
-                <span className="text-xs sm:text-sm font-semibold text-white/90">20+ Years Excellence</span>
+                <span className="text-xs sm:text-sm font-semibold text-white/95 tracking-wide">Trusted Partner</span>
               </div>
             </div>
 
@@ -129,43 +129,58 @@ export default function Hero() {
 
             {/* Value Proposition - Clear & Concise */}
             <div data-animation="hero-fade-in-y" className="opacity-0 max-w-2xl">
-              <p className="text-lg sm:text-xl lg:text-2xl text-white/70 leading-relaxed font-light">
-                We deliver tailored digital solutions backed by two decades of industry expertise to help your business thrive.
+              <p className="text-lg sm:text-xl lg:text-2xl text-white/80 leading-relaxed font-normal">
+                We deliver tailored digital solutions backed by industry expertise to help your business thrive.
               </p>
             </div>
 
             {/* Social Proof Points */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 flex flex-wrap gap-6 sm:gap-8">
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-[#451842]" />
-                <span className="text-sm sm:text-base text-white/60 font-medium">500+ Projects</span>
+            <div data-animation="hero-fade-in-y" className="opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8">
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5 text-[#451842]" />
+                  <span className="text-3xl sm:text-4xl font-bold text-white">72+</span>
+                </div>
+                <span className="text-sm text-white/70 font-medium">Happy Clients</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-[#451842]" />
-                <span className="text-sm sm:text-base text-white/60 font-medium">98% Satisfaction</span>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5 text-[#451842]" />
+                  <span className="text-3xl sm:text-4xl font-bold text-white">128+</span>
+                </div>
+                <span className="text-sm text-white/70 font-medium">Successful Projects</span>
               </div>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-[#451842]" />
-                <span className="text-sm sm:text-base text-white/60 font-medium">Global Clients</span>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5 text-[#451842]" />
+                  <span className="text-3xl sm:text-4xl font-bold text-white">57+</span>
+                </div>
+                <span className="text-sm text-white/70 font-medium">Team Members</span>
+              </div>
+              <div className="flex flex-col">
+                <div className="flex items-center gap-2 mb-2">
+                  <CheckCircle className="w-5 h-5 text-[#451842]" />
+                  <span className="text-3xl sm:text-4xl font-bold text-white">99%</span>
+                </div>
+                <span className="text-sm text-white/70 font-medium">Customer Satisfaction</span>
               </div>
             </div>
 
             {/* Primary CTA - Conversion Focused */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 pt-4">
+            <div data-animation="hero-fade-in-y" className="opacity-0 pt-6">
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/contact"
-                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-[#451842] text-white overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl hover:shadow-[#451842]/50"
+                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-[#451842] text-white overflow-hidden transition-all duration-300 hover:bg-[#5a1f55] shadow-lg hover:shadow-xl hover:shadow-[#451842]/30"
                   aria-label="Get Started"
                 >
                   <span className="relative z-10">Get Started</span>
                   <ArrowRight className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#451842] to-[#5a1f55] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
 
                 <Link
                   href="/services"
-                  className="group inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-transparent text-white border-2 border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
+                  className="group inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:border-white/30 hover:bg-white/15 transition-all duration-300"
                   aria-label="View Services"
                 >
                   <span>View Services</span>
@@ -173,10 +188,10 @@ export default function Hero() {
                 </Link>
               </div>
             </div>
-
+            
             {/* Subtle Note */}
-            <div data-animation="hero-fade-in-y" className="opacity-0">
-              <p className="text-sm text-white/40">
+            <div data-animation="hero-fade-in-y" className="opacity-0 pt-2">
+              <p className="text-sm text-white/50">
                 Free consultation • No commitment required
               </p>
             </div>
