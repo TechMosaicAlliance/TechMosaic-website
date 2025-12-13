@@ -54,7 +54,10 @@ export default function OurBlog() {
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
 
       {/* Header Section */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
+      <div 
+        data-animation="trigger-fade-in-y"
+        className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16"
+      >
         <div className="space-y-4">
           {/* Eyebrow with accent */}
           <div className="flex items-center gap-3">
@@ -128,8 +131,8 @@ export default function OurBlog() {
 
                   {/* Content */}
                   <div className="flex flex-col flex-1 p-6 lg:p-7">
-                    {/* Title */}
-                    <h2 className="text-xl lg:text-2xl font-bold line-clamp-2 mb-4 text-neutral-900 group-hover:text-primary transition-colors duration-300 leading-tight">
+                    {/* Title - One Line Only */}
+                    <h2 className="text-xl lg:text-2xl font-bold line-clamp-1 mb-4 text-neutral-900 group-hover:text-primary transition-colors duration-300 leading-tight">
                       {item.title.rendered}
                     </h2>
 

@@ -89,6 +89,19 @@ export default function OurService() {
     }
   }, [open]);
 
+  // Update image when accordion item is clicked
+  useEffect(() => {
+    if (imageRef.current && data[open]) {
+      // Trigger image change animation
+      imageRef.current.style.transform = "scale(0.95)";
+      setTimeout(() => {
+        if (imageRef.current) {
+          imageRef.current.style.transform = "scale(1)";
+        }
+      }, 200);
+    }
+  }, [open, data]);
+
   return (
     <section className="relative container max-w-7xl px-4 py-16 lg:py-24 lg:px-6 overflow-hidden">
       {/* Subtle background decoration with brand color */}
@@ -97,7 +110,10 @@ export default function OurService() {
 
       <div className="relative z-10">
         {/* Header Section */}
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16">
+        <div 
+          data-animation="trigger-fade-in-y"
+          className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between mb-12 lg:mb-16"
+        >
           <div className="space-y-4">
             {/* Eyebrow with accent */}
             <div className="flex items-center gap-3">
@@ -107,12 +123,12 @@ export default function OurService() {
               </h3>
             </div>
 
-            {/* Main heading */}
-            <h1 className="text-4xl lg:text-6xl font-semibold leading-tight text-neutral-900 playfair-display">
-              Reliable and affordable
+            {/* Main heading - Bolder and Bigger */}
+            <h1 className="text-5xl lg:text-7xl font-bold leading-tight text-neutral-900 playfair-display">
+              Our Service
               <br className="hidden lg:block" />
-              <span className="text-primary">custom solutions</span>
-              <br className="hidden lg:block" /> that work
+              <span className="text-primary">Reliable and affordable</span>
+              <br className="hidden lg:block" /> custom solutions that work
             </h1>
           </div>
 
@@ -133,7 +149,10 @@ export default function OurService() {
         </div>
 
         {/* Main Content */}
-        <div className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-10 xl:gap-12">
+        <div 
+          data-animation="trigger-fade-in-y"
+          className="flex flex-col lg:flex-row items-stretch gap-6 lg:gap-10 xl:gap-12"
+        >
           {/* Services List - Left Side */}
           <div className="w-full lg:w-[48%] xl:w-[50%] h-[32rem] lg:h-[42rem] xl:h-[46rem] flex flex-col space-y-3 overflow-hidden">
             {data.map((item, idx) => (
@@ -196,7 +215,7 @@ export default function OurService() {
                       "overflow-hidden transition-all duration-500 ease-in-out",
                       open === idx ? "max-h-24 opacity-100" : "max-h-0 opacity-0"
                     )}>
-                      <p className="text-neutral-600 text-sm font-normal leading-relaxed pt-1">
+                      <p className="text-neutral-600 text-xs font-normal leading-relaxed pt-1">
                         {item.text}
                       </p>
                     </div>
@@ -204,6 +223,21 @@ export default function OurService() {
                 </div>
               </div>
             ))}
+            
+            {/* Explore Our Service Button Below Brand Design */}
+            {data.findIndex((item) => item.name === "Brand Design") !== -1 && (
+              <div className="mt-4 pt-4 border-t border-neutral-200/50">
+                <Link
+                  href="/services"
+                  className={cn(
+                    "group relative inline-flex items-center justify-center gap-2 w-full px-6 py-4 rounded-xl font-semibold text-sm bg-primary/10 hover:bg-primary text-primary hover:text-white border-2 border-primary/30 hover:border-primary transition-all duration-300 shadow-sm hover:shadow-md"
+                  )}
+                >
+                  <span>Explore Our Service</span>
+                  <ArrowRightSvg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Image Display - Right Side */}

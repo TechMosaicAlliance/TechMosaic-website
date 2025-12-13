@@ -19,7 +19,10 @@ export default function OurPortfolio() {
           <div className="absolute top-20 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
           <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
 
-          <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row lg:items-end justify-between mb-10 lg:mb-16">
+          <div 
+            data-animation="trigger-fade-in-y"
+            className="flex flex-col gap-6 lg:gap-0 lg:flex-row lg:items-end justify-between mb-10 lg:mb-16"
+          >
             <div className="space-y-4">
               {/* Eyebrow with accent */}
               <div className="flex items-center gap-3">
@@ -53,7 +56,10 @@ export default function OurPortfolio() {
             </div>
           </div>
 
-          <div className="overflow-x-auto bars pt-4 lg:pt-8">
+          <div 
+            data-animation="trigger-fade-in-y"
+            className="overflow-x-auto bars pt-4 lg:pt-8"
+          >
             <div className="lg:grid flex lg:grid-cols-3 gap-6 lg:gap-8">
               {data.length > 3
                 ? data

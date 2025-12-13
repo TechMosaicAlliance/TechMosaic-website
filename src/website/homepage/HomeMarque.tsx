@@ -83,18 +83,18 @@ export default function HomeMarque() {
                   key={item.id || idx}
                   className="group relative"
                 >
-                  {/* Card container with enhanced styling */}
-                  <div className="relative flex items-center justify-center px-8 py-6 rounded-xl bg-white/90 backdrop-blur-sm border-2 border-neutral-200/60 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-500">
-                    {/* Logo */}
+                  {/* Card container with enhanced styling - Increased height */}
+                  <div className="relative flex items-center justify-center px-8 py-8 lg:py-10 rounded-xl bg-white/90 backdrop-blur-sm border-2 border-neutral-200/60 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-500 min-h-[80px] lg:min-h-[100px]">
+                    {/* Logo - Increased height */}
                     <div
                       className={cn(
-                        "w-auto h-12 lg:h-14",
+                        "w-auto h-16 lg:h-20",
                         "opacity-50 grayscale contrast-75 transition-all duration-700 ease-out",
                         "group-hover:opacity-100 group-hover:grayscale-0 group-hover:contrast-100 group-hover:scale-110"
                       )}
                       style={{
-                        minWidth: '100px',
-                        maxWidth: '180px',
+                        minWidth: '120px',
+                        maxWidth: '220px',
                         backgroundImage: `url(${logoUrl})`,
                         backgroundSize: 'contain',
                         backgroundRepeat: 'no-repeat',

@@ -140,10 +140,10 @@ function FooterLinks() {
             </ul>
             <div className="pt-2">
               <a
-                href="https://tally.so"
+                href="https://tally.so/r/your-form-id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1"
+                className="group text-sm font-medium text-primary-foreground/75 hover:text-primary-foreground transition-all duration-300 inline-flex items-center gap-1.5 hover:translate-x-1 bg-primary-foreground/5 hover:bg-primary-foreground/10 px-4 py-2 rounded-lg border border-primary-foreground/10 hover:border-primary-foreground/20"
               >
                 <span>Fill Basic Biodata</span>
                 <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -163,9 +163,8 @@ function FooterLinks() {
               <li className="flex items-start gap-3 group">
                 <MapPin className="w-4 h-4 mt-0.5 text-primary-foreground/60 group-hover:text-primary-foreground transition-colors duration-300 flex-shrink-0" />
                 <span className="leading-relaxed">
-                  Herbert Macaulay Street,
-                  <br /> Plot C36 Penthouse Estate,
-                  <br /> Lugbe East Extension, F.C.T, Nigeria
+                  {/* Updated address - Please provide the new address */}
+                  [New Address Here]
                 </span>
               </li>
               <li className="flex items-center gap-3">

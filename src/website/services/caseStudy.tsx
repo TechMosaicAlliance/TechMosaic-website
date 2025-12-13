@@ -15,7 +15,10 @@ export default function CaseStudy() {
     <>
       {data && data?.length > 0 ? (
         <section className="container max-w-7xl p-4 pt-[4rem] lg:pt-[7rem]">
-          <div className="flex flex-col gap-4 lg:gap-0  lg:flex-row lg:items-end justify-between">
+          <div 
+            data-animation="trigger-fade-in-y"
+            className="flex flex-col gap-4 lg:gap-0  lg:flex-row lg:items-end justify-between"
+          >
             <div className="grid gap-4">
               <h3 className="tracking-wider">CASE STUDY</h3>
               <h1 className="lg:text-5xl text-3xl">
@@ -47,7 +50,10 @@ export default function CaseStudy() {
             </div>
           </div>
 
-          <div className="pt-[4rem]">
+          <div 
+            data-animation="trigger-fade-in-y"
+            className="pt-[4rem]"
+          >
             <div className="grid lg:grid-cols-3 gap-4">
               {data.length > 3
                 ? data
@@ -67,22 +73,25 @@ export default function CaseStudy() {
 function Card({ item }: { item: any }) {
   return (
     <Link href={`/casestudy/${item.id}`}>
-      <article className="grid overflow-hidden gap-2">
-        <div className="h-[19rem] group overflow-hidden relative w-full">
+      <article className="grid overflow-hidden gap-4 group">
+        <div className="h-[19rem] overflow-hidden relative w-full rounded-lg">
           <BlurImage
-            className="object-cover  group-hover:scale-125  transition-transform"
+            className="object-cover group-hover:scale-110 transition-transform duration-700"
             fill
             alt={item?.title?.rendered}
             src={item?.acf?.thumbnail}
           />
-          <div className="absolute w-full  text-[#FCFCFC] transition-all duration-500 cursor-pointer overflow-hidden group-hover:h-full h-[30rem] top-0 bottom-0">
-            <div className="pt-1 relative z-10 items-center text-center p-4  h-full justify-end pb-14 flex flex-col gap-1">
-              <h1 className="text-2xl line-clamp-2 font-medium">
-                {item.title?.rendered}
-              </h1>
-              <p className="text-sm line-clamp-3">{item.acf.text}</p>
-            </div>
-          </div>
+          {/* Gradient overlay for better text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+        </div>
+        {/* Text content always visible below image */}
+        <div className="grid gap-2">
+          <h1 className="text-xl lg:text-2xl font-semibold text-neutral-900 group-hover:text-primary transition-colors duration-300 line-clamp-2">
+            {item.title?.rendered}
+          </h1>
+          <p className="text-sm lg:text-base text-neutral-700 line-clamp-3 leading-relaxed">
+            {item.acf.text}
+          </p>
         </div>
       </article>
     </Link>

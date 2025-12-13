@@ -44,8 +44,15 @@ export default function Hero() {
         ease: Power4.easeOut,
         onStart: () => {
           wordRef.current.textContent = word.text;
-          wordRef.current.className = `relative inline-flex items-center justify-center italic playfair-display text-custom-conic-gradient px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl bg-white/10 backdrop-blur-md border-2 border-[#f27121] shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap`;
-          wordRef.current.style.boxShadow = "0 8px 32px 0 rgba(242, 113, 33, 0.4)";
+          wordRef.current.className = `relative inline-flex items-center justify-center italic playfair-display px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border-2 shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap`;
+          wordRef.current.style.background = "linear-gradient(135deg, #f27121 0%, #e94057 100%)";
+          wordRef.current.style.WebkitBackgroundClip = "text";
+          wordRef.current.style.WebkitTextFillColor = "transparent";
+          wordRef.current.style.backgroundClip = "text";
+          wordRef.current.style.borderColor = "#f27121";
+          wordRef.current.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
+          wordRef.current.style.boxShadow = "0 8px 32px 0 rgba(242, 113, 33, 0.5)";
+          wordRef.current.style.color = "#f27121";
         },
       })
         .to({}, { duration: 1 })
@@ -110,8 +117,18 @@ export default function Hero() {
                   <span className="relative inline-flex items-center justify-center ml-2 sm:ml-3 md:ml-4">
                     <span
                       ref={wordRef}
-                      className="relative inline-flex items-center justify-center italic playfair-display text-custom-conic-gradient px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl bg-white/10 backdrop-blur-md border-2 border-[#f27121] shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap"
-                      style={{ transform: "translateY(100%)", boxShadow: "0 8px 32px 0 rgba(242, 113, 33, 0.4)" }}
+                      className="relative inline-flex items-center justify-center italic playfair-display px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border-2 shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap"
+                      style={{ 
+                        transform: "translateY(100%)", 
+                        background: "linear-gradient(135deg, #f27121 0%, #e94057 100%)",
+                        WebkitBackgroundClip: "text",
+                        WebkitTextFillColor: "transparent",
+                        backgroundClip: "text",
+                        borderColor: "#f27121",
+                        backgroundColor: "rgba(255, 255, 255, 0.95)",
+                        boxShadow: "0 8px 32px 0 rgba(242, 113, 33, 0.5)",
+                        color: "#f27121"
+                      }}
                     >
                       {words[0].text}
                     </span>
@@ -129,30 +146,52 @@ export default function Hero() {
               </p>
             </div>
 
-            {/* CTA Buttons with Enhanced Visibility */}
+            {/* CTA Buttons with Enhanced Visibility and Responsiveness */}
             <div
               data-animation="hero-fade-in-y"
               className="opacity-0 flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2"
             >
-              {/* Primary CTA - Enhanced */}
+              {/* Primary CTA - More Button-like with Better Hover */}
               <Link
                 href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_12px_36px_rgba(69,24,66,0.6)] transition-all duration-300 ease-out hover:-translate-y-0.5 shadow-lg w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_12px_36px_rgba(69,24,66,0.6)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg w-full sm:w-auto cursor-pointer"
                 aria-label="Get Started - Contact Us"
               >
-                <span>Get Started</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                <span className="relative z-10">Get Started</span>
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
+                <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-white/0 group-hover:bg-white/10 transition-all duration-300" />
               </Link>
 
               {/* Secondary CTA - Enhanced */}
               <Link
                 href="/services"
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border-2 border-[#f27121]/70 hover:bg-white/15 hover:border-[#f27121] hover:shadow-[0_12px_32px_rgba(242,113,33,0.4)] transition-all duration-300 ease-out shadow-md w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border-2 border-[#f27121]/70 hover:bg-white/20 hover:border-[#f27121] hover:shadow-[0_12px_32px_rgba(242,113,33,0.4)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-md w-full sm:w-auto cursor-pointer"
                 aria-label="View Our Services"
               >
-                <span>What We Do</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                <span className="relative z-10">What We Do</span>
+                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
+                <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-white/0 group-hover:bg-white/10 transition-all duration-300" />
               </Link>
+            </div>
+            
+            {/* Scroll Down Button - Replaced Arrow with Button */}
+            <div
+              data-animation="hero-fade-in-y"
+              className="opacity-0 flex justify-center mt-8 sm:mt-12"
+            >
+              <button
+                onClick={() => {
+                  const nextSection = document.querySelector('.hero-section')?.nextElementSibling;
+                  nextSection?.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="group relative flex flex-col items-center gap-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110 active:scale-95"
+                aria-label="Scroll to next section"
+              >
+                <span className="text-xs font-semibold uppercase tracking-wider">Scroll Down</span>
+                <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border-2 border-white/30 hover:border-white/60 hover:bg-white/20 flex items-center justify-center transition-all duration-300 group-hover:shadow-lg">
+                  <ArrowRight className="w-5 h-5 rotate-90 transition-transform duration-300 group-hover:translate-y-1" strokeWidth={2.5} />
+                </div>
+              </button>
             </div>
           </div>
         </section>

@@ -7,6 +7,7 @@ import OurPortfolio from "./OurPortfolio";
 import { companyMarqueeData, productMarqueeData } from "@/services/dummyData";
 import OurBlog from "./OurBlog";
 import HomeMarque from "./HomeMarque";
+import CaseStudy from "../services/caseStudy";
 
 export default function HomePage() {
   return (
@@ -15,6 +16,7 @@ export default function HomePage() {
       <HomeMarque />
       <OurService />
       <OurPortfolio />
+      <CaseStudy />
       <Marquee>
         <div className="flex lg:pt-[4rem] lg:pb-[2rem] gap-8 lg:gap-12 items-center">
           {productMarqueeData.map((item, idx) => (
