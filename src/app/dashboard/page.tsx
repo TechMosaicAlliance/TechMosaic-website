@@ -165,18 +165,20 @@ export default function DashboardPage() {
 
             {/* Settings - Super Admin Only */}
             {permissions?.canAccessSettings && (
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <Settings className="w-7 h-7 text-white" />
+              <Link href="/admin/settings">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Settings className="w-7 h-7 text-white" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Settings</h4>
+                  <p className="text-sm text-gray-600">
+                    Configure system settings
+                  </p>
+                  <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                    Super Admin Only
+                  </span>
                 </div>
-                <h4 className="text-lg font-bold text-gray-900 mb-2">Settings</h4>
-                <p className="text-sm text-gray-600">
-                  Configure system settings
-                </p>
-                <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
-                  Super Admin Only
-                </span>
-              </div>
+              </Link>
             )}
           </div>
         </div>

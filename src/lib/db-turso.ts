@@ -66,6 +66,17 @@ export async function initializeSchema() {
       )
     `);
 
+    // Create settings table
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS settings (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        key TEXT UNIQUE NOT NULL,
+        value TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create indexes
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
@@ -74,6 +85,7 @@ export async function initializeSchema() {
     await db.execute('CREATE INDEX IF NOT EXISTS idx_projects_status ON projects(status)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_projects_impact_area ON projects(impact_area)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_projects_service_type ON projects(service_type)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key)');
 
     console.log('Turso database schema initialized successfully');
   } catch (error) {
