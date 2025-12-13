@@ -161,11 +161,8 @@ export default function LoginPage() {
           {/* Default Credentials Info */}
           <div className="mt-8 p-4 rounded-xl bg-blue-50 border border-blue-200">
             <p className="text-xs font-semibold text-blue-900 mb-2">
-              Default Credentials:
             </p>
             <div className="space-y-1 text-xs text-blue-700">
-              <p>• Email: <span className="font-mono">superadmin@techmosaic.com</span></p>
-              <p>• Password: <span className="font-mono">admin123</span></p>
             </div>
           </div>
 
