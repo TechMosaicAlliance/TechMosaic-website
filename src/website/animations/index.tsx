@@ -238,12 +238,8 @@ export const useHeroAnimation = (props?: Iprops) => {
           stagger: { each: 0.15, grid: [1, 3] },
           overwrite: true,
         }),
-      onLeave: (batch) =>
-        gsap.set(batch, { opacity: 0, y: -100, overwrite: true }),
       onEnterBack: (batch) =>
         gsap.to(batch, { opacity: 1, y: 0, stagger: 0.15, overwrite: true }),
-      onLeaveBack: (batch) =>
-        gsap.set(batch, { opacity: 0, y: 50, overwrite: true }),
     });
 
     ScrollTrigger.batch('[data-animation="scroll-fade-in-y"]', {
