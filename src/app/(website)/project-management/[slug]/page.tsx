@@ -44,6 +44,7 @@ export default function ProjectDetailPage() {
   const [project, setProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [similarProjects, setSimilarProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     fetchProject();
@@ -66,11 +67,56 @@ export default function ProjectDetailPage() {
       
       const data = await response.json();
       setProject(data.project);
+      
+      // Fetch similar projects after getting the current project
+      if (data.project) {
+        fetchSimilarProjects(data.project);
+      }
     } catch (error) {
       console.error('Error fetching project:', error);
       setError("Failed to load project");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchSimilarProjects = async (currentProject: Project) => {
+    try {
+      // Fetch projects with same impact area or service type, excluding current project
+      const params = new URLSearchParams();
+      if (currentProject.impactArea) {
+        params.append('impactArea', currentProject.impactArea);
+      }
+      
+      const response = await fetch(`/api/projects?${params.toString()}`);
+      if (!response.ok) throw new Error('Failed to fetch similar projects');
+      
+      const data = await response.json();
+      // Filter out current project and limit to 2
+      const similar = data.projects
+        .filter((p: Project) => p.slug !== currentProject.slug)
+        .slice(0, 2);
+      
+      // If we don't have 2 projects, try fetching by service type
+      if (similar.length < 2 && currentProject.serviceType) {
+        const serviceParams = new URLSearchParams();
+        serviceParams.append('serviceType', currentProject.serviceType);
+        const serviceResponse = await fetch(`/api/projects?${serviceParams.toString()}`);
+        if (serviceResponse.ok) {
+          const serviceData = await serviceResponse.json();
+          const additionalProjects = serviceData.projects
+            .filter((p: Project) => 
+              p.slug !== currentProject.slug && 
+              !similar.some((sp: Project) => sp.slug === p.slug)
+            )
+            .slice(0, 2 - similar.length);
+          similar.push(...additionalProjects);
+        }
+      }
+      
+      setSimilarProjects(similar);
+    } catch (error) {
+      console.error('Error fetching similar projects:', error);
     }
   };
 
@@ -366,22 +412,119 @@ export default function ProjectDetailPage() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Interested in Similar Projects?
-          </h2>
-          <p className="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
-            Explore more of our work and see how we&apos;re making a global impact
-          </p>
-          <Link href="/project-management">
-            <Button size="lg" variant="secondary">
-              View All Projects
-            </Button>
-          </Link>
-        </div>
-      </section>
+      {/* Similar Projects Section */}
+      {similarProjects.length > 0 && (
+        <section className="bg-gray-50 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+                Interested in Similar Projects?
+              </h2>
+              <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                Explore more of our work and see how we&apos;re making a global impact
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              {similarProjects.map((similarProject) => (
+                <Link
+                  key={similarProject.id}
+                  href={`/project-management/${similarProject.slug}`}
+                  className="group"
+                >
+                  <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
+                    {/* Project Image */}
+                    <div className="h-56 bg-gray-200 relative overflow-hidden">
+                      <div className="absolute inset-0 bg-primary/20 group-hover:opacity-0 transition-opacity"></div>
+                      {similarProject.image ? (
+                        <Image
+                          src={similarProject.image}
+                          alt={similarProject.name}
+                          width={600}
+                          height={400}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-6xl font-bold text-white/20">
+                            {similarProject.name.charAt(0)}
+                          </span>
+                        </div>
+                      )}
+                      
+                      {/* Status Badge */}
+                      <div className="absolute top-4 right-4">
+                        <span
+                          className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold border backdrop-blur-sm ${getStatusColor(
+                            similarProject.status
+                          )}`}
+                        >
+                          {getStatusIcon(similarProject.status)}
+                          {similarProject.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Project Info */}
+                    <div className="p-6">
+                      <div className="mb-4">
+                        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors">
+                          {similarProject.name}
+                        </h3>
+                        
+                        {/* Client */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600 mb-2">
+                          <Building2 className="w-4 h-4" />
+                          <span>{similarProject.client}</span>
+                        </div>
+
+                        {/* Date */}
+                        <div className="flex items-center gap-2 text-sm text-gray-600">
+                          <Calendar className="w-4 h-4" />
+                          <span>
+                            {new Date(similarProject.date).toLocaleDateString("en-US", {
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Project Overview */}
+                      {similarProject.projectOverview && (
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+                          {similarProject.projectOverview}
+                        </p>
+                      )}
+
+                      {/* Service Type Tag */}
+                      <div className="mb-4">
+                        <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-xs font-medium rounded-full">
+                          {similarProject.serviceType}
+                        </span>
+                      </div>
+
+                      {/* View Project Link */}
+                      <div className="flex items-center gap-2 text-primary font-semibold text-sm group-hover:gap-3 transition-all">
+                        <span>View Project</span>
+                        <ExternalLink className="w-4 h-4" />
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link href="/project-management">
+                <Button size="lg" variant="outline">
+                  View All Projects
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
