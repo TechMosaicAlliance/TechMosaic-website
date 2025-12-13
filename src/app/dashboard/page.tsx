@@ -152,15 +152,17 @@ export default function DashboardPage() {
 
             {/* Analytics */}
             {permissions?.canViewAnalytics && (
-              <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                  <BarChart3 className="w-7 h-7 text-white" />
+              <Link href="/dashboard/analytics">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <BarChart3 className="w-7 h-7 text-white" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Analytics</h4>
+                  <p className="text-sm text-gray-600">
+                    View system analytics and reports
+                  </p>
                 </div>
-                <h4 className="text-lg font-bold text-gray-900 mb-2">Analytics</h4>
-                <p className="text-sm text-gray-600">
-                  View system analytics and reports
-                </p>
-              </div>
+              </Link>
             )}
 
             {/* Settings - Super Admin Only */}

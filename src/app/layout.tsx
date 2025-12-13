@@ -7,6 +7,7 @@ import Providers from "./providers";
 import { Toaster } from "sonner";
 import ScrollToTopButton, { ScrollHack } from "@/components/ui/scrollbutton";
 import { GoogleTagManagerScript, GoogleTagManagerNoscript } from "@/components/GoogleTagManager";
+import { PageTracker } from "@/components/PageTracker";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -35,6 +36,7 @@ export default function RootLayout({
         <GoogleTagManagerScript />
         <GoogleTagManagerNoscript />
         <Providers>
+          <PageTracker />
           <Toaster closeButton position="top-right" richColors />
           <ScrollToTopButton />
           <ScrollHack />

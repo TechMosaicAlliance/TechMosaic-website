@@ -77,6 +77,20 @@ export async function initializeSchema() {
       )
     `);
 
+    // Create page_visits table for analytics
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS page_visits (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        page_path TEXT NOT NULL,
+        page_title TEXT,
+        referrer TEXT,
+        user_agent TEXT,
+        visitor_id TEXT,
+        session_id TEXT,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create indexes
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
@@ -86,6 +100,8 @@ export async function initializeSchema() {
     await db.execute('CREATE INDEX IF NOT EXISTS idx_projects_impact_area ON projects(impact_area)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_projects_service_type ON projects(service_type)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_path ON page_visits(page_path)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_created ON page_visits(created_at)');
 
     console.log('Turso database schema initialized successfully');
   } catch (error) {
