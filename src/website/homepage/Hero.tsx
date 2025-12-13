@@ -76,7 +76,7 @@ export default function Hero() {
   return (
     <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] min-h-[700px] sm:min-h-[800px] relative overflow-hidden bg-white">
       <Navbar />
-      <div className="grid grid-cols-1 grid-rows-1 relative">
+      <div className="grid grid-cols-1 grid-rows-1 relative my-8 sm:my-12 lg:my-16 mx-4 sm:mx-6 lg:mx-8 rounded-2xl overflow-hidden">
         {/* Background Image */}
         <Image
           priority
