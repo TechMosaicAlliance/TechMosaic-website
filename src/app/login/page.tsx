@@ -159,12 +159,7 @@ export default function LoginPage() {
           </form>
 
           {/* Default Credentials Info */}
-          <div className="mt-8 p-4 rounded-xl bg-blue-50 border border-blue-200">
-            <p className="text-xs font-semibold text-blue-900 mb-2">
-            </p>
-            <div className="space-y-1 text-xs text-blue-700">
-            </div>
-          </div>
+        
 
           {/* Footer */}
           <p className="text-center text-xs text-gray-500">
