@@ -7,7 +7,7 @@ import React from "react";
 
 export default function OurMission() {
   return (
-    <section className="pb-14 grid gap-10 p-4 max-w-7xl container mx-auto pt-[4rem]">
+    <section className="py-16 lg:py-24 grid gap-16 lg:gap-20 p-4 max-w-7xl container mx-auto">
       <div className=" flex-col lg:flex-row items-center gap-10 justify-between flex ">
         <div className="grid gap-4">
           <div
@@ -90,7 +90,7 @@ export default function OurMission() {
           </p>
 
           <Link href="/career">
-            <Button className="border-white group  mt-3 w-fit border">
+            <Button className="bg-primary hover:bg-primary/90 text-white group mt-3 w-fit">
               JOIN OUR TEAM
               <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
             </Button>

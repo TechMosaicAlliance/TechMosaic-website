@@ -25,15 +25,15 @@ export default function OurTeamView() {
   return (
     <>
       {data && data.length > 0 ? (
-        <section className="container max-w-7xl p-4 pt-[8rem] mx-auto">
-          <div className="grid gap-3 ">
-            <p className="tracking-wider">OUR TEAM</p>
+        <section className="container max-w-7xl p-4 py-16 lg:py-24 mx-auto">
+          <div className="grid gap-3 mb-12 lg:mb-16">
+            <p className="tracking-wider text-sm lg:text-base">OUR TEAM</p>
             <h2 className="lg:text-5xl text-4xl lg:leading-[3.5rem] font-medium">
               Humans of
               <br className="hidden lg:block" /> TechMosaic
             </h2>
           </div>
-          <div className="pt-[4rem]">
+          <div>
             <div className="grid lg:grid-cols-3 gap-4">
               {data.map((item, idx) => (
                 <article key={idx} className="flex flex-col ">

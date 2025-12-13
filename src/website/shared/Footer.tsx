@@ -376,7 +376,7 @@ function NewsLetterFooter() {
                 <button
                   type="submit"
                   disabled={isPending}
-                  className="absolute right-2 p-3 rounded-xl bg-white hover:bg-white/90 text-primary font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
+                  className="absolute right-2 p-3 rounded-xl bg-primary hover:bg-primary/90 text-white font-semibold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-105 active:scale-95"
                   aria-label="Subscribe to newsletter"
                 >
                   {isPending ? (
@@ -533,7 +533,7 @@ function ContactUsFooter() {
                 <Button
                   disabled={isPending}
                   type="submit"
-                  className="w-full text-white bg-white hover:bg-white/90 text-black font-semibold py-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full text-white bg-primary hover:bg-primary/90 font-semibold py-6 rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98]"
                 >
                   {isPending ? (
                     <>

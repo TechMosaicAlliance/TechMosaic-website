@@ -10,7 +10,7 @@ const data = [
         <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
           {val}
         </h1>
-        <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
+        <p className="text-2xl lg:text-4xl font-medium text-primary">+</p>
       </div>
     ),
     text: "Happy Clients",
@@ -21,7 +21,7 @@ const data = [
         <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
           {val}
         </h1>
-        <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
+        <p className="text-2xl lg:text-4xl font-medium text-primary">+</p>
       </div>
     ),
     text: "Successful projects",
@@ -32,7 +32,7 @@ const data = [
         <h1 data-count={val} className="text-3xl lg:text-5xl font-medium">
           {val}
         </h1>
-        <p className="text-2xl lg:text-4xl font-medium text-red-500">+</p>
+        <p className="text-2xl lg:text-4xl font-medium text-primary">+</p>
       </div>
     ),
     text: "Team members",
@@ -43,7 +43,7 @@ const data = [
         <h1 data-count={val} className=" text-3xl lg:text-5xl font-medium">
           {val}
         </h1>
-        <p className=" text-2xl lg:text-4xl font-medium text-red-500">%</p>
+        <p className=" text-2xl lg:text-4xl font-medium text-primary">%</p>
       </div>
     ),
     text: "Customer satisfaction",
@@ -76,16 +76,16 @@ export default function OurResults() {
     return <div></div>;
   }
   return (
-    <section className="lg:pt-[3rem]">
-      <div className=" text-center mx-auto">
+    <section className="py-16 lg:py-24 bg-gray-50/50">
+      <div className="container max-w-7xl mx-auto px-4 text-center">
         <h1
           data-animation="fade-in-y"
-          className="text-xl font-medium md:font-normal opacity-0"
+          className="text-xl font-medium md:font-normal opacity-0 mb-8 lg:mb-12"
         >
           Our results in numbers
         </h1>
 
-        <div className="flex gap-5 justify-center pt-5 items-center lg:gap-20">
+        <div className="flex flex-wrap gap-8 lg:gap-20 justify-center items-center">
           {data.map((item, idx) => (
             <div
               key={idx}

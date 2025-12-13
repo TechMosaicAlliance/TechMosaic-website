@@ -65,79 +65,91 @@ export function ContactView() {
           </p>
         </div>
 
-        <div className=" bg-white p-4 rounded-xl border max-w-lg">
-          <form onSubmit={handleSubmit}>
-            <input
-              required
-              name="fullName"
-              value={formData.fullName}
-              onChange={handleChange}
-              placeholder="Full Name"
-              className=" h-[5rem] p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-            />
-            <input
-              required
-              name="phoneNumber"
-              value={formData.phoneNumber}
-              onChange={handleChange}
-              placeholder="Phone Number"
-              className=" h-[5rem] p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-            />
-            <input
-              required
-              name="companyName"
-              value={formData.companyName}
-              onChange={handleChange}
-              placeholder="Company Name"
-              className=" h-[5rem] p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-            />
-            <input
-              required
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Email Address"
-              className=" h-[5rem] p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-            />
-            <textarea
-              required
-              name="projectDetails"
-              value={formData.projectDetails}
-              onChange={handleChange}
-              placeholder="Tell us about your project"
-              className=" min-h-[5rem]  p-4 pt-10 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-            />
+        <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-lg max-w-lg">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <input
+                required
+                name="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                placeholder="Full Name"
+                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+              />
+            </div>
+            <div>
+              <input
+                required
+                name="phoneNumber"
+                value={formData.phoneNumber}
+                onChange={handleChange}
+                placeholder="Phone Number"
+                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+              />
+            </div>
+            <div>
+              <input
+                required
+                name="companyName"
+                value={formData.companyName}
+                onChange={handleChange}
+                placeholder="Company Name"
+                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+              />
+            </div>
+            <div>
+              <input
+                required
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="Email Address"
+                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+              />
+            </div>
+            <div>
+              <textarea
+                required
+                name="projectDetails"
+                value={formData.projectDetails}
+                onChange={handleChange}
+                placeholder="Tell us about your project"
+                rows={4}
+                className="w-full min-h-[120px] px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300 resize-none"
+              />
+            </div>
 
-            <div className="pt-[3rem]">
-              <div className="flex space-x-2">
+            <div className="pt-6">
+              <div className="flex items-start space-x-3 mb-6">
                 <input
                   id="terms"
                   type="checkbox"
                   name="termsAccepted"
                   checked={formData.termsAccepted}
                   onChange={handleChange}
-                  className="mt-1"
+                  className="mt-1 w-4 h-4 rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
                 />
                 <div className="max-w-md">
                   <label
                     htmlFor="terms"
-                    className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-sm font-medium text-gray-600 cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    <p className="text-black/60">
-                      By clicking submit, you agree to receive marketing and
-                      sales communication via email and call from us.
-                    </p>
+                    By clicking submit, you agree to receive marketing and
+                    sales communication via email and call from us.
                   </label>
                 </div>
               </div>
               <Button
                 disabled={isPending}
                 type="submit"
-                className="bg-black mt-10 w-full text-xs"
+                className="bg-primary hover:bg-primary/90 text-white font-semibold mt-4 w-full h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isPending ? (
-                  <Loader2 size={17} className="animate-spin ml-1" />
+                  <>
+                    <Loader2 size={17} className="animate-spin mr-2" />
+                    Sending...
+                  </>
                 ) : (
                   "SEND MESSAGE"
                 )}

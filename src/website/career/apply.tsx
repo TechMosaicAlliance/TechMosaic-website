@@ -105,63 +105,75 @@ export function ApplyView({
         </p>
       </div>
       <div className="pt-10">
-        <form onSubmit={handleSubmit}>
-          <input
-            required
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            placeholder="Full Name"
-            className=" h-[5rem] px-0 p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-          />
-          <input
-            required
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-            placeholder="Phone Number"
-            className=" h-[5rem] px-0 p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-          />
-          <input
-            required
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            placeholder="Email Address"
-            className=" h-[5rem] px-0 p-4 pb-5 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-          />
-          <textarea
-            required
-            name="why_do_you"
-            value={formData.why_do_you}
-            onChange={handleChange}
-            placeholder="Why do you want to work here"
-            className="min-h-[5rem] px-0 p-4 pt-10 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-          />
-          <textarea
-            required
-            name="about_you"
-            value={formData.about_you}
-            onChange={handleChange}
-            placeholder="Tell us about yourself"
-            className="min-h-[5rem] px-0 p-4 pt-10 border-b focus:outline-none focus:border-black/30 bg-transparent outline-none w-full"
-          />
+        <form onSubmit={handleSubmit} className="space-y-4 max-w-2xl">
+          <div>
+            <input
+              required
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              placeholder="Full Name"
+              className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+            />
+          </div>
+          <div>
+            <input
+              required
+              name="phone"
+              value={formData.phone}
+              onChange={handleChange}
+              placeholder="Phone Number"
+              className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+            />
+          </div>
+          <div>
+            <input
+              required
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Email Address"
+              className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
+            />
+          </div>
+          <div>
+            <textarea
+              required
+              name="why_do_you"
+              value={formData.why_do_you}
+              onChange={handleChange}
+              placeholder="Why do you want to work here"
+              rows={4}
+              className="w-full min-h-[120px] px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300 resize-none"
+            />
+          </div>
+          <div>
+            <textarea
+              required
+              name="about_you"
+              value={formData.about_you}
+              onChange={handleChange}
+              placeholder="Tell us about yourself"
+              rows={4}
+              className="w-full min-h-[120px] px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300 resize-none"
+            />
+          </div>
 
           {/* File Upload Section */}
           <div className="mt-6">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
               Upload CV
             </label>
-            <div className="flex items-center space-x-4 mt-2">
+            <div className="flex items-center space-x-4">
               <button
                 type="button"
                 onClick={triggerFileInput}
-                className="px-4 py-2 bg-black text-white text-sm rounded shadow hover:bg-slate-900 focus:outline-none"
+                className="px-6 py-3 bg-primary hover:bg-primary/90 text-white text-sm font-semibold rounded-xl shadow-lg focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 hover:scale-105 active:scale-95"
               >
                 Choose File
               </button>
-              <span className="text-gray-500 text-sm">
+              <span className="text-gray-600 text-sm">
                 {cvFileName || "No file chosen"}
               </span>
             </div>
@@ -174,34 +186,35 @@ export function ApplyView({
             />
           </div>
 
-          <div className="pt-[1rem]">
-            <div className="flex space-x-2">
+          <div className="pt-6">
+            <div className="flex items-start space-x-3 mb-6">
               <input
                 id="terms"
                 type="checkbox"
                 name="termsAccepted"
                 checked={formData.termsAccepted}
                 onChange={handleChange}
-                className="mt-1"
+                className="mt-1 w-4 h-4 rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
               />
               <label
                 htmlFor="terms"
-                className="text-sm font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-medium text-gray-600 cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
-                <p className="text-black/60">
-                  By submitting this application, I agree that I have read the
-                  Privacy Policy and confirm that Tech Mosaic can store my
-                  personal details to be able to process my job application.
-                </p>
+                By submitting this application, I agree that I have read the
+                Privacy Policy and confirm that Tech Mosaic can store my
+                personal details to be able to process my job application.
               </label>
             </div>
             <Button
               disabled={isPending}
               type="submit"
-              className="bg-black mt-4 text-xs"
+              className="bg-primary hover:bg-primary/90 text-white font-semibold w-full h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isPending ? (
-                <Loader2 size={17} className="animate-spin ml-1" />
+                <>
+                  <Loader2 size={17} className="animate-spin mr-2" />
+                  Submitting...
+                </>
               ) : (
                 "APPLY"
               )}

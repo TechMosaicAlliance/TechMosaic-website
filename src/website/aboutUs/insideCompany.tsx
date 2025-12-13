@@ -6,7 +6,7 @@ import { useGetContents } from "../hooks";
 export default function InsideMosaicCompany() {
   const { data: contentData, isPending } = useGetContents();
   return (
-    <section className="container max-w-7xl p-4 pt-[2rem] lg:pt-[4rem] mx-auto">
+    <section className="container max-w-7xl p-4 py-16 lg:py-24 mx-auto">
       <div className="grid ">
         <p
           data-animation="trigger-fade-in-y"

@@ -25,8 +25,8 @@ const data = [
 
 export default function AboutUsHero() {
   return (
-    <section className="pb-14">
-      <div className="container max-w-7xl p-4 items-center gap-10 justify-between flex pt-[5rem] mx-auto">
+    <section className="pb-20 lg:pb-28">
+      <div className="container max-w-7xl p-4 items-center gap-10 justify-between flex pt-[5rem] lg:pt-[6rem] mx-auto">
         <div className="grid gap-4">
           <div className="grid gap-4">
             <p data-animation="fade-in-y" className="tracking-wider opacity-0">
