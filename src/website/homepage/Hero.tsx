@@ -2,63 +2,44 @@
 import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import Navbar from "../shared/Navbar";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, CheckCircle, Star } from "lucide-react";
 import { useHeroAnimation } from "../animations";
-import TextPlugin from "gsap/TextPlugin";
 import gsap, { Power4, Power2 } from "gsap";
 import Link from "next/link";
 
 const words = [
-  {
-    text: "Web Development",
-    style: "italic playfair-display font-semibold text-custom-conic-gradient",
-  },
-  {
-    text: "Brand Design",
-    style: "italic playfair-display  font-semibold text-custom-conic-gradient",
-  },
-  {
-    text: "Project Management",
-    style: "italic playfair-display  font-semibold text-custom-conic-gradient",
-  },
-  {
-    text: "Creative Writing",
-    style: "italic playfair-display font-semibold text-custom-conic-gradient",
-  },
-  {
-    text: "UI/UX",
-    style: "italic playfair-display font-semibold text-custom-conic-gradient",
-  },
+  "Web Development",
+  "Brand Design",
+  "Project Management",
+  "Creative Strategy",
+  "UI/UX Design",
 ];
 
-gsap.registerPlugin(TextPlugin);
 export default function Hero() {
   useHeroAnimation();
-  const wordRef = useRef<any>(null);
+  const wordRef = useRef<HTMLSpanElement>(null);
+  
   useEffect(() => {
+    if (!wordRef.current) return;
+    
     const tl = gsap.timeline({ repeat: -1 });
-    words.forEach((word, index) => {
+    words.forEach((word) => {
       tl.to(wordRef.current, {
-        duration: 1,
+        duration: 0.8,
         y: "0%",
+        opacity: 1,
         ease: Power4.easeOut,
         onStart: () => {
-          wordRef.current.textContent = word.text;
-          wordRef.current.className = `relative inline-flex items-center justify-center italic playfair-display px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border-2 shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap`;
-          wordRef.current.style.background = "linear-gradient(135deg, #f27121 0%, #e94057 100%)";
-          wordRef.current.style.WebkitBackgroundClip = "text";
-          wordRef.current.style.WebkitTextFillColor = "transparent";
-          wordRef.current.style.backgroundClip = "text";
-          wordRef.current.style.borderColor = "#f27121";
-          wordRef.current.style.backgroundColor = "rgba(255, 255, 255, 0.95)";
-          wordRef.current.style.boxShadow = "0 8px 32px 0 rgba(242, 113, 33, 0.5)";
-          wordRef.current.style.color = "#f27121";
+          if (wordRef.current) {
+            wordRef.current.textContent = word;
+          }
         },
       })
-        .to({}, { duration: 1 })
+        .to({}, { duration: 1.5 })
         .to(wordRef.current, {
-          duration: 0.1,
-          y: "100%",
+          duration: 0.5,
+          y: "-100%",
+          opacity: 0,
           ease: Power4.easeIn,
         });
     });
@@ -68,29 +49,35 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const timeline = gsap.timeline();
+    const timeline = gsap.timeline({ delay: 0.3 });
 
-    // Smooth staggered animation for the title and paragraph text
     timeline.fromTo(
       '[data-animation="hero-fade-in-y"]',
-      { yPercent: 80, opacity: 0 },
+      { y: 60, opacity: 0 },
       {
-        yPercent: 0,
+        y: 0,
         opacity: 1,
         ease: Power2.easeOut,
-        duration: 1, // Make the reveal slower and smoother
-        stagger: {
-          amount: 0.6, // Stagger the animation for each element to make it look smooth
-        },
+        duration: 0.8,
+        stagger: 0.15,
       }
     );
+
+    // Fallback visibility
+    setTimeout(() => {
+      document.querySelectorAll('[data-animation="hero-fade-in-y"]').forEach((el) => {
+        if (el instanceof HTMLElement) {
+          el.style.opacity = '1';
+        }
+      });
+    }, 2500);
   }, []);
 
   return (
-    <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] min-h-[600px] sm:min-h-[700px] 2xl:h-[54rem] relative overflow-hidden">
+    <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] min-h-[700px] sm:min-h-[800px] relative overflow-hidden bg-white">
       <Navbar />
       <div className="grid grid-cols-1 grid-rows-1 relative">
-        {/* Background Image with Enhanced Overlay */}
+        {/* Background Image */}
         <Image
           priority
           alt="Hero background"
@@ -98,97 +85,100 @@ export default function Hero() {
           fill
           className="object-cover col-span-full row-span-full"
         />
-        {/* Enhanced overlay for contrast and readability */}
-        <div className="absolute inset-0 bg-black/75 col-span-full row-span-full z-[1]" />
+        {/* Light Overlay for text contrast */}
+        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 col-span-full row-span-full z-[1]" />
 
-        {/* Refined decorative geometric elements */}
-        <div className="absolute top-20 right-10 w-64 h-64 bg-[#f27121]/8 rounded-full blur-3xl z-[2] hidden lg:block" />
-        <div className="absolute bottom-32 left-10 w-52 h-52 bg-[#451842]/12 rounded-full blur-3xl z-[2] hidden lg:block" />
+        {/* Minimal Decorative Elements */}
+        <div className="absolute top-32 right-20 w-[500px] h-[500px] bg-[#451842]/8 rounded-full blur-[120px] z-[2] hidden lg:block" />
+        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-[#451842]/6 rounded-full blur-[100px] z-[2] hidden lg:block" />
 
-        <section className="relative py-8 sm:py-12 md:py-14 col-span-full pt-[4rem] sm:pt-[5rem] row-span-full z-10 container max-w-7xl mx-auto px-4 sm:px-5 md:px-6 lg:px-8 lg:py-24 flex flex-col md:justify-center">
-          <div className="grid gap-6 sm:gap-8 md:gap-10 lg:gap-14 max-w-6xl w-full">
-            {/* Main Heading with Enhanced Typography and Contrast */}
+        <section className="relative col-span-full row-span-full z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-20 sm:py-24">
+          <div className="max-w-4xl space-y-8 sm:space-y-10">
+            
+            {/* Trust Badge */}
             <div data-animation="hero-fade-in-y" className="opacity-0">
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold lg:font-semibold tracking-tight text-white leading-[1.1] sm:leading-[1.15] break-words mb-3 sm:mb-4 drop-shadow-2xl">
-                Fueling Your Business <br className="hidden sm:block" />
-                <span className="text-white/95 font-medium">Growth through</span> <br className="hidden sm:block" />
-                <span className="relative inline-block mt-2 sm:mt-3">
-                  <span className="text-white">Personalized</span>
-                  <span className="relative inline-flex items-center justify-center ml-2 sm:ml-3 md:ml-4">
-                    <span
-                      ref={wordRef}
-                      className="relative inline-flex items-center justify-center italic playfair-display px-2 sm:px-3 md:px-4 lg:px-6 py-1.5 sm:py-2 md:py-2.5 lg:py-3 rounded-lg sm:rounded-xl backdrop-blur-md border-2 shadow-lg font-bold text-lg sm:text-xl md:text-2xl lg:text-4xl xl:text-5xl leading-tight whitespace-nowrap"
-                      style={{ 
-                        transform: "translateY(100%)", 
-                        background: "linear-gradient(135deg, #f27121 0%, #e94057 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                        borderColor: "#f27121",
-                        backgroundColor: "rgba(255, 255, 255, 0.95)",
-                        boxShadow: "0 8px 32px 0 rgba(242, 113, 33, 0.5)",
-                        color: "#f27121"
-                      }}
-                    >
-                      {words[0].text}
-                    </span>
+              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#451842]/10 backdrop-blur-sm border border-[#451842]/20">
+                <Star className="w-4 h-4 text-[#451842] fill-[#451842]" />
+                <span className="text-xs sm:text-sm font-semibold text-white/90">20+ Years Excellence</span>
+              </div>
+            </div>
+
+            {/* Main Headline - Clean & Direct */}
+            <div data-animation="hero-fade-in-y" className="opacity-0 space-y-4 sm:space-y-6">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight">
+                Transform Your Business
+                <br />
+                <span className="text-white/80">with Expert</span>
+                <br />
+                <span className="relative inline-block mt-2">
+                  <span 
+                    ref={wordRef}
+                    className="text-[#451842] font-bold"
+                    style={{ 
+                      display: "inline-block",
+                      transform: "translateY(100%)",
+                      opacity: 0,
+                      minWidth: "300px"
+                    }}
+                  >
+                    {words[0]}
                   </span>
                 </span>
               </h1>
             </div>
 
-            {/* Enhanced Description with Better Contrast */}
-            <div className="max-w-3xl" data-animation="hero-fade-in-y">
-              <p className="lg:text-xl opacity-0 text-base sm:text-lg text-white/95 leading-relaxed font-light tracking-wide drop-shadow-lg">
-                We fuse creativity, effective management, and a shared industry
-                experience of over two decades to help you stand out in a
-                competitive market
+            {/* Value Proposition - Clear & Concise */}
+            <div data-animation="hero-fade-in-y" className="opacity-0 max-w-2xl">
+              <p className="text-lg sm:text-xl lg:text-2xl text-white/70 leading-relaxed font-light">
+                We deliver tailored digital solutions backed by two decades of industry expertise to help your business thrive.
               </p>
             </div>
 
-            {/* CTA Buttons with Enhanced Visibility and Responsiveness */}
-            <div
-              data-animation="hero-fade-in-y"
-              className="opacity-0 flex flex-col sm:flex-row gap-3 sm:gap-4 mt-2"
-            >
-              {/* Primary CTA - More Button-like with Better Hover */}
-              <Link
-                href="/contact"
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base bg-[#451842] text-white border-2 border-[#451842] hover:bg-[#5a1f55] hover:border-[#5a1f55] hover:shadow-[0_12px_36px_rgba(69,24,66,0.6)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-lg w-full sm:w-auto cursor-pointer"
-                aria-label="Get Started - Contact Us"
-              >
-                <span className="relative z-10">Get Started</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
-                <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-white/0 group-hover:bg-white/10 transition-all duration-300" />
-              </Link>
-
-              {/* Secondary CTA - Enhanced */}
-              <Link
-                href="/services"
-                className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border-2 border-[#f27121]/70 hover:bg-white/20 hover:border-[#f27121] hover:shadow-[0_12px_32px_rgba(242,113,33,0.4)] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-105 active:scale-95 shadow-md w-full sm:w-auto cursor-pointer"
-                aria-label="View Our Services"
-              >
-                <span className="relative z-10">What We Do</span>
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-all duration-300 group-hover:translate-x-2 group-hover:scale-110" strokeWidth={2.5} />
-                <div className="absolute inset-0 rounded-lg sm:rounded-xl bg-white/0 group-hover:bg-white/10 transition-all duration-300" />
-              </Link>
+            {/* Social Proof Points */}
+            <div data-animation="hero-fade-in-y" className="opacity-0 flex flex-wrap gap-6 sm:gap-8">
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-[#451842]" />
+                <span className="text-sm sm:text-base text-white/60 font-medium">500+ Projects</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-[#451842]" />
+                <span className="text-sm sm:text-base text-white/60 font-medium">98% Satisfaction</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-[#451842]" />
+                <span className="text-sm sm:text-base text-white/60 font-medium">Global Clients</span>
+              </div>
             </div>
-            
-            {/*  Button - Replaced Arrow with Button */}
-            <div
-              data-animation="hero-fade-in-y"
-              className="opacity-0 flex justify-center mt-8 sm:mt-12"
-            >
-              <button
-                onClick={() => {
-                  const nextSection = document.querySelector('.hero-section')?.nextElementSibling;
-                  nextSection?.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="group relative flex flex-col items-center gap-2 text-white/80 hover:text-white transition-all duration-300 hover:scale-110 active:scale-95"
-                aria-label="Scroll to next section"
-              >
-              
-              </button>
+
+            {/* Primary CTA - Conversion Focused */}
+            <div data-animation="hero-fade-in-y" className="opacity-0 pt-4">
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/contact"
+                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-[#451842] text-white overflow-hidden transition-all duration-300 hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl hover:shadow-[#451842]/50"
+                  aria-label="Get Started"
+                >
+                  <span className="relative z-10">Get Started</span>
+                  <ArrowRight className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#451842] to-[#5a1f55] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </Link>
+
+                <Link
+                  href="/services"
+                  className="group inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-transparent text-white border-2 border-white/20 hover:border-white/40 hover:bg-white/5 transition-all duration-300"
+                  aria-label="View Services"
+                >
+                  <span>View Services</span>
+                  <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                </Link>
+              </div>
+            </div>
+
+            {/* Subtle Note */}
+            <div data-animation="hero-fade-in-y" className="opacity-0">
+              <p className="text-sm text-white/40">
+                Free consultation • No commitment required
+              </p>
             </div>
           </div>
         </section>
