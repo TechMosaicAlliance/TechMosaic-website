@@ -1,198 +1,215 @@
 "use client";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Navbar from "../shared/Navbar";
-import { ArrowRight, CheckCircle, Star } from "lucide-react";
+import { ArrowRight, Sparkles, CheckCircle2 } from "lucide-react";
 import { useHeroAnimation } from "../animations";
-import gsap, { Power4, Power2 } from "gsap";
+import gsap, { Power4, Power2, Power3 } from "gsap";
 import Link from "next/link";
 
-const words = [
-  "Web Development",
-  "Brand Design",
-  "Project Management",
-  "Creative Strategy",
-  "UI/UX Design",
+const services = [
+  { name: "Web Development", color: "from-purple-400 to-pink-400" },
+  { name: "Brand Design", color: "from-blue-400 to-cyan-400" },
+  { name: "Project Management", color: "from-emerald-400 to-teal-400" },
+  { name: "Creative Strategy", color: "from-orange-400 to-red-400" },
+  { name: "UI/UX Design", color: "from-violet-400 to-purple-400" },
+];
+
+const stats = [
+  { value: "72+", label: "Happy Clients" },
+  { value: "128+", label: "Projects" },
+  { value: "57+", label: "Team Members" },
+  { value: "99%", label: "Satisfaction" },
 ];
 
 export default function Hero() {
   useHeroAnimation();
   const wordRef = useRef<HTMLSpanElement>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
   
   useEffect(() => {
     if (!wordRef.current) return;
     
-    const tl = gsap.timeline({ repeat: -1 });
-    words.forEach((word) => {
+    const tl = gsap.timeline({ 
+      repeat: -1, 
+      delay: 1.5,
+      onUpdate: function() {
+        if (this.progress() > 0.2 && this.progress() < 0.3) {
+          const index = Math.floor(this.totalTime() / 5.5) % services.length;
+          setCurrentIndex(index);
+        }
+      }
+    });
+    
+    services.forEach((service, index) => {
+      if (index === 0) {
+        tl.set(wordRef.current, {
+          textContent: service.name,
+          y: "100%",
+          opacity: 0,
+        });
+      }
+      
       tl.to(wordRef.current, {
-        duration: 0.8,
+        duration: 1,
         y: "0%",
         opacity: 1,
-        ease: Power4.easeOut,
+        ease: Power3.easeOut,
         onStart: () => {
           if (wordRef.current) {
-            wordRef.current.textContent = word;
+            wordRef.current.textContent = service.name;
           }
         },
       })
-        .to({}, { duration: 1.5 })
+        .to({}, { duration: 2.5 })
         .to(wordRef.current, {
-          duration: 0.5,
+          duration: 0.8,
           y: "-100%",
           opacity: 0,
-          ease: Power4.easeIn,
-        });
+          ease: Power3.easeIn,
+        })
+        .to({}, { duration: 0.7 });
     });
+    
     return () => {
       tl.kill();
     };
   }, []);
 
   useEffect(() => {
-    const timeline = gsap.timeline({ delay: 0.3 });
+    const timeline = gsap.timeline({ delay: 0.5 });
 
     timeline.fromTo(
-      '[data-animation="hero-fade-in-y"]',
-      { y: 60, opacity: 0 },
+      '[data-animation="hero-fade-in"]',
+      { y: 40, opacity: 0 },
       {
         y: 0,
         opacity: 1,
         ease: Power2.easeOut,
-        duration: 0.8,
-        stagger: 0.15,
+        duration: 1,
+        stagger: 0.2,
       }
     );
 
-    // Fallback visibility
     setTimeout(() => {
-      document.querySelectorAll('[data-animation="hero-fade-in-y"]').forEach((el) => {
+      document.querySelectorAll('[data-animation="hero-fade-in"]').forEach((el) => {
         if (el instanceof HTMLElement) {
           el.style.opacity = '1';
         }
       });
-    }, 2500);
+    }, 3000);
   }, []);
 
   return (
-    <div className="grid grid-rows-[auto_1fr] hero-section h-[100svh] min-h-[700px] sm:min-h-[800px] relative overflow-hidden bg-white">
+    <div className="grid grid-rows-[auto_1fr] hero-section min-h-screen relative overflow-hidden bg-gradient-to-br from-gray-50 via-white to-gray-50">
       <Navbar />
-      <div className="grid grid-cols-1 grid-rows-1 relative my-8 sm:my-12 lg:my-16 mx-4 sm:mx-6 lg:mx-8 rounded-2xl overflow-hidden">
-        {/* Background Image */}
-        <Image
-          priority
-          alt="Hero background"
-          src="/assets/hero-image.webp"
-          fill
-          className="object-cover col-span-full row-span-full"
-        />
-        {/* Light Overlay for text contrast */}
-        <div className="absolute inset-0 bg-gradient-to-br from-black/40 via-black/30 to-black/40 col-span-full row-span-full z-[1]" />
+      
+      {/* Main Hero Content */}
+      <div className="relative">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
+          backgroundImage: `radial-gradient(circle at 1px 1px, #451842 1px, transparent 0)`,
+          backgroundSize: '40px 40px'
+        }} />
+        
+        {/* Decorative Gradient Orbs */}
+        <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-br from-[#451842]/5 to-transparent rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-tr from-[#8a3d7a]/5 to-transparent rounded-full blur-3xl" />
 
-        {/* Minimal Decorative Elements */}
-        <div className="absolute top-32 right-20 w-[500px] h-[500px] bg-[#451842]/8 rounded-full blur-[120px] z-[2] hidden lg:block" />
-        <div className="absolute bottom-20 left-20 w-[400px] h-[400px] bg-[#451842]/6 rounded-full blur-[100px] z-[2] hidden lg:block" />
-
-        <section className="relative col-span-full row-span-full z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col justify-center py-20 sm:py-24">
-          <div className="max-w-4xl space-y-8 sm:space-y-10">
+        <section className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
+          <div className="max-w-5xl mx-auto space-y-12 sm:space-y-16">
             
-            {/* Trust Badge */}
-            <div data-animation="hero-fade-in-y" className="opacity-0">
-              <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#451842]/10 backdrop-blur-sm border border-[#451842]/20">
-                <Star className="w-4 h-4 text-[#451842] fill-[#451842]" />
-                <span className="text-xs sm:text-sm font-semibold text-white/95 tracking-wide">Trusted Partner</span>
+            {/* Trust Badge - Elegant */}
+            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#451842]/10 to-[#8a3d7a]/10 border border-[#451842]/20 shadow-sm">
+                <Sparkles className="w-4 h-4 text-[#451842]" />
+                <span className="text-xs font-bold text-gray-700 tracking-widest uppercase">Digital Excellence Since 2003</span>
               </div>
             </div>
 
-            {/* Main Headline - Clean & Direct */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 space-y-4 sm:space-y-6">
-              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-[1.1] tracking-tight">
-                Transform Your Business
+            {/* Main Headline - Bold & Modern */}
+            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-[1.05] tracking-tight">
+                We Craft
                 <br />
-                <span className="text-white/80">with Expert</span>
-                <br />
-                <span className="relative inline-block mt-2">
-                  <span 
-                    ref={wordRef}
-                    className="text-[#451842] font-bold"
-                    style={{ 
-                      display: "inline-block",
-                      transform: "translateY(100%)",
-                      opacity: 0,
-                      minWidth: "300px"
-                    }}
-                  >
-                    {words[0]}
+                <span className="relative inline-flex items-baseline gap-3 sm:gap-4 flex-wrap">
+                  <span className="text-gray-400">Exceptional</span>
+                  <span className="relative inline-block h-[1.2em] min-w-[280px] sm:min-w-[320px] lg:min-w-[400px]">
+                    <span 
+                      ref={wordRef}
+                      className="absolute left-0 top-0 font-bold bg-gradient-to-r from-[#451842] via-[#8a3d7a] to-[#451842] bg-clip-text text-transparent"
+                      style={{ 
+                        transform: "translateY(100%)",
+                        opacity: 0,
+                      }}
+                    >
+                      {services[0].name}
+                    </span>
                   </span>
                 </span>
               </h1>
             </div>
 
-            {/* Value Proposition - Clear & Concise */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 max-w-2xl">
-              <p className="text-lg sm:text-xl lg:text-2xl text-white/80 leading-relaxed font-normal">
-                We deliver tailored digital solutions backed by industry expertise to help your business thrive.
+            {/* Value Proposition - Refined */}
+            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left max-w-3xl mx-auto lg:mx-0">
+              <p className="text-xl sm:text-2xl lg:text-3xl text-gray-600 leading-relaxed font-light">
+                Tailored digital solutions that{" "}
+                <span className="text-gray-900 font-medium">transform businesses</span> and{" "}
+                <span className="text-gray-900 font-medium">drive growth</span>
               </p>
             </div>
 
-            {/* Social Proof Points */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <CheckCircle className="w-4 h-4 text-[#451842]" />
-                  <span className="text-xl sm:text-2xl font-bold text-white">72+</span>
-                </div>
-                <span className="text-xs text-white/70 font-medium">Happy Clients</span>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <CheckCircle className="w-4 h-4 text-[#451842]" />
-                  <span className="text-xl sm:text-2xl font-bold text-white">128+</span>
-                </div>
-                <span className="text-xs text-white/70 font-medium">Successful Projects</span>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <CheckCircle className="w-4 h-4 text-[#451842]" />
-                  <span className="text-xl sm:text-2xl font-bold text-white">57+</span>
-                </div>
-                <span className="text-xs text-white/70 font-medium">Team Members</span>
-              </div>
-              <div className="flex flex-col">
-                <div className="flex items-center gap-1.5 mb-1">
-                  <CheckCircle className="w-4 h-4 text-[#451842]" />
-                  <span className="text-xl sm:text-2xl font-bold text-white">99%</span>
-                </div>
-                <span className="text-xs text-white/70 font-medium">Customer Satisfaction</span>
+            {/* Stats Grid - Modern Cards */}
+            <div data-animation="hero-fade-in" className="opacity-0">
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                {stats.map((stat, idx) => (
+                  <div 
+                    key={idx}
+                    className="group relative bg-white rounded-xl p-4 sm:p-5 border border-gray-200 shadow-sm hover:shadow-lg hover:border-[#451842]/20 transition-all duration-500"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/0 to-[#451842]/5 opacity-0 group-hover:opacity-100 rounded-xl transition-opacity duration-500" />
+                    <div className="relative">
+                      <div className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[#451842] to-[#8a3d7a] bg-clip-text text-transparent mb-1.5">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-gray-600 font-medium">
+                        {stat.label}
+                      </div>
+                    </div>
+                    <div className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#451842]/5 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#451842]" />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            {/* Primary CTA - Conversion Focused */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 pt-6">
-              <div className="flex flex-col sm:flex-row gap-4">
+            {/* CTA Section - Strategic Placement */}
+            <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link
                   href="/contact"
-                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-[#451842] text-white overflow-hidden transition-all duration-300 hover:bg-[#5a1f55] shadow-lg hover:shadow-xl hover:shadow-[#451842]/30"
-                  aria-label="Get Started"
+                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-semibold text-lg bg-gradient-to-r from-[#451842] to-[#5a1f55] text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-[#451842]/20 transition-all duration-500 hover:scale-105"
+                  aria-label="Start Your Project"
                 >
-                  <span className="relative z-10">Get Started</span>
-                  <ArrowRight className="relative z-10 w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
+                  <span className="relative z-10">Start Your Project</span>
+                  <ArrowRight className="relative z-10 w-5 h-5 transition-transform duration-500 group-hover:translate-x-2" strokeWidth={2.5} />
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#5a1f55] to-[#451842] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 </Link>
 
                 <Link
-                  href="/services"
-                  className="group inline-flex items-center justify-center gap-3 px-8 py-4 sm:py-5 rounded-xl font-semibold text-base sm:text-lg bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:border-white/30 hover:bg-white/15 transition-all duration-300"
-                  aria-label="View Services"
+                  href="/portfolio"
+                  className="group inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-semibold text-lg bg-white text-gray-900 border-2 border-gray-200 hover:border-[#451842]/30 hover:bg-gray-50 transition-all duration-300 shadow-sm"
+                  aria-label="View Our Work"
                 >
-                  <span>View Services</span>
+                  <span>View Our Work</span>
                   <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
                 </Link>
               </div>
-            </div>
-            
-            {/* Subtle Note */}
-            <div data-animation="hero-fade-in-y" className="opacity-0 pt-2">
-              <p className="text-sm text-white/50">
-                Free consultation • No commitment required
+              
+              {/* Trust Note */}
+              <p className="mt-6 text-sm text-gray-500 font-medium">
+                ✓ Free consultation · No commitment · 24hr response time
               </p>
             </div>
           </div>
