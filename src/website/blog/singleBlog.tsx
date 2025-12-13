@@ -3,11 +3,9 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { BlogAcf, IWordPressReturnTypeObj } from "@/services/wordpress/types";
 import React from "react";
 import { MarkDownComponents, preprocessMDXContent } from "../shared/mdFmt";
-import { Button } from "@/components/ui/button";
-import { ArrowRightSvg } from "@/components/svgs";
-import { ArrowLeft } from "lucide-react";
 import BackBtn from "../shared/Back";
-import Link from "next/link";
+import { NewsletterSection } from "./NewsletterSection";
+import { NewsletterButton } from "./NewsletterButton";
 
 export function SingleBlogContent({
   data,
@@ -45,14 +43,12 @@ export function SingleBlogContent({
               source={preprocessMDXContent(data.acf.content)}
               components={MarkDownComponents}
             />
-            <Link href="/career">
-              <Button className="border-white group mt-7 w-fit border">
-                JOIN OUR TEAM
-                <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
-              </Button>
-            </Link>
+            <NewsletterButton />
           </section>
         </div>
+
+        {/* Newsletter Subscription Section */}
+        <NewsletterSection />
       </div>
     </>
   );
