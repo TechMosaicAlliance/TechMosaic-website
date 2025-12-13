@@ -383,6 +383,7 @@ function UsersPageContent() {
               placeholder="Search users by name, username, or email..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              autoComplete="off"
               className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
             />
           </div>
@@ -556,8 +557,9 @@ function UsersPageContent() {
                           size="sm"
                           onClick={() => handleDeleteUser(user.id, user.username)}
                           title="Delete user"
+                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
                         >
-                          <Trash2 className="w-4 h-4 text-red-600" />
+                          <Trash2 className="w-4 h-4" />
                         </Button>
                       </div>
                     </td>
