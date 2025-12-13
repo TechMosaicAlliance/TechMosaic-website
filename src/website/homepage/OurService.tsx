@@ -103,7 +103,7 @@ export default function OurService() {
             <div className="flex items-center gap-3">
               <div className="w-12 h-[2px] bg-primary rounded-full" />
               <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-primary">
-                OUR SERVICES
+                WHAT WE DO
               </h3>
             </div>
 
@@ -126,7 +126,7 @@ export default function OurService() {
                 })
               )}
             >
-              EXPLORE OUR SERVICES
+              EXPLORE WHAT WE DO
               <ArrowRightSvg className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -224,7 +224,7 @@ export default function OurService() {
                 isHovering ? "scale-105" : "scale-100"
               )}
               src={data[open]?.image || "/services/alvaro-reyes-zvmZiw3vdsQ-unsplash.jpg"}
-              alt={data[open]?.name || "Our Services"}
+              alt={data[open]?.name || "What We Do"}
               fill
             />
 

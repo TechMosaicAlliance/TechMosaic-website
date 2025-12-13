@@ -150,7 +150,7 @@ export default function Hero() {
                 className="group relative inline-flex items-center justify-center gap-2 sm:gap-2.5 px-6 sm:px-8 md:px-10 py-3 sm:py-4 md:py-5 rounded-lg sm:rounded-xl font-semibold text-sm sm:text-base bg-white/10 backdrop-blur-sm text-white border-2 border-[#f27121]/70 hover:bg-white/15 hover:border-[#f27121] hover:shadow-[0_12px_32px_rgba(242,113,33,0.4)] transition-all duration-300 ease-out shadow-md w-full sm:w-auto"
                 aria-label="View Our Services"
               >
-                <span>Our Services</span>
+                <span>What We Do</span>
                 <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1" strokeWidth={2.5} />
               </Link>
             </div>

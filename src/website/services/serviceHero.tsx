@@ -12,7 +12,7 @@ export default function ServiceHero() {
         <div className="grid gap-4">
           <div className="grid gap-4">
             <p data-animation="fade-in-y" className="opacity-0">
-              OUR SERVICES
+              WHAT WE DO
             </p>
             <h2
               data-animation="fade-in-y"

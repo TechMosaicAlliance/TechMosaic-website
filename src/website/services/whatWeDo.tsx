@@ -1,72 +1,169 @@
+"use client";
 import {
   BrandDesignSvg,
   CopyWritingSvg,
   UIUXSvg,
   WebDevSvg,
+  ArrowRightSvg,
 } from "@/components/svgs";
 import React from "react";
+import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const data = [
   {
     name: "Graphic Design",
     text: "We combine the best creative and tech talents to deliver faster, more affordable, and reliable solutions.",
     icon: (
-      <BrandDesignSvg className="group-hover:rotate-90 transition-transform" />
+      <BrandDesignSvg className="group-hover:rotate-90 transition-transform duration-500" />
     ),
+    gradient: "from-purple-500/10 via-pink-500/10 to-orange-500/10",
+    borderGradient: "from-purple-500 via-pink-500 to-orange-500",
+    number: "01",
   },
   {
     name: "Copywriting",
     text: "We combine the best creative and tech talents to deliver faster, more affordable, and reliable solutions.",
     icon: (
-      <CopyWritingSvg className="group-hover:rotate-6 transition-transform" />
+      <CopyWritingSvg className="group-hover:rotate-6 transition-transform duration-500" />
     ),
+    gradient: "from-blue-500/10 via-cyan-500/10 to-teal-500/10",
+    borderGradient: "from-blue-500 via-cyan-500 to-teal-500",
+    number: "02",
   },
   {
     name: "UI/UX Design",
     text: "We combine the best creative and tech talents to deliver faster, more affordable, and reliable solutions.",
-    icon: <UIUXSvg className="group-hover:rotate-12 transition-transform" />,
+    icon: <UIUXSvg className="group-hover:rotate-12 transition-transform duration-500" />,
+    gradient: "from-indigo-500/10 via-purple-500/10 to-pink-500/10",
+    borderGradient: "from-indigo-500 via-purple-500 to-pink-500",
+    number: "03",
   },
   {
     name: "Web Development",
     text: "We combine the best creative and tech talents to deliver faster, more affordable, and reliable solutions.",
-    icon: <WebDevSvg className="group-hover:rotate-90 transition-transform" />,
+    icon: <WebDevSvg className="group-hover:rotate-90 transition-transform duration-500" />,
+    gradient: "from-emerald-500/10 via-green-500/10 to-lime-500/10",
+    borderGradient: "from-emerald-500 via-green-500 to-lime-500",
+    number: "04",
   },
   {
     name: "Brand Design",
     text: "We combine the best creative and tech talents to deliver faster, more affordable, and reliable solutions.",
     icon: (
-      <BrandDesignSvg className="group-hover:rotate-45 transition-transform" />
+      <BrandDesignSvg className="group-hover:rotate-45 transition-transform duration-500" />
     ),
+    gradient: "from-amber-500/10 via-yellow-500/10 to-orange-500/10",
+    borderGradient: "from-amber-500 via-yellow-500 to-orange-500",
+    number: "05",
   },
 ];
 
 export default function WhatWeDo() {
   return (
-    <section className="container border-t pt-[4rem] mx-auto">
+    <section className="container border-t pt-[4rem] lg:pt-[6rem] mx-auto">
+      {/* Header */}
+      <div className="mb-12 lg:mb-16">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-12 h-[2px] bg-primary rounded-full" />
+          <h3 className="tracking-[0.15em] font-semibold text-xs lg:text-sm uppercase text-primary">
+            WHAT WE DO
+          </h3>
+        </div>
+        <h2 className="text-3xl lg:text-5xl font-semibold leading-tight text-neutral-900 playfair-display max-w-2xl">
+          Explore Our Creative Services
+        </h2>
+        <p className="text-gray-600 mt-4 max-w-2xl">
+          Click on any service to view our portfolio of work in that area
+        </p>
+      </div>
+
+      {/* Creative Grid Layout */}
       <div
         data-animation="trigger-fade-in-y"
-        className="grid grid-cols-layout opacity-0 gap-5 "
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 opacity-0 gap-6 lg:gap-8"
       >
         {data.map((item, idx) => (
-          <Card key={idx} item={item} />
+          <Card key={idx} item={item} index={idx} />
         ))}
       </div>
     </section>
   );
 }
 
-function Card({ item }: { item: (typeof data)[0] }) {
+function Card({ item, index }: { item: (typeof data)[0]; index: number }) {
   return (
-    <div className="bg-[#F6F5F4] cursor-pointer group  rounded  drop-shadow p-5">
-      <div className="grid items-center gap-4">
-        <div className="flex items-center flex-col gap-2">
-          <div className="w-14   h-[3.3rem] bg-black/80 flex items-center justify-center rounded-lg">
-            {item.icon}
+    <Link 
+      href={`/portfolio?service=${encodeURIComponent(item.name)}`}
+      className={cn(
+        "group relative overflow-hidden rounded-2xl border-2",
+        "border-gray-200/50 hover:border-primary/50",
+        "bg-gradient-to-br bg-[#F6F5F4] hover:bg-white",
+        "transition-all duration-500 ease-out",
+        "hover:scale-[1.02] hover:shadow-2xl",
+        "cursor-pointer"
+      )}
+      style={{ animationDelay: `${index * 0.1}s` }}
+    >
+
+      {/* Background Gradient Overlay */}
+      <div
+        className={cn(
+          "absolute inset-0 bg-gradient-to-br opacity-0 group-hover:opacity-100 transition-opacity duration-500",
+          item.gradient
+        )}
+      />
+
+      {/* Content */}
+      <div className="relative z-10 p-6 lg:p-8 h-full flex flex-col">
+        {/* Number Badge */}
+        <div className="flex items-start justify-between mb-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-black/80 group-hover:bg-primary transition-colors duration-300 flex items-center justify-center">
+              <span className="text-white font-bold text-sm">{item.number}</span>
+            </div>
           </div>
-          <h1 className="font-medium">{item.name}</h1>
+          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-[-8px] group-hover:translate-x-0">
+            <ArrowRightSvg className="w-5 h-5 text-primary" />
+          </div>
         </div>
-        <p className="text-sm text-center">{item.text}</p>
+
+        {/* Icon */}
+        <div className="mb-6">
+          <div className="w-16 h-16 lg:w-20 lg:h-20 bg-black/80 group-hover:bg-primary transition-all duration-300 flex items-center justify-center rounded-xl group-hover:scale-110 group-hover:rotate-3">
+            <div className="text-white scale-75 lg:scale-100">
+              {item.icon}
+            </div>
+          </div>
+        </div>
+
+        {/* Title */}
+        <h3 className="text-xl lg:text-2xl font-semibold mb-3 text-neutral-900 group-hover:text-primary transition-colors duration-300">
+          {item.name}
+        </h3>
+
+        {/* Description */}
+        <p className="text-sm lg:text-base text-gray-600 leading-relaxed flex-grow">
+          {item.text}
+        </p>
+
+        {/* Hover Indicator */}
+        <div className="mt-6 pt-4 border-t border-gray-200/50 group-hover:border-primary/30 transition-colors duration-300">
+          <span className="text-xs font-medium text-gray-500 group-hover:text-primary transition-colors duration-300">
+            View Portfolio →
+          </span>
+        </div>
       </div>
-    </div>
+
+      {/* Decorative Corner Element */}
+      <div className="absolute top-0 right-0 w-24 h-24 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div
+          className={cn(
+            "absolute top-0 right-0 w-full h-full bg-gradient-to-br rounded-bl-full",
+            item.gradient
+          )}
+        />
+      </div>
+    </Link>
   );
 }

@@ -34,7 +34,7 @@ const navData = [
     ],
   },
   {
-    name: "Services",
+    name: "What We Do",
     url: "/services",
   },
   {
