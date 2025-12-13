@@ -155,7 +155,7 @@ export default function OurService() {
               >
                 {/* Active indicator */}
                 {open === idx && (
-                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary to-primary/60" />
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary" />
                 )}
 
                 <div className="relative flex items-center p-5 lg:p-6 gap-4">
@@ -214,8 +214,8 @@ export default function OurService() {
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
-            {/* Gradient overlay with brand color */}
-            <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/20 to-transparent z-10 transition-all duration-700" />
+            {/* Overlay with brand color */}
+            <div className="absolute inset-0 bg-primary/40 z-10 transition-all duration-700" />
 
             <BlurImage
               key={data[open]?.image}
@@ -236,7 +236,7 @@ export default function OurService() {
                     <div className="w-10 h-10 rounded-lg bg-primary/30 backdrop-blur-sm border border-white/30 flex items-center justify-center">
                       <span className="text-white font-semibold text-sm">{data[open]?.number}</span>
                     </div>
-                    <div className="h-px flex-1 bg-gradient-to-r from-white/40 to-transparent" />
+                    <div className="h-px flex-1 bg-white/40" />
                   </div>
                   <h3 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-white leading-tight">
                     {data[open]?.name}

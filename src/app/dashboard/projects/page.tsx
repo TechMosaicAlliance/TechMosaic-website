@@ -295,7 +295,7 @@ function ProjectsPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-5">
@@ -435,7 +435,7 @@ function ProjectsPageContent() {
               <div key={project.id} className="group">
                 <div className="bg-white rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                   {/* Project Image */}
-                  <div className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
+                  <div className="h-48 bg-gray-200 relative overflow-hidden">
                     {project.image ? (
                       <Image
                         src={project.image}
@@ -445,7 +445,7 @@ function ProjectsPageContent() {
                       />
                     ) : (
                       <>
-                        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/5 group-hover:opacity-0 transition-opacity"></div>
+                        <div className="absolute inset-0 bg-primary/20 group-hover:opacity-0 transition-opacity"></div>
                         <div className="absolute inset-0 flex items-center justify-center">
                           <span className="text-4xl font-bold text-white/20">
                             {project.name.charAt(0)}
@@ -879,7 +879,7 @@ function ProjectsPageContent() {
 export default function ProjectsPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <p className="text-gray-500">Loading projects...</p>
       </div>
     }>

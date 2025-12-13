@@ -86,7 +86,7 @@ function Card({ item, index }: { item: any; index: number }) {
             src={item.acf.thumbnail}
           />
           {/* Enhanced overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
           {/* Corner accent */}
           <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-white/60 rounded-tr-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

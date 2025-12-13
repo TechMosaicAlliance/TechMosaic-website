@@ -52,7 +52,7 @@ export default function HomeMarque() {
 
   if (validLogos.length > 4) {
     return (
-      <section className="relative py-20 lg:py-28 bg-gradient-to-b from-white via-neutral-50/30 to-white overflow-hidden">
+      <section className="relative py-20 lg:py-28 bg-white overflow-hidden">
         {/* Subtle background decoration with brand color */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl -z-10" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-primary/3 rounded-full blur-3xl -z-10" />
@@ -119,7 +119,7 @@ export default function HomeMarque() {
   }
 
   return (
-    <section className="py-12 lg:py-20 bg-gradient-to-b from-white via-neutral-50/30 to-white">
+    <section className="py-12 lg:py-20 bg-white">
       <Marquee>
         <div
           className="flex items-center gap-12 lg:gap-16 px-4"

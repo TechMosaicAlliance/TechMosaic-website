@@ -135,7 +135,7 @@ export default function ProjectDetailPage() {
       </div>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-primary via-purple-600 to-blue-600 text-white py-20">
+      <section className="relative bg-primary text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -190,7 +190,7 @@ export default function ProjectDetailPage() {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
+                  <div className="w-full h-full bg-gray-700 flex items-center justify-center">
                     <span className="text-8xl font-bold text-white/20">
                       {project.name.charAt(0)}
                     </span>
@@ -362,7 +362,7 @@ export default function ProjectDetailPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-primary to-purple-600 text-white py-16">
+      <section className="bg-primary text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Interested in Similar Projects?

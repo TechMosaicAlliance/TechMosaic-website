@@ -9,7 +9,7 @@ export function ProjectDetailSkeleton() {
       </div>
 
       {/* Hero Section Skeleton */}
-      <section className="relative bg-gradient-to-r from-gray-300 to-gray-400 py-20">
+      <section className="relative bg-gray-300 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">

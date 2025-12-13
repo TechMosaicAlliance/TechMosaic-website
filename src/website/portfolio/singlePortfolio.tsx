@@ -5,7 +5,7 @@ import {
   PortfolioAcf,
 } from "@/services/wordpress/types";
 import React from "react";
-import { MarkDownComponents } from "../shared/mdFmt";
+import { MarkDownComponents, preprocessMDXContent } from "../shared/mdFmt";
 import { Button } from "@/components/ui/button";
 import { ArrowRightSvg } from "@/components/svgs";
 import BackBtn from "../shared/Back";
@@ -75,7 +75,7 @@ export function SinglePortfolio({
           {/* CMS CONTENT */}
           <section className="pt-[4rem] prose max-w-5xl mx-auto">
             <MDXRemote
-              source={data.acf.content}
+              source={preprocessMDXContent(data.acf.content)}
               components={MarkDownComponents}
             />
 

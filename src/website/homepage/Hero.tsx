@@ -91,11 +91,8 @@ export default function Hero() {
           fill
           className="object-cover col-span-full row-span-full"
         />
-        {/* Enhanced gradient overlay for MAXIMUM contrast and readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-black/85 col-span-full row-span-full z-[1]" />
-
-        {/* Subtle accent overlays for visual interest */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#451842]/10 via-transparent to-[#f27121]/5 col-span-full row-span-full z-[1]" />
+        {/* Enhanced overlay for contrast and readability */}
+        <div className="absolute inset-0 bg-black/75 col-span-full row-span-full z-[1]" />
 
         {/* Refined decorative geometric elements */}
         <div className="absolute top-20 right-10 w-64 h-64 bg-[#f27121]/8 rounded-full blur-3xl z-[2] hidden lg:block" />

@@ -177,9 +177,9 @@ function ProjectManagementPageContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-gradient-to-r from-primary via-purple-600 to-blue-600 text-white py-20">
+      <section className="bg-primary text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
@@ -376,7 +376,7 @@ function ProjectManagementPageContent() {
                 {/* Impact Area Header */}
                 <div className="mb-8">
                   <div className="flex items-center gap-4 mb-2">
-                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-xl">
+                    <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl">
                       {index + 1}
                     </div>
                     <div>
@@ -384,7 +384,7 @@ function ProjectManagementPageContent() {
                       <p className="text-gray-600">{projects.length} {projects.length === 1 ? 'project' : 'projects'}</p>
                     </div>
                   </div>
-                  <div className="h-1 w-20 bg-gradient-to-r from-primary to-purple-600 rounded-full"></div>
+                  <div className="h-1 w-20 bg-primary rounded-full"></div>
                 </div>
 
                 {/* Projects Grid */}
@@ -397,8 +397,8 @@ function ProjectManagementPageContent() {
                     >
                       <div className="bg-white rounded-2xl overflow-hidden border border-gray-200 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300">
                         {/* Project Image */}
-                        <div className="h-56 bg-gradient-to-br from-gray-200 to-gray-300 relative overflow-hidden">
-                          <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-600/20 group-hover:opacity-0 transition-opacity"></div>
+                        <div className="h-56 bg-gray-200 relative overflow-hidden">
+                          <div className="absolute inset-0 bg-primary/20 group-hover:opacity-0 transition-opacity"></div>
                           {project.image ? (
                             <img
                               src={project.image}
@@ -535,7 +535,7 @@ function ProjectManagementPageContent() {
 export default function ProjectManagementPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <ProjectsGridSkeleton count={6} />
       </div>
     }>

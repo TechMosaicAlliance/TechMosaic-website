@@ -2,7 +2,7 @@ import { BlurImage } from "@/components/ui/blurImage";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { BlogAcf, IWordPressReturnTypeObj } from "@/services/wordpress/types";
 import React from "react";
-import { MarkDownComponents } from "../shared/mdFmt";
+import { MarkDownComponents, preprocessMDXContent } from "../shared/mdFmt";
 import { Button } from "@/components/ui/button";
 import { ArrowRightSvg } from "@/components/svgs";
 import { ArrowLeft } from "lucide-react";
@@ -42,7 +42,7 @@ export function SingleBlogContent({
           {/* CMS CONTENT */}
           <section className="pt-[4rem] prose max-w-5xl mx-auto">
             <MDXRemote
-              source={data.acf.content}
+              source={preprocessMDXContent(data.acf.content)}
               components={MarkDownComponents}
             />
             <Link href="/career">

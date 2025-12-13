@@ -60,7 +60,7 @@ export function ProtectedRoute({
   // Loading state
   if (isLoading || checking) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
@@ -69,7 +69,7 @@ export function ProtectedRoute({
   // Access denied
   if (!hasAccess) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100 p-8">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-8">
         <div className="max-w-md w-full">
           <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-8 text-center">
             <div className="w-20 h-20 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-6">

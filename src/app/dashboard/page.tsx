@@ -41,20 +41,20 @@ export default function DashboardPage() {
 
   if (isLoading || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-white to-gray-100">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <Loader2 className="w-8 h-8 animate-spin text-primary" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-12 h-12 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-lg">
                 {user.avatar}
               </div>
               <div>
@@ -84,7 +84,7 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-8 py-8">
         {/* User Info Card */}
-        <div className="bg-gradient-to-r from-primary to-purple-600 rounded-2xl p-8 text-white mb-8 shadow-lg">
+        <div className="bg-primary rounded-2xl p-8 text-white mb-8 shadow-lg">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-3xl font-bold mb-2">Welcome, {user.name}!</h2>
@@ -109,7 +109,7 @@ export default function DashboardPage() {
             {permissions?.canViewUsers && (
               <Link href="/dashboard/users">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <Users className="w-7 h-7 text-white" />
                     </div>
                   <h4 className="text-lg font-bold text-gray-900 mb-2">User Management</h4>
@@ -127,7 +127,7 @@ export default function DashboardPage() {
             {permissions?.canViewProjects && (
               <Link href="/dashboard/projects">
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                  <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                     <FolderKanban className="w-7 h-7 text-white" />
                   </div>
                   <h4 className="text-lg font-bold text-gray-900 mb-2">Projects</h4>
@@ -153,7 +153,7 @@ export default function DashboardPage() {
             {/* Analytics */}
             {permissions?.canViewAnalytics && (
               <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <BarChart3 className="w-7 h-7 text-white" />
                 </div>
                 <h4 className="text-lg font-bold text-gray-900 mb-2">Analytics</h4>
@@ -166,7 +166,7 @@ export default function DashboardPage() {
             {/* Settings - Super Admin Only */}
             {permissions?.canAccessSettings && (
               <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                   <Settings className="w-7 h-7 text-white" />
                 </div>
                 <h4 className="text-lg font-bold text-gray-900 mb-2">Settings</h4>

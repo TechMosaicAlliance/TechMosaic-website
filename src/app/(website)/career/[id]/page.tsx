@@ -3,7 +3,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 
 import React, { Suspense } from "react";
 import { BlogLoader } from "@/components/ui/loading";
-import { MarkDownComponents } from "@/website/shared/mdFmt";
+import { MarkDownComponents, preprocessMDXContent } from "@/website/shared/mdFmt";
 import { ApplyView } from "@/website/career/apply";
 import { wordpressApi } from "@/services/wordpress";
 import WhatNext from "@/website/career/whatNext";
@@ -18,7 +18,7 @@ export default async function page({ params }: any) {
           {/* CMS CONTENT */}
           <section className="pt-[4rem] prose max-w-5xl mx-auto">
             <MDXRemote
-              source={data.acf.content}
+              source={preprocessMDXContent(data.acf.content)}
               components={MarkDownComponents}
             />
 
