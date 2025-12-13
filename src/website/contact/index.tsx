@@ -48,158 +48,204 @@ export function ContactView() {
   };
 
   return (
-    <div className="container mx-auto p-4 pt-[4rem] md:pt-[6rem] max-w-7xl">
-      <div className="flex  gap-10 md:flex-row flex-col justify-between">
-        <div className="flex  flex-col gap-4">
-          <div className="grid gap-4">
-            <p className="tracking-wider">LET&apos;S TALK</p>
-            <h2 className="lg:text-6xl text-4xl lg:leading-[4rem] font-medium">
-              You are one call
-              <br />
-              away{" "}
-              <span className="playfair-display italic">from greatness</span>
-            </h2>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-50">
+      {/* Hero Section - Compact */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-8 max-w-7xl">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#451842]/5 border border-[#451842]/10">
+            <span className="text-xs font-semibold text-[#451842] tracking-wide uppercase">Get In Touch</span>
           </div>
-          <p className="text-lg text-[#606060] max-w-2xl">
-            Tell us your project requirements, let&apos;s make magic together.
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+            Let's Build Something <span className="text-[#451842]">Amazing Together</span>
+          </h1>
+          <p className="text-base sm:text-lg text-gray-600">
+            Have a project in mind? Share your vision and let's make it a reality.
           </p>
         </div>
+      </div>
 
-        <div className="bg-white p-6 md:p-8 rounded-2xl border border-gray-100 shadow-lg max-w-lg">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <input
-                required
-                name="fullName"
-                value={formData.fullName}
-                onChange={handleChange}
-                placeholder="Full Name"
-                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
-              />
-            </div>
-            <div>
-              <input
-                required
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-                placeholder="Phone Number"
-                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
-              />
-            </div>
-            <div>
-              <input
-                required
-                name="companyName"
-                value={formData.companyName}
-                onChange={handleChange}
-                placeholder="Company Name"
-                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
-              />
-            </div>
-            <div>
-              <input
-                required
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address"
-                className="w-full h-14 px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300"
-              />
-            </div>
-            <div>
-              <textarea
-                required
-                name="projectDetails"
-                value={formData.projectDetails}
-                onChange={handleChange}
-                placeholder="Tell us about your project"
-                rows={4}
-                className="w-full min-h-[120px] px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white transition-all duration-300 placeholder:text-gray-400 hover:border-gray-300 resize-none"
-              />
-            </div>
+      {/* Form and Info Section - Optimized Layout */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-16 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-10">
+          
+          {/* Contact Form - Shows First on Mobile, Takes 3 columns on Desktop */}
+          <div className="lg:col-span-3">
+            <div className="bg-white p-5 sm:p-6 lg:p-8 rounded-xl border border-gray-200 shadow-lg">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-4 sm:mb-5">Send us a message</h2>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Full Name *</label>
+                    <input
+                      required
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleChange}
+                      placeholder="John Doe"
+                      className="w-full h-11 px-3.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#451842]/20 focus:border-[#451842] bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-900 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number *</label>
+                    <input
+                      required
+                      name="phoneNumber"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      placeholder="+1 (555) 123-4567"
+                      className="w-full h-11 px-3.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#451842]/20 focus:border-[#451842] bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-900 text-sm"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Company Name *</label>
+                    <input
+                      required
+                      name="companyName"
+                      value={formData.companyName}
+                      onChange={handleChange}
+                      placeholder="Your Company"
+                      className="w-full h-11 px-3.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#451842]/20 focus:border-[#451842] bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-900 text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
+                    <input
+                      required
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="john@company.com"
+                      className="w-full h-11 px-3.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#451842]/20 focus:border-[#451842] bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-900 text-sm"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Project Details *</label>
+                  <textarea
+                    required
+                    name="projectDetails"
+                    value={formData.projectDetails}
+                    onChange={handleChange}
+                    placeholder="Tell us about your project, goals, and timeline..."
+                    rows={4}
+                    className="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#451842]/20 focus:border-[#451842] bg-white transition-all duration-200 placeholder:text-gray-400 text-gray-900 resize-none text-sm"
+                  />
+                </div>
 
-            <div className="pt-6">
-              <div className="flex items-start space-x-3 mb-6">
-                <input
-                  id="terms"
-                  type="checkbox"
-                  name="termsAccepted"
-                  checked={formData.termsAccepted}
-                  onChange={handleChange}
-                  className="mt-1 w-4 h-4 rounded border-gray-300 text-primary focus:ring-2 focus:ring-primary/20 cursor-pointer"
-                />
-                <div className="max-w-md">
+                <div className="flex items-start space-x-2.5">
+                  <input
+                    id="terms"
+                    type="checkbox"
+                    name="termsAccepted"
+                    checked={formData.termsAccepted}
+                    onChange={handleChange}
+                    className="mt-0.5 w-4 h-4 rounded border-gray-300 text-[#451842] focus:ring-2 focus:ring-[#451842]/20 cursor-pointer"
+                  />
                   <label
                     htmlFor="terms"
-                    className="text-sm font-medium text-gray-600 cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    className="text-xs text-gray-600 cursor-pointer leading-relaxed"
                   >
-                    By clicking submit, you agree to receive marketing and
-                    sales communication via email and call from us.
+                    I agree to receive marketing and sales communication via email and phone.
                   </label>
                 </div>
-              </div>
-              <Button
-                disabled={isPending}
-                type="submit"
-                className="bg-primary hover:bg-primary/90 text-white font-semibold mt-4 w-full h-12 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isPending ? (
-                  <>
-                    <Loader2 size={17} className="animate-spin mr-2" />
-                    Sending...
-                  </>
-                ) : (
-                  "SEND MESSAGE"
-                )}
-              </Button>
+                <Button
+                  disabled={isPending}
+                  type="submit"
+                  className="bg-[#451842] hover:bg-[#5a1f55] text-white font-semibold w-full h-11 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isPending ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin mr-2" />
+                      Sending...
+                    </>
+                  ) : (
+                    "Send Message"
+                  )}
+                </Button>
+              </form>
             </div>
-          </form>
+          </div>
+
+          {/* Contact Information - Sidebar - Takes 2 columns on Desktop */}
+          <div className="lg:col-span-2 space-y-4 sm:space-y-5">
+            <div>
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Contact Info</h2>
+              <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                Get in touch with us today.
+              </p>
+            </div>
+
+            <div className="space-y-3 sm:space-y-4">
+              {/* Location */}
+              <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-xs font-bold text-[#451842] uppercase tracking-wide mb-2">Location</h3>
+                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                  Herbert Macaulay Street, Plot C36 Penthouse Estate, Lugbe East Extension, F.C.T, Nigeria
+                </p>
+              </div>
+
+              {/* Contact Details */}
+              <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-xs font-bold text-[#451842] uppercase tracking-wide mb-2">Get In Touch</h3>
+                <div className="space-y-1.5">
+                  <a href="mailto:info@techmosaic.org" className="block text-xs sm:text-sm text-gray-700 hover:text-[#451842] transition-colors duration-200 break-all">
+                    info@techmosaic.org
+                  </a>
+                  <a href="tel:+2348095555658" className="block text-xs sm:text-sm text-gray-700 hover:text-[#451842] transition-colors duration-200">
+                    +234 809 555 5658
+                  </a>
+                </div>
+              </div>
+
+              {/* Social Media */}
+              <div className="bg-white p-4 sm:p-5 rounded-xl border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                <h3 className="text-xs font-bold text-[#451842] uppercase tracking-wide mb-2">Follow Us</h3>
+                <div className="flex flex-col space-y-1.5">
+                  <Link
+                    target="_blank"
+                    href="https://www.linkedin.com/company/techmosaic/"
+                    className="text-xs sm:text-sm text-gray-700 hover:text-[#451842] transition-colors duration-200 inline-flex items-center gap-1.5"
+                  >
+                    LinkedIn
+                    <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </Link>
+                  <Link
+                    target="_blank"
+                    href="https://www.instagram.com/_techmosaic?igsh=ZDFjMGt6aTJ0bDI5"
+                    className="text-xs sm:text-sm text-gray-700 hover:text-[#451842] transition-colors duration-200 inline-flex items-center gap-1.5"
+                  >
+                    Instagram
+                    <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </Link>
+                  <Link
+                    target="_blank"
+                    href="https://youtube.com/@techmosaicalliance?si=v-GzRtmFjdQJ7gRL"
+                    className="text-xs sm:text-sm text-gray-700 hover:text-[#451842] transition-colors duration-200 inline-flex items-center gap-1.5"
+                  >
+                    YouTube
+                    <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className=" gap-6 flex lg:gap-0 lg:flex-row pt-[9rem]">
-        <div className="grid w-full mr-auto max-w-md gap-2 lg:gap-4 ">
-          <h2 className="text-[#7A7979]">Location</h2>
-          <p className="lg:text-xl text-lg font-medium">
-            Herbert Macaulay Street, Plot C36 Penthouse Estate, Lugbe East
-            Extension, F.C.T, Nigeria
-          </p>
+      {/* FAQ Section */}
+      <div className="bg-gray-50 py-12 sm:py-16 lg:py-20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+          <Faq />
         </div>
-        <div className="w-full max-w-md mx-auto grid">
-          <h2 className="text-[#7A7979]">Call / Email</h2>
-          <p className="lg:text-xl text-lg font-medium">info@techmosaic.org</p>
-          <p className="lg:text-xl text-lg font-medium">+2348095555658</p>
-        </div>
-        <div className="grid max-w-md  ml-auto">
-          <h2 className="text-[#7A7979]">Social media</h2>
-          <Link
-            target="_blank"
-            href="https://www.linkedin.com/company/techmosaic/"
-            className="lg:text-xl text-lg underline font-medium"
-          >
-            Linkedin
-          </Link>
-          <Link
-            target="_blank"
-            href="https://www.instagram.com/_techmosaic?igsh=ZDFjMGt6aTJ0bDI5"
-            className="lg:text-xl text-lg underline font-medium"
-          >
-            Instagram
-          </Link>
-          <Link
-            target="_blank"
-            className="lg:text-xl text-lg underline font-medium"
-            href="https://youtube.com/@techmosaicalliance?si=v-GzRtmFjdQJ7gRL"
-          >
-            Youtube
-          </Link>
-        </div>
-      </div>
-
-      <div className="mt-[10rem] bg-[#EEEDEB] p-6 md:p-16">
-        <Faq />
       </div>
     </div>
   );
