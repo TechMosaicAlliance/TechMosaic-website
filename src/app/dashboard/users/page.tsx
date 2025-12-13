@@ -513,12 +513,13 @@ function UsersPageContent() {
                       })}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
-                      <div className="flex items-center justify-end gap-2">
+                      <div className="flex items-center justify-end gap-1">
                         <Button 
                           variant="ghost" 
                           size="sm"
                           onClick={() => handleEditUser(user)}
                           title="Edit user"
+                          className="text-gray-600 hover:text-primary hover:bg-primary/5"
                         >
                           <Edit className="w-4 h-4" />
                         </Button>
@@ -527,40 +528,45 @@ function UsersPageContent() {
                           size="sm"
                           onClick={() => openPasswordResetModal(user.id)}
                           title="Reset password"
-                          className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                          className="text-gray-600 hover:text-primary hover:bg-primary/5"
                         >
                           <Key className="w-4 h-4" />
                         </Button>
-                        {user.status === "Active" ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleToggleUserStatus(user)}
-                            className="text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-                            title="Deactivate user"
-                          >
-                            <UserX className="w-4 h-4" />
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleToggleUserStatus(user)}
-                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                            title="Activate user"
-                          >
-                            <UserCheck className="w-4 h-4" />
-                          </Button>
+                        {user.role !== "Super Admin" && (
+                          <>
+                            {user.status === "Inactive" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleToggleUserStatus(user)}
+                                className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                                title="Activate user"
+                              >
+                                <UserCheck className="w-4 h-4" />
+                              </Button>
+                            )}
+                            {user.status === "Active" && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleToggleUserStatus(user)}
+                                className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                                title="Deactivate user"
+                              >
+                                <UserX className="w-4 h-4" />
+                              </Button>
+                            )}
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={() => handleDeleteUser(user.id, user.username)}
+                              title="Delete user"
+                              className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
+                          </>
                         )}
-                        <Button 
-                          variant="ghost" 
-                          size="sm"
-                          onClick={() => handleDeleteUser(user.id, user.username)}
-                          title="Delete user"
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
                       </div>
                     </td>
                   </tr>
@@ -761,20 +767,75 @@ function UsersPageContent() {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-3 pt-4 border-t border-gray-200">
-                <Button
-                  variant="outline"
-                  onClick={handleCloseDrawer}
-                  className="flex-1"
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  onClick={isEditMode ? handleUpdateUser : handleCreateUser}
-                  className="flex-1"
-                >
-                  {isEditMode ? 'Update User' : 'Create User'}
-                </Button>
+              <div className="space-y-3 pt-4 border-t border-gray-200">
+                <div className="flex gap-3">
+                  <Button
+                    variant="outline"
+                    onClick={handleCloseDrawer}
+                    className="flex-1"
+                  >
+                    Cancel
+                  </Button>
+                  <Button 
+                    onClick={isEditMode ? handleUpdateUser : handleCreateUser}
+                    className="flex-1"
+                  >
+                    {isEditMode ? 'Update User' : 'Create User'}
+                  </Button>
+                </div>
+                
+                {/* Additional Actions for Edit Mode */}
+                {isEditMode && formData.role !== "Super Admin" && (
+                  <div className="flex gap-2 pt-2 border-t border-gray-100 justify-end">
+                    {formData.status === "Inactive" ? (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          const userToUpdate = users.find(u => u.id === formData.id);
+                          if (userToUpdate) {
+                            await handleToggleUserStatus(userToUpdate);
+                            setFormData({ ...formData, status: "Active" });
+                          }
+                        }}
+                        className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                        title="Activate user"
+                      >
+                        <UserCheck className="w-4 h-4" />
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={async () => {
+                          const userToUpdate = users.find(u => u.id === formData.id);
+                          if (userToUpdate) {
+                            await handleToggleUserStatus(userToUpdate);
+                            setFormData({ ...formData, status: "Inactive" });
+                          }
+                        }}
+                        className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                        title="Deactivate user"
+                      >
+                        <UserX className="w-4 h-4" />
+                      </Button>
+                    )}
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Are you sure you want to delete user "${formData.username}"? This action cannot be undone.`)) {
+                          handleDeleteUser(formData.id, formData.username);
+                          handleCloseDrawer();
+                        }
+                      }}
+                      className="text-gray-600 hover:text-primary hover:bg-primary/5"
+                      title="Delete user"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
