@@ -7,6 +7,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
 const impactAreas = [
   "Digital Solutions & Innovation",
@@ -149,7 +150,7 @@ const sampleProjects: Record<string, any> = {
   },
 };
 
-export default function ProjectEditPage() {
+function ProjectEditPageContent() {
   const params = useParams();
   const slug = params.slug as string;
   
@@ -966,6 +967,15 @@ export default function ProjectEditPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+// Wrap with ProtectedRoute - requires canViewProjects permission
+export default function ProjectEditPage() {
+  return (
+    <ProtectedRoute requiredPermission="canViewProjects">
+      <ProjectEditPageContent />
+    </ProtectedRoute>
   );
 }
 
