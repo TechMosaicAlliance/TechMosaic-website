@@ -7,6 +7,8 @@ import { BlurImage } from "@/components/ui/blurImage";
 import Link from "next/link";
 import { ArrowRightSvg } from "@/components/svgs";
 import { useHeroAnimation } from "../animations";
+import { useRouter } from "next/navigation";
+
 const data = [
   {
     name: "Graphic Design",
@@ -52,10 +54,29 @@ const data = [
   },
 ];
 
+// Map service names to project serviceType values
+const mapServiceToServiceType = (serviceName: string): string => {
+  const mapping: Record<string, string> = {
+    "Graphic Design": "Graphic Design",
+    "Copywriting": "Copywriting",
+    "UI/UX Design": "UI/UX Design",
+    "Web Development": "Web Development",
+    "Brand Design": "Branding & Identity",
+    "Project Management": "Project Management",
+  };
+  return mapping[serviceName] || serviceName;
+};
+
 export default function OurService() {
+  const router = useRouter();
   const [open, setOpen] = useState(0);
   const [isHovering, setIsHovering] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
+
+  const handleServiceClick = (serviceName: string) => {
+    const serviceType = mapServiceToServiceType(serviceName);
+    router.push(`/project-management?serviceType=${encodeURIComponent(serviceType)}`);
+  };
 
   useEffect(() => {
     if (imageRef.current) {
@@ -221,7 +242,8 @@ export default function OurService() {
           {/* Image Display - Right Side */}
           <div
             ref={imageRef}
-            className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border-2 border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0"
+            onClick={() => handleServiceClick(data[open]?.name)}
+            className="opacity-0 lg:flex h-[32rem] lg:h-[42rem] xl:h-[46rem] w-full lg:w-[48%] xl:w-[50%] relative overflow-hidden rounded-2xl border-2 border-neutral-200/60 bg-background shadow-xl group/image-container transition-opacity duration-500 flex-shrink-0 cursor-pointer"
             onMouseEnter={() => setIsHovering(true)}
             onMouseLeave={() => setIsHovering(false)}
           >
