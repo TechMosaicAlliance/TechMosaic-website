@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat as FontSans } from "next/font/google";
+import { Montserrat as FontSans, Outfit } from "next/font/google";
 import "./globals.css";
 import "@/styles/util.css";
 import { cn } from "@/lib/utils";
@@ -12,6 +12,11 @@ import { PageTracker } from "@/components/PageTracker";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -30,7 +35,8 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
+          fontSans.variable,
+          outfit.variable
         )}
       >
         <GoogleTagManagerScript />

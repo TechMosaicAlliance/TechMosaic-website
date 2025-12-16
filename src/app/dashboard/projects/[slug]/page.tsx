@@ -419,14 +419,14 @@ function ProjectEditPageContent() {
 
   if (loading || !formData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 font-outfit flex items-center justify-center">
         <p className="text-gray-500">Loading project...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-outfit">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-5xl mx-auto px-8 py-5">

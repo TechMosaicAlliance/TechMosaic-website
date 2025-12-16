@@ -450,10 +450,11 @@ function ContactUsFooter() {
     }));
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
     // Add any validation logic if needed
     if (formData.termsAccepted) {
+      // Save to WordPress (existing functionality)
       mutate({
         acf: {
           title: "New Enquiry",
@@ -464,6 +465,27 @@ function ContactUsFooter() {
           phone: formData.phoneNumber,
         },
       });
+
+      // Also save to our database
+      try {
+        await fetch("/api/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName: formData.fullName,
+            email: formData.email,
+            phone: formData.phoneNumber,
+            companyName: formData.companyName,
+            projectDetails: formData.projectDetails,
+            source: "footer_form",
+          }),
+        });
+      } catch (error) {
+        console.error("Error saving message to database:", error);
+        // Don't show error to user, WordPress save is the primary
+      }
     } else {
       toast.error("Please accept the terms and conditions.");
     }

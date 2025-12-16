@@ -203,7 +203,7 @@ export default function AdminSettingsPage() {
 
   // Settings Page
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 font-outfit">
       {/* Header */}
       <header className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-5">

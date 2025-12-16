@@ -103,6 +103,21 @@ export async function initializeSchema() {
       )
     `);
 
+    // Create messages table for contact form submissions
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        full_name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        phone TEXT,
+        company_name TEXT,
+        project_details TEXT NOT NULL,
+        source TEXT DEFAULT 'contact_form',
+        is_read INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create indexes
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
@@ -115,6 +130,8 @@ export async function initializeSchema() {
     await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_path ON page_visits(page_path)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_created ON page_visits(created_at)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_stats_display_order ON stats(display_order)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_messages_created ON messages(created_at)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_messages_read ON messages(is_read)');
 
     console.log('Turso database schema initialized successfully');
   } catch (error) {

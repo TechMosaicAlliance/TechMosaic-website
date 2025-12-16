@@ -14,7 +14,8 @@ import {
   Settings,
   Eye,
   Edit3,
-  TrendingUp
+  TrendingUp,
+  Mail
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -49,7 +50,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-outfit">
       {/* Header */}
       <header className="bg-white/80 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-8 py-5">
@@ -195,6 +196,24 @@ export default function DashboardPage() {
                   <p className="text-sm text-gray-600">
                     Manage homepage statistics
                   </p>
+                </div>
+              </Link>
+            )}
+
+            {/* Messages - Super Admin Only */}
+            {permissions?.canViewUsers && (
+              <Link href="/dashboard/messages">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <Mail className="w-7 h-7 text-white" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Messages</h4>
+                  <p className="text-sm text-gray-600">
+                    View contact form submissions
+                  </p>
+                  <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
+                    Super Admin Only
+                  </span>
                 </div>
               </Link>
             )}
