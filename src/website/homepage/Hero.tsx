@@ -104,7 +104,7 @@ export default function Hero() {
       <Navbar />
       
       {/* Main Hero Content */}
-      <div className="relative">
+      <div className="relative pt-16 sm:pt-20">
         {/* Subtle Background Pattern */}
         <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: `radial-gradient(circle at 1px 1px, #451842 1px, transparent 0)`,

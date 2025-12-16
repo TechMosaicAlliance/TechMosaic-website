@@ -205,13 +205,13 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "transition-all duration-500 z-[99999]",
+        "transition-all duration-500 z-[99999] fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl mx-auto rounded-2xl",
         isSticky
-          ? "bg-background/80 backdrop-blur-lg border-b border-foreground/10 shadow-sm self-start fixed top-0 left-0 right-0 w-full"
-          : "bg-transparent border-b border-foreground/5"
+          ? "bg-background/30 backdrop-blur-xl border border-foreground/10 shadow-lg"
+          : "bg-background/20 backdrop-blur-lg border border-foreground/5 shadow-md"
       )}
     >
-      <div className="flex container max-w-7xl mx-auto items-center px-5 lg:px-8 py-3 lg:py-4 justify-between">
+      <div className="flex items-center px-5 lg:px-8 py-3 lg:py-4 justify-between">
         <Link 
           href="/" 
           className="flex items-center space-x-2 transition-all duration-300 hover:scale-105 active:scale-95"
