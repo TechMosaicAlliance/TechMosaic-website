@@ -189,20 +189,6 @@ function ProjectManagementPageContent() {
             <p className="text-xl md:text-2xl text-white/90 max-w-3xl mx-auto">
               Discover how we&apos;re making a difference across the world through innovative projects and solutions
             </p>
-            <div className="mt-8 flex items-center justify-center gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-white rounded-full"></div>
-                <span>{projects.length} Projects</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                <span>{projects.filter(p => p.status === 'Completed').length} Completed</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-400 rounded-full"></div>
-                <span>{projects.filter(p => p.status === 'Ongoing').length} Ongoing</span>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -528,6 +514,61 @@ function ProjectManagementPageContent() {
               Showing <span className="font-bold text-gray-900">{filteredProjects.length}</span> of{" "}
               <span className="font-bold text-gray-900">{projects.length}</span> projects
             </p>
+          </div>
+        </section>
+      )}
+
+      {/* Stats Section */}
+      {!loading && (
+        <section className="bg-white border-t border-gray-200 py-16">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Total Projects */}
+              <div className="bg-gradient-to-br from-primary/5 to-primary/10 rounded-2xl p-8 border border-primary/20 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-14 h-14 bg-primary/10 rounded-xl flex items-center justify-center">
+                    <Layers className="w-7 h-7 text-primary" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-4xl font-bold text-gray-900">{projects.length}</p>
+                  <p className="text-lg font-semibold text-gray-700">Projects</p>
+                  <p className="text-sm text-gray-500">Total projects in our portfolio</p>
+                </div>
+              </div>
+
+              {/* Completed Projects */}
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8 border border-green-200 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-14 h-14 bg-green-100 rounded-xl flex items-center justify-center">
+                    <CheckCircle className="w-7 h-7 text-green-600" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-4xl font-bold text-gray-900">
+                    {projects.filter(p => p.status === 'Completed').length}
+                  </p>
+                  <p className="text-lg font-semibold text-gray-700">Completed</p>
+                  <p className="text-sm text-gray-500">Successfully delivered projects</p>
+                </div>
+              </div>
+
+              {/* Ongoing Projects */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200 hover:shadow-lg transition-all duration-300">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center">
+                    <Clock className="w-7 h-7 text-blue-600" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <p className="text-4xl font-bold text-gray-900">
+                    {projects.filter(p => p.status === 'Ongoing').length}
+                  </p>
+                  <p className="text-lg font-semibold text-gray-700">Ongoing</p>
+                  <p className="text-sm text-gray-500">Projects currently in progress</p>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
       )}
