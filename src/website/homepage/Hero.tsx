@@ -115,7 +115,7 @@ export default function Hero() {
         <div className="absolute top-20 right-10 w-[600px] h-[600px] bg-gradient-to-br from-[#451842]/5 to-transparent rounded-full blur-3xl" />
         <div className="absolute bottom-20 left-10 w-[500px] h-[500px] bg-gradient-to-tr from-[#8a3d7a]/5 to-transparent rounded-full blur-3xl" />
 
-        <section className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-28 lg:py-32">
+        <section className="relative z-10 container max-w-7xl mx-auto px-2 sm:px-3 lg:px-4 pt-2 sm:pt-4 lg:pt-6 pb-20 sm:pb-28 lg:pb-32">
           <div className="max-w-5xl mx-auto space-y-12 sm:space-y-16 w-full">
             
             {/* Trust Badge - Elegant */}
@@ -128,7 +128,7 @@ export default function Hero() {
 
             {/* Main Headline - Bold & Modern */}
             <div data-animation="hero-fade-in" className="opacity-0 text-center lg:text-left">
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold text-gray-900 leading-[1.05] tracking-tight">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-[1.05] tracking-tight">
                 We Craft
                 <br />
                 <span className="relative inline-flex items-baseline gap-3 sm:gap-4 flex-wrap">
