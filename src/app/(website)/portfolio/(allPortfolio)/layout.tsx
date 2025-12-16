@@ -16,27 +16,29 @@ export const metadata: Metadata = {
 
 export default function layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-gray-50">
-      <section className="container max-w-7xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 mx-auto">
+    <div className="min-h-screen bg-white">
+      <section className="container max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-12 mx-auto">
         <PortfolioHero />
         
         {/* Video Section */}
-        <div className="mt-12 mb-16">
+        <div className="mt-16 mb-20">
           <div className="relative group">
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 rounded-3xl blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative h-[20rem] sm:h-[25rem] lg:h-[32rem] rounded-2xl overflow-hidden shadow-2xl border border-gray-200/50 bg-gray-900">
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/30 via-primary/20 to-primary/30 rounded-3xl blur-xl opacity-60 group-hover:opacity-100 transition-all duration-700"></div>
+            <div className="relative h-[22rem] sm:h-[28rem] lg:h-[36rem] rounded-2xl overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)] border border-gray-100 bg-gray-900">
               <YoutubeView videoSrc="/assets/video1.mp4" />
             </div>
           </div>
         </div>
 
-        <div className="pt-8 pb-8">
+        <div className="pt-6 pb-10 border-t border-gray-100">
           <Filter url="/portfolio" />
         </div>
-        {children}
+        <div className="pt-8">
+          {children}
+        </div>
       </section>
-      <div className="bg-white border-t border-gray-200">
-        <div className="container max-w-7xl px-4 sm:px-6 lg:px-8 pb-16 pt-12">
+      <div className="bg-gray-50 border-t border-gray-100 mt-20">
+        <div className="container max-w-7xl px-4 sm:px-6 lg:px-8 pb-20 pt-16">
           <OurService />
         </div>
       </div>
