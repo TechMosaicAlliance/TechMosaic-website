@@ -136,7 +136,7 @@ export default function StatsPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h1>
-          <p className="text-gray-600 mb-4">You don't have permission to manage stats.</p>
+          <p className="text-gray-600 mb-4">You don&apos;t have permission to manage stats.</p>
           <Link href="/dashboard">
             <Button>Go to Dashboard</Button>
           </Link>
@@ -243,7 +243,7 @@ export default function StatsPage() {
 
                 {stats.length === 0 && (
                   <div className="text-center py-8 text-gray-500">
-                    <p>No stats added yet. Click "Add Stat" to get started.</p>
+                    <p>No stats added yet. Click &quot;Add Stat&quot; to get started.</p>
                   </div>
                 )}
               </div>
