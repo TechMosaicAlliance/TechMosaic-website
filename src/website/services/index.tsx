@@ -13,16 +13,15 @@ export default function ServicePage() {
   return (
     <>
       <ServiceHero />
+      <ServiceYoutube />
       <WhatWeDo />
       <CaseStudy />
       <ServicePortfolioView />
-      <div className="container p-4 lg:pt-[4rem] mx-auto">
-        <ServiceYoutube />
-
-        <div className="flex pt-7 lg:hidden gap-3">
-          <Button className="border-white group  text-xs  border">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 lg:pt-16 pb-8 sm:pb-12">
+        <div className="flex pt-4 sm:pt-6 lg:hidden gap-3">
+          <Button className="border-white group text-xs sm:text-sm border h-9 sm:h-10">
             JOIN OUR TEAM
-            <ArrowRightSvg className="ml-1 h-4 w-4  transition-transform group-hover:translate-x-1" />
+            <ArrowRightSvg className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
           </Button>
         </div>
       </div>
