@@ -91,6 +91,18 @@ export async function initializeSchema() {
       )
     `);
 
+    // Create stats table for hero section stats
+    await db.execute(`
+      CREATE TABLE IF NOT EXISTS stats (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        value TEXT NOT NULL,
+        label TEXT NOT NULL,
+        display_order INTEGER DEFAULT 0,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+        updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create indexes
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_username ON users(username)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)');
@@ -102,6 +114,7 @@ export async function initializeSchema() {
     await db.execute('CREATE INDEX IF NOT EXISTS idx_settings_key ON settings(key)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_path ON page_visits(page_path)');
     await db.execute('CREATE INDEX IF NOT EXISTS idx_page_visits_created ON page_visits(created_at)');
+    await db.execute('CREATE INDEX IF NOT EXISTS idx_stats_display_order ON stats(display_order)');
 
     console.log('Turso database schema initialized successfully');
   } catch (error) {
@@ -150,6 +163,28 @@ export async function seedInitialData() {
       console.log('Seeding initial projects...');
       await seedInitialProjects(db);
       console.log('Initial projects seeded successfully');
+    }
+
+    // Check if stats exist
+    const statsCount = await db.execute('SELECT COUNT(*) as count FROM stats');
+    const sCount = statsCount.rows[0].count as number;
+
+    if (sCount === 0) {
+      console.log('Seeding initial stats...');
+      const initialStats = [
+        { value: '72+', label: 'Happy Clients' },
+        { value: '128+', label: 'Projects' },
+        { value: '57+', label: 'Team Members' },
+        { value: '99%', label: 'Satisfaction' }
+      ];
+
+      for (let i = 0; i < initialStats.length; i++) {
+        await db.execute({
+          sql: 'INSERT INTO stats (value, label, display_order) VALUES (?, ?, ?)',
+          args: [initialStats[i].value, initialStats[i].label, i]
+        });
+      }
+      console.log('Initial stats seeded successfully');
     }
   } catch (error) {
     console.error('Seeding error:', error);

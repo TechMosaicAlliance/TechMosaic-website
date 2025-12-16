@@ -15,6 +15,7 @@ export interface Permission {
   canResetPasswords: boolean;
   canViewAnalytics: boolean;
   canAccessSettings: boolean;
+  canManageSettings: boolean;
   canManageSystem: boolean;
 }
 
@@ -33,6 +34,7 @@ const rolePermissions: Record<UserRole, Permission> = {
     canResetPasswords: true,
     canViewAnalytics: true,
     canAccessSettings: true,
+    canManageSettings: true,
     canManageSystem: true,
   },
   'Admin': {
@@ -48,6 +50,7 @@ const rolePermissions: Record<UserRole, Permission> = {
     canResetPasswords: false,
     canViewAnalytics: true,
     canAccessSettings: false,
+    canManageSettings: true,
     canManageSystem: false,
   },
   'Editor': {
@@ -63,6 +66,7 @@ const rolePermissions: Record<UserRole, Permission> = {
     canResetPasswords: false,
     canViewAnalytics: false,
     canAccessSettings: false,
+    canManageSettings: false,
     canManageSystem: false,
   },
   'Viewer': {
@@ -78,6 +82,7 @@ const rolePermissions: Record<UserRole, Permission> = {
     canResetPasswords: false,
     canViewAnalytics: false,
     canAccessSettings: false,
+    canManageSettings: false,
     canManageSystem: false,
   },
 };

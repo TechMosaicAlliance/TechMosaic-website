@@ -13,7 +13,8 @@ import {
   BarChart3,
   Settings,
   Eye,
-  Edit3
+  Edit3,
+  TrendingUp
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
@@ -179,6 +180,21 @@ export default function DashboardPage() {
                   <span className="inline-block mt-2 px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
                     Super Admin Only
                   </span>
+                </div>
+              </Link>
+            )}
+
+            {/* Stats Management */}
+            {permissions?.canManageSettings && (
+              <Link href="/dashboard/stats">
+                <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow cursor-pointer group">
+                  <div className="w-14 h-14 rounded-xl bg-primary flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                    <TrendingUp className="w-7 h-7 text-white" />
+                  </div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">Hero Stats</h4>
+                  <p className="text-sm text-gray-600">
+                    Manage homepage statistics
+                  </p>
                 </div>
               </Link>
             )}

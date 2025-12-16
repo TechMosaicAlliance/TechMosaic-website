@@ -14,18 +14,45 @@ const services = [
   { name: "UI/UX Design", color: "from-violet-400 to-purple-400" },
 ];
 
-const stats = [
-  { value: "72+", label: "Happy Clients" },
-  { value: "128+", label: "Projects" },
-  { value: "57+", label: "Team Members" },
-  { value: "99%", label: "Satisfaction" },
-];
-
 export default function Hero() {
   useHeroAnimation();
   const wordRef1 = useRef<HTMLSpanElement>(null);
   const wordRef2 = useRef<HTMLSpanElement>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [stats, setStats] = useState([
+    { value: "72+", label: "Happy Clients" },
+    { value: "128+", label: "Projects" },
+    { value: "57+", label: "Team Members" },
+    { value: "99%", label: "Satisfaction" },
+  ]);
+
+  // Fetch stats from API
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const response = await fetch("/api/stats", {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache'
+          }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          if (data.stats && data.stats.length > 0) {
+            setStats(data.stats.map((stat: any) => ({
+              value: stat.value,
+              label: stat.label,
+            })));
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching stats:", error);
+        // Keep default stats on error
+      }
+    };
+
+    fetchStats();
+  }, []);
   
   useEffect(() => {
     if (!wordRef1.current || !wordRef2.current) return;
