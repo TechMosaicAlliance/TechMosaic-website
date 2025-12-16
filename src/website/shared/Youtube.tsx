@@ -126,38 +126,61 @@ export default function YoutubeView({
   return (
     <div
       onClick={togglePlayPause}
-      className="bg-green-800/20 h-full flex items-center justify-center relative"
+      className="bg-gradient-to-br from-gray-900 to-gray-800 h-full w-full flex items-center justify-center relative cursor-pointer group"
     >
       {showThumbnail && (
         <div className="absolute overflow-hidden top-0 w-full h-full">
           <BlurImage
-            alt=""
+            alt="Video thumbnail"
             src={thumbnail}
             fill
-            className="object-cover aspect-auto"
+            className="object-cover transition-opacity duration-500"
           />
+          {/* Overlay gradient */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
         </div>
       )}
 
       {!isPlaying && (
         <Button
-          onClick={togglePlayPause}
-          className={`absolute cursor-pointer z-10 h-[3rem] w-[3rem] lg:w-[5rem] lg:h-[5rem] rounded-full ${
+          onClick={(e) => {
+            e.stopPropagation();
+            togglePlayPause();
+          }}
+          className={`absolute cursor-pointer z-10 h-16 w-16 lg:w-20 lg:h-20 rounded-full bg-white/90 hover:bg-white shadow-2xl transition-all duration-300 hover:scale-110 active:scale-95 flex items-center justify-center group-hover:shadow-primary/50 ${
             isLoading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={isLoading}
-          style={{ backgroundColor: btnColor || "black" }}
         >
-          {isPlaying ? <Pause size={32} /> : <Play size={32} />}
+          <Play 
+            size={isLoading ? 24 : 28} 
+            className="text-gray-900 ml-1 lg:ml-1.5" 
+            fill="currentColor"
+          />
         </Button>
+      )}
+
+      {isPlaying && (
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              togglePlayPause();
+            }}
+            className="h-16 w-16 lg:w-20 lg:h-20 rounded-full bg-white/90 hover:bg-white shadow-2xl transition-all duration-300 hover:scale-110 flex items-center justify-center"
+          >
+            <Pause size={28} className="text-gray-900" fill="currentColor" />
+          </Button>
+        </div>
       )}
 
       <video
         ref={videoRef}
         onEnded={handleVideoEnd}
         onCanPlay={handleCanPlay}
-        className="h-full w-full"
+        className="h-full w-full object-cover"
         preload="metadata"
+        playsInline
       >
         Your browser does not support the video tag.
       </video>

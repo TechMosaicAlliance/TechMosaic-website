@@ -14,7 +14,7 @@ export default function Filter({ url }: { url: string }) {
   const isBasePath = pathname === url || pathname === `${url}/`;
 
   return (
-    <div className="flex bar overflow-x-auto gap-2 md:p-4">
+    <div className="flex flex-wrap gap-3 pb-2">
       {filters.map((item, idx) => {
         const isActive =
           (item === "ALL" && isBasePath) ||
@@ -28,11 +28,11 @@ export default function Filter({ url }: { url: string }) {
                 variant: "outline",
                 size: "sm",
                 className:
-                  "rounded-md hover:bg-black focus:active:bg-black focus:active:text-white hover:text-white border-gray-300 text-sm font-medium",
+                  "rounded-full px-6 py-2.5 text-sm font-semibold transition-all duration-300 border-2 whitespace-nowrap",
               }),
               isActive
-                ? "bg-black text-primary-foreground"
-                : "lg:hover:bg-secondary"
+                ? "bg-primary text-white border-primary hover:bg-primary/90 shadow-md"
+                : "bg-white text-gray-700 border-gray-300 hover:border-primary hover:text-primary hover:bg-primary/5"
             )}
             key={idx}
           >
