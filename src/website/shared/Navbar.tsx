@@ -205,7 +205,7 @@ export default function Navbar() {
   return (
     <nav
       className={cn(
-        "transition-all duration-500 z-[99999] fixed top-4 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl mx-auto rounded-2xl",
+        "transition-all duration-500 z-[99999] fixed top-0 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl mx-auto rounded-b-2xl",
         isSticky
           ? "bg-background/30 backdrop-blur-xl border border-foreground/10 shadow-lg"
           : "bg-background/20 backdrop-blur-lg border border-foreground/5 shadow-md"
