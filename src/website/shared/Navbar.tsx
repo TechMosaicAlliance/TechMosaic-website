@@ -26,7 +26,7 @@ const navData = [
     caseStudies: [
       { name: "Our Portfolio", url: "/portfolio" },
       { name: "Case Studies", url: "/casestudy" },
-      { name: "blog", url: "/blogs" },
+      { name: "Blog", url: "/blogs" },
     ],
   },
   {
